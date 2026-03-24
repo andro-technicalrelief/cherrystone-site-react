@@ -138,6 +138,33 @@ export default function EasterOverlay() {
   const [isDragging, setIsDragging] = useState(false)
   const [showTutorial, setShowTutorial] = useState(false)
   const [giftEmail, setGiftEmail] = useState('')
+  const [giftSending, setGiftSending] = useState(false)
+  const [giftSent, setGiftSent] = useState(false)
+
+  const dismissMilestone = useCallback(() => setShowMilestone(false), [])
+
+  const sendGiftEmail = useCallback(async () => {
+    if (!giftEmail.trim() || giftSending) return
+    setGiftSending(true)
+    try {
+      const formData = new FormData()
+      formData.append('email', giftEmail)
+      formData.append('_subject', 'Easter Egg Hunt Winner! 🐣')
+      formData.append('Message', `Someone won the Easter egg hunt game!\n\nTheir email: ${giftEmail}\nEggs collected: 10\nTimestamp: ${new Date().toLocaleString()}`)
+      formData.append('_captcha', 'false')
+
+      await fetch('https://formsubmit.co/ajax/kirsteinzander@gmail.com', {
+        method: 'POST',
+        body: formData,
+        headers: { 'Accept': 'application/json' },
+      })
+      setGiftSent(true)
+      setTimeout(() => dismissMilestone(), 2000)
+    } catch (err) {
+      console.error('Gift email error:', err)
+      dismissMilestone()
+    }
+  }, [giftEmail, giftSending, dismissMilestone])
   const gameOverRef = useRef(false)
   const basketRef = useRef(null)
   const pointerStartRef = useRef(null)
@@ -471,7 +498,6 @@ export default function EasterOverlay() {
     }
   }, [milestoneReached, spawnCelebration, eggs])
 
-  const dismissMilestone = useCallback(() => setShowMilestone(false), [])
 
   // Rabbit CSS style helper — always use LEFT positioning for consistency
   const getRabbitStyle = (rabbit) => {
@@ -609,9 +635,10 @@ export default function EasterOverlay() {
                 value={giftEmail} onChange={(e) => setGiftEmail(e.target.value)} autoFocus />
             </div>
             <button className="milestone-close"
-              onClick={() => { if (giftEmail.trim()) dismissMilestone() }}
-              style={{ opacity: giftEmail.trim() ? 1 : 0.5 }}>
-              Send My Gift 🎁
+              onClick={sendGiftEmail}
+              disabled={giftSending || giftSent}
+              style={{ opacity: giftEmail.trim() && !giftSent ? 1 : 0.5 }}>
+              {giftSent ? 'Sent! ✓' : giftSending ? 'Sending...' : 'Send My Gift 🎁'}
             </button>
           </div>
         </div>

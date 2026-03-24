@@ -858,6 +858,128 @@ footer {
 }
 
 /* ============================================
+   OUR DNA PAGE — Desktop Classes
+   ============================================ */
+.dna-graph-area {
+    padding: 60px 40px;
+    background: transparent;
+}
+
+.dna-graph-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    min-height: 200px;
+}
+
+.dna-y-labels {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.5);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 2px 0 4px;
+    text-align: right;
+    min-width: 28px;
+}
+
+.dna-x-labels {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 50px;
+    margin-bottom: 60px;
+    font-size: 0.7rem;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+}
+
+.dna-vca-banner {
+    text-align: center;
+    background: white;
+    color: var(--primary-red);
+    padding: 15px 20px;
+    margin-bottom: 60px;
+    font-size: clamp(1.1rem, 4vw, 2rem);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 8px;
+    word-break: break-word;
+    overflow: hidden;
+}
+
+.dna-flow-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin-bottom: 80px;
+}
+
+.dna-flow-card {
+    padding: 24px 40px;
+    border-radius: 16px;
+    text-align: center;
+    min-width: 280px;
+    max-width: 340px;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    cursor: default;
+}
+
+.dna-flow-connector {
+    width: 2px;
+    height: 30px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+}
+
+.dna-flow-result {
+    margin-top: 20px;
+    background: white;
+    color: var(--primary-red);
+    padding: 20px 30px;
+    border-radius: 16px;
+    text-align: center;
+    font-weight: 800;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.dna-capabilities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.dna-capability-card {
+    background: rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 30px;
+    border: 1px solid rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+}
+
+.dna-why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.dna-why-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 30px 24px;
+    text-align: center;
+}
+
+/* ============================================
    MOBILE RESPONSIVE
    ============================================ */
 @media (max-width: 768px) {
@@ -966,11 +1088,100 @@ footer {
         gap: 40px !important;
     }
 
+    /* ====== Our DNA Page — Mobile Overrides ====== */
+    .dna-graph-area {
+        padding: 30px 12px;
+    }
+
+    .dna-graph-row {
+        gap: 6px;
+        min-height: 120px;
+    }
+
+    .dna-y-labels {
+        font-size: 0.55rem;
+        min-width: 22px;
+    }
+
+    .dna-x-labels {
+        padding-left: 28px;
+        margin-bottom: 30px;
+        font-size: 0.6rem;
+    }
+
+    .dna-vca-banner {
+        padding: 12px 14px;
+        margin-bottom: 30px;
+        font-size: clamp(0.95rem, 5vw, 1.5rem);
+        letter-spacing: 0.02em;
+    }
+
+    .dna-flow-container {
+        margin-bottom: 40px;
+    }
+
+    .dna-flow-card {
+        min-width: 0;
+        max-width: 100%;
+        padding: 18px 20px;
+        border-radius: 12px;
+    }
+
+    .dna-flow-card div[style*="fontSize"] {
+        font-size: 0.95rem !important;
+    }
+
+    .dna-flow-connector {
+        height: 20px;
+    }
+
+    .dna-flow-result {
+        padding: 16px 20px;
+        border-radius: 12px;
+        font-size: 0.95rem;
+    }
+
+    .dna-capabilities-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .dna-capability-card {
+        padding: 20px 16px;
+        border-radius: 14px;
+    }
+
+    .dna-capability-card h3 {
+        font-size: 1.05rem !important;
+        margin-bottom: 14px !important;
+    }
+
+    /* Reduce flip card scale on mobile to prevent overflow */
+    .vc-box-wrapper:hover .vc-box-inner,
+    .vc-box-wrapper.active-flip .vc-box-inner {
+        transform: scale(1.08) rotateY(180deg);
+    }
+
+    .dna-why-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-top: 30px;
+    }
+
+    .dna-why-card {
+        padding: 24px 18px;
+        border-radius: 12px;
+    }
+
     /* Value Chain Architecture banner */
     .vc-section .container,
     .vc-section > div {
-        padding-left: 15px !important;
-        padding-right: 15px !important;
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    .vc-section {
+        margin-bottom: 50px !important;
     }
 
     /* Barriers grid - Collaborations */

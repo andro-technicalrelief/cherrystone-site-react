@@ -82,11 +82,11 @@ export default function About() {
           </section>
 
           <section className="container reveal vc-section" style={{ paddingTop: '60px', marginBottom: '100px', position: 'relative' }}>
-            <div style={{ padding: '60px 40px', background: 'transparent' }}>
+            <div className="dna-graph-area">
               {/* Graph with axes — Y labels outside, then chart */}
-              <div style={{ display: 'flex', gap: '12px', marginBottom: '20px', minHeight: '200px' }}>
+              <div className="dna-graph-row">
                 {/* Y-axis labels — outside the graph */}
-                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', fontSize: '0.7rem', color: 'rgba(255,255,255,0.5)', fontWeight: 600, letterSpacing: '0.05em', padding: '2px 0 4px', textAlign: 'right', minWidth: '28px' }}>
+                <div className="dna-y-labels">
                   <span>MAX</span>
                   <span>MID</span>
                   <span>MIN</span>
@@ -107,18 +107,18 @@ export default function About() {
                 </div>
               </div>
               {/* X-axis labels */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', paddingLeft: '50px', marginBottom: '60px', fontSize: '0.7rem', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.1em', fontWeight: 600 }}>
+              <div className="dna-x-labels">
                 <span>Scattered</span>
                 <span>Modelled</span>
                 <span>Structured</span>
               </div>
 
-              <div style={{ textAlign: 'center', background: 'white', color: 'var(--primary-red)', padding: '15px 20px', marginBottom: '60px', fontSize: 'clamp(1.1rem, 4vw, 2rem)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em', borderRadius: '8px', wordBreak: 'break-word', overflow: 'hidden' }}>
+              <div className="dna-vca-banner">
                 Value Chain Architecture
               </div>
 
               {/* Central Flow — The Core Process */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0', marginBottom: '80px' }}>
+              <div className="dna-flow-container">
                 {[
                   { label: 'Identify Outcomes', desc: 'Define what success looks like', bg: 'linear-gradient(135deg, #4a1e1e, #6b2c2c)', iconName: 'target', light: true },
                   { label: 'Identify Processes', desc: 'Map actions that produce results', bg: 'linear-gradient(135deg, #7c3131, #a04040)', iconName: 'search', light: true },
@@ -127,37 +127,30 @@ export default function About() {
                   { label: 'Manage Process', desc: 'Lead with data-driven decisions', bg: 'linear-gradient(135deg, #f5dede, #fdf2f2)', iconName: 'gear', light: false },
                 ].map((step, i) => (
                   <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                    <div style={{
+                    <div className="dna-flow-card" style={{
                       background: step.bg,
                       color: step.light ? 'white' : '#4a1e1e',
-                      padding: '24px 40px',
-                      borderRadius: '16px',
-                      textAlign: 'center',
-                      minWidth: '280px',
-                      maxWidth: '340px',
-                      boxShadow: '0 8px 32px rgba(0,0,0,0.2)',
-                      cursor: 'default',
                     }}>
                       <div style={{ marginBottom: '8px' }}><Icon name={step.iconName} size={28} color={step.light ? 'white' : '#4a1e1e'} /></div>
                       <div style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '4px' }}>{step.label}</div>
                       <div style={{ fontSize: '0.85rem', opacity: 0.8 }}>{step.desc}</div>
                     </div>
                     {i < 4 && (
-                      <div style={{ width: '2px', height: '30px', background: 'linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0.1))' }}></div>
+                      <div className="dna-flow-connector"></div>
                     )}
                   </div>
                 ))}
 
-                <div style={{ marginTop: '20px', background: 'white', color: 'var(--primary-red)', padding: '20px 30px', borderRadius: '16px', textAlign: 'center', fontWeight: 800, boxShadow: '0 10px 40px rgba(0,0,0,0.2)' }}>
+                <div className="dna-flow-result">
                   <div style={{ marginBottom: '8px' }}><Icon name="user" size={32} color="var(--primary-red)" /></div>
                   Quantified Process
                 </div>
               </div>
 
               {/* Supporting Capabilities — 3 Category Grid with Flip Cards */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px', maxWidth: '1000px', margin: '0 auto' }}>
+              <div className="dna-capabilities-grid">
                 {/* Visibility */}
-                <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: '20px', padding: '30px', border: '1px solid rgba(255,255,255,0.12)', backdropFilter: 'blur(10px)' }}>
+                <div className="dna-capability-card">
                   <div style={{ textAlign: 'center', marginBottom: '6px' }}><Icon name="eye" size={28} /></div>
                   <h3 style={{ fontSize: '1.2rem', fontWeight: 700, textAlign: 'center', marginBottom: '20px', color: 'white' }}>Visibility</h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -168,7 +161,7 @@ export default function About() {
                 </div>
 
                 {/* Measurement */}
-                <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: '20px', padding: '30px', border: '1px solid rgba(255,255,255,0.12)', backdropFilter: 'blur(10px)' }}>
+                <div className="dna-capability-card">
                   <div style={{ textAlign: 'center', marginBottom: '6px' }}><Icon name="straightedge" size={28} /></div>
                   <h3 style={{ fontSize: '1.2rem', fontWeight: 700, textAlign: 'center', marginBottom: '20px', color: 'white' }}>Measurement</h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -179,7 +172,7 @@ export default function About() {
                 </div>
 
                 {/* Improvement */}
-                <div style={{ background: 'rgba(255,255,255,0.08)', borderRadius: '20px', padding: '30px', border: '1px solid rgba(255,255,255,0.12)', backdropFilter: 'blur(10px)' }}>
+                <div className="dna-capability-card">
                   <div style={{ textAlign: 'center', marginBottom: '6px' }}><Icon name="loop" size={28} /></div>
                   <h3 style={{ fontSize: '1.2rem', fontWeight: 700, textAlign: 'center', marginBottom: '20px', color: 'white' }}>Improvement</h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -210,18 +203,13 @@ export default function About() {
                 and start predicting them.
               </p>
 
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '24px', marginTop: '40px' }}>
+              <div className="dna-why-grid">
                 {[
                   { iconName: 'microscope', title: 'Diagnose', text: 'We identify where tribal knowledge and undocumented processes are limiting growth.' },
                   { iconName: 'map', title: 'Map', text: 'Every critical process is visually mapped, measured, and assigned ownership.' },
                   { iconName: 'trending', title: 'Scale', text: 'With clarity comes control — enabling confident decisions that drive measurable growth.' },
                 ].map((item, i) => (
-                  <div key={i} className="reveal" style={{
-                    background: 'rgba(255,255,255,0.06)',
-                    border: '1px solid rgba(255,255,255,0.12)',
-                    borderRadius: '16px',
-                    padding: '30px 24px',
-                    textAlign: 'center',
+                  <div key={i} className="reveal dna-why-card" style={{
                     transitionDelay: `${0.1 * (i + 3)}s`,
                   }}>
                     <div style={{ marginBottom: '12px' }}><Icon name={item.iconName} size={30} /></div>
