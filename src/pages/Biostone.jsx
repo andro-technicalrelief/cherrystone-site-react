@@ -61,6 +61,14 @@ const getStatusLabel = (score) => {
   return 'Initial (Level 1)';
 };
 
+const getScoreColor = (score) => {
+  if (score >= 5.0) return '#2E7D32'; 
+  if (score >= 4.0) return '#4CAF50'; 
+  if (score >= 3.0) return '#F59E0B'; 
+  if (score >= 2.0) return '#F97316'; 
+  return '#D32F2F'; 
+};
+
 const getActionItems = (scores) => {
   const recommendations = {
     efficiency: {
@@ -102,7 +110,8 @@ const getActionItems = (scores) => {
     items.push({
       category: cat.title,
       icon: assessmentData.find(d => d.id === cat.category)?.icon,
-      text: recommendations[cat.category][level]
+      text: recommendations[cat.category][level],
+      color: getScoreColor(cat.score)
     });
   });
   
@@ -320,12 +329,12 @@ export default function Biostone() {
                 <div style={{ background: '#fff', color: '#080808', borderRadius: '12px', padding: '40px', marginBottom: '30px', boxShadow: '0 20px 40px rgba(0,0,0,0.3)' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '40px', paddingBottom: '40px', borderBottom: '1px solid rgba(0,0,0,0.1)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
-                      <BarChart2 size={36} color="#D32F2F" />
-                      <h2 style={{ fontSize: '2.5rem', margin: 0, textTransform: 'uppercase', letterSpacing: '0.02em', color: '#D32F2F', textShadow: 'none' }}>Maturity Report</h2>
+                      <BarChart2 size={36} color={getScoreColor(overallMaturity)} />
+                      <h2 style={{ fontSize: '2.5rem', margin: 0, textTransform: 'uppercase', letterSpacing: '0.02em', color: getScoreColor(overallMaturity), textShadow: 'none' }}>Maturity Report</h2>
                     </div>
                     
                     <div style={{ fontSize: '4rem', fontWeight: '800', lineHeight: 1, marginBottom: '10px' }}>{overallMaturity}<span style={{ fontSize: '1.5rem', color: '#666', opacity: 0.5 }}>/5</span></div>
-                    <div style={{ fontSize: '1.4rem', fontWeight: '700', color: '#D32F2F' }}>
+                    <div style={{ fontSize: '1.4rem', fontWeight: '700', color: getScoreColor(overallMaturity) }}>
                       {getStatusLabel(overallMaturity)}
                     </div>
                   </div>
@@ -337,7 +346,7 @@ export default function Biostone() {
                           <PolarGrid stroke="rgba(0,0,0,0.1)" />
                           <PolarAngleAxis dataKey="title" tick={{ fill: '#333', fontSize: 13, fontWeight: 600 }} />
                           <PolarRadiusAxis angle={30} domain={[0, 5]} tick={{ fill: '#999', fontSize: 11 }} />
-                          <Radar name="Score" dataKey="score" stroke="#D32F2F" strokeWidth={3} fill="#D32F2F" fillOpacity={0.4} />
+                          <Radar name="Score" dataKey="score" stroke={getScoreColor(overallMaturity)} strokeWidth={3} fill={getScoreColor(overallMaturity)} fillOpacity={0.4} />
                         </RadarChart>
                       </ResponsiveContainer>
                     </div>
@@ -349,10 +358,10 @@ export default function Biostone() {
                           <div key={cat.category} className="score-item">
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                               <span style={{ fontWeight: '600', fontSize: '1rem' }}>{cat.title}</span>
-                              <span style={{ fontWeight: '800', color: '#D32F2F' }}>{cat.score} <span style={{fontSize:'0.8rem', color:'#999'}}>{cat.status.split('(')[1].replace(')','')}</span></span>
+                              <span style={{ fontWeight: '800', color: getScoreColor(cat.score) }}>{cat.score} <span style={{fontSize:'0.8rem', color:'#999'}}>{cat.status.split('(')[1].replace(')','')}</span></span>
                             </div>
                             <div style={{ width: '100%', height: '8px', background: 'rgba(0,0,0,0.05)', borderRadius: '4px', overflow: 'hidden' }}>
-                              <div style={{ width: `${(cat.score / 5) * 100}%`, height: '100%', background: '#D32F2F', borderRadius: '4px' }}></div>
+                              <div style={{ width: `${(cat.score / 5) * 100}%`, height: '100%', background: getScoreColor(cat.score), borderRadius: '4px' }}></div>
                             </div>
                           </div>
                         ))}
@@ -369,12 +378,12 @@ export default function Biostone() {
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                     {actionItems.map((item, idx) => (
-                      <div key={idx} className="action-item">
+                      <div key={idx} className="action-item" style={{ borderLeftColor: item.color }}>
                         <div style={{ color: 'rgba(255,255,255,0.8)', background: 'rgba(255,255,255,0.1)', width: '50px', height: '50px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                           {item.icon}
                         </div>
                         <div>
-                          <h4 style={{ fontSize: '1.1rem', marginBottom: '8px', color: '#D32F2F', fontWeight: '700' }}>{item.category} priority</h4>
+                          <h4 style={{ fontSize: '1.1rem', marginBottom: '8px', color: item.color, fontWeight: '700' }}>{item.category} priority</h4>
                           <p style={{ fontSize: '1.05rem', lineHeight: 1.5 }}>{item.text}</p>
                         </div>
                       </div>
