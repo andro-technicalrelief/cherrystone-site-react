@@ -124,7 +124,12 @@ const CELEBRATION_EMOJIS = ['🎉', '✨', '⭐', '🌟', '💫', '🎊', '🥳'
 
 export default function EasterOverlay() {
   const location = useLocation()
+  const currentPathRef = useRef(location.pathname)
+  useEffect(() => { currentPathRef.current = location.pathname }, [location.pathname])
+
   const isHomePage = location.pathname === '/'
+  const isBiostone = location.pathname === '/biostone'
+  
   const [eggCount, setEggCount] = useState(0)
   const [showMilestone, setShowMilestone] = useState(false)
   const [rabbits, setRabbits] = useState([])
@@ -240,6 +245,7 @@ export default function EasterOverlay() {
 
     const spawnChick = () => {
       if (gameOverRef.current) return
+      if (currentPathRef.current === '/biostone') { scheduleChick(); return }
 
       const id = Date.now() + Math.random()
       const fromLeft = Math.random() > 0.5
@@ -310,6 +316,7 @@ export default function EasterOverlay() {
 
     const trySpawnRabbit = () => {
       if (gameOverRef.current) return
+      if (currentPathRef.current === '/biostone') { scheduleRabbit(); return }
 
       setEggs(currentEggs => {
         const available = currentEggs.filter(e => !e.stolen && !stolenEggsRef.current.has(e.id))
@@ -529,7 +536,7 @@ export default function EasterOverlay() {
   return (
     <div className="easter-overlay">
       {/* Chicks */}
-      {chicks.map(chick => (
+      {!isBiostone && chicks.map(chick => (
         <div
           key={chick.id}
           className={`hopping-rabbit ${chick.fromLeft ? 'face-right' : 'face-left'} phase-${chick.phase}`}
@@ -540,7 +547,7 @@ export default function EasterOverlay() {
       ))}
 
       {/* Rabbits */}
-      {rabbits.map(rabbit => (
+      {!isBiostone && rabbits.map(rabbit => (
         <div
           key={rabbit.id}
           className={`hopping-rabbit ${rabbit.fromLeft ? 'face-right' : 'face-left'} phase-${rabbit.phase}`}
@@ -556,7 +563,7 @@ export default function EasterOverlay() {
       ))}
 
       {/* Eggs */}
-      {eggs.map(egg => (
+      {!isBiostone && eggs.map(egg => (
         <div
           key={egg.id}
           className={`dropped-egg${egg.rotten ? ' rotten-egg' : ''}${egg.stolen ? ' egg-stolen' : ''}`}

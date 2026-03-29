@@ -1275,3 +1275,54 @@ footer {
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+/* ============================================
+   BIOSTONE BETA STYLES 
+   ============================================ */
+.likert-options {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.report-grid {
+    display: grid;
+    grid-template-columns: minmax(300px, 1fr) 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.action-item {
+    display: flex;
+    gap: 20px;
+    background: rgba(255,255,255,0.05);
+    padding: 25px;
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-red);
+}
+
+@media (max-width: 768px) {
+    .likert-options {
+        flex-wrap: wrap;
+    }
+    
+    .likert-options button.likert-btn {
+        flex: 1 1 calc(33.333% - 10px) !important;
+    }
+    
+    .report-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .radar-chart-container {
+        margin-left: 0 !important;
+        height: 250px !important;
+    }
+    
+    .action-item {
+        flex-direction: column;
+        gap: 15px;
+        padding: 20px;
+    }
+}

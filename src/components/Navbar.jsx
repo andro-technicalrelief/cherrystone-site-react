@@ -23,6 +23,7 @@ export default function Navbar() {
         <Link to="/services" onClick={closeMenu} className={isActive('/services') ? 'nav-active' : ''}>What We Do</Link>
         <Link to="/references" onClick={closeMenu} className={isActive('/references') ? 'nav-active' : ''}>Collaborations</Link>
         <Link to="/about" onClick={closeMenu} className={isActive('/about') ? 'nav-active' : ''}>Our DNA</Link>
+        <Link to="/biostone" onClick={closeMenu} className={isActive('/biostone') ? 'nav-active' : ''}>Biostone (Beta)</Link>
         <Link to="/contact" onClick={closeMenu} className={isActive('/contact') ? 'nav-active' : ''}>Contact</Link>
       </div>
     </nav>
