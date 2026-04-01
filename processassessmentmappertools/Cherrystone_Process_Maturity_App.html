@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cherrystone — Process Maturity Assessment</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --cherry-dark: #8B1A1A;
+  --cherry-mid: #B22222;
+  --cherry-light: #D4443A;
+  --charcoal: #2D2D2D;
+  --grey-100: #F7F7F7;
+  --grey-200: #EEEEEE;
+  --grey-300: #DDDDDD;
+  --grey-500: #888888;
+  --white: #FFFFFF;
+  --green: #4CAF50;
+  --amber: #FF9800;
+  --red-light: #FFCDD2;
+  --orange-light: #FFE0B2;
+  --yellow-light: #FFF9C4;
+  --green-light: #C8E6C9;
+  --green-mid: #A5D6A7;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--grey-100); color: var(--charcoal); }
+
+.app-header {
+  background: linear-gradient(135deg, var(--cherry-dark) 0%, var(--cherry-mid) 100%);
+  color: white; padding: 24px 40px; display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+.app-header h1 { font-size: 24px; font-weight: 700; letter-spacing: 1px; }
+.app-header .subtitle { font-size: 13px; opacity: 0.85; margin-top: 2px; }
+
+.nav-tabs {
+  background: var(--white); border-bottom: 2px solid var(--grey-300);
+  display: flex; padding: 0 40px; gap: 0; overflow-x: auto;
+}
+.nav-tab {
+  padding: 14px 20px; cursor: pointer; font-size: 13px; font-weight: 600;
+  color: var(--grey-500); border-bottom: 3px solid transparent;
+  transition: all 0.2s; white-space: nowrap; user-select: none;
+}
+.nav-tab:hover { color: var(--cherry-mid); }
+.nav-tab.active { color: var(--cherry-dark); border-bottom-color: var(--cherry-dark); }
+.nav-tab.disabled { opacity: 0.4; pointer-events: none; }
+
+.content { max-width: 1100px; margin: 0 auto; padding: 30px 40px; }
+
+/* Welcome */
+.welcome-card {
+  background: white; border-radius: 12px; padding: 50px; text-align: center;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.welcome-card h2 { color: var(--cherry-dark); font-size: 28px; margin-bottom: 8px; }
+.welcome-card .tagline { color: var(--grey-500); font-size: 15px; margin-bottom: 30px; }
+.welcome-card .steps { text-align: left; max-width: 600px; margin: 0 auto 30px; }
+.welcome-card .step { display: flex; gap: 14px; margin-bottom: 16px; align-items: flex-start; }
+.welcome-card .step-num {
+  background: var(--cherry-dark); color: white; width: 28px; height: 28px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700; flex-shrink: 0;
+}
+.welcome-card .step-text { font-size: 14px; line-height: 1.5; padding-top: 3px; }
+.scoring-guide {
+  background: var(--grey-100); border-radius: 8px; padding: 20px 28px;
+  max-width: 500px; margin: 0 auto; text-align: left;
+}
+.scoring-guide h4 { margin-bottom: 10px; color: var(--cherry-dark); font-size: 14px; }
+.score-item { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; font-size: 13px; }
+.score-badge {
+  width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center;
+  justify-content: center; font-weight: 700; font-size: 12px; color: var(--charcoal);
+}
+
+.btn {
+  display: inline-block; padding: 12px 32px; border-radius: 8px; font-size: 14px;
+  font-weight: 600; cursor: pointer; border: none; transition: all 0.2s;
+}
+.btn-primary { background: var(--cherry-dark); color: white; }
+.btn-primary:hover { background: var(--cherry-mid); transform: translateY(-1px); }
+.btn-secondary { background: var(--grey-200); color: var(--charcoal); }
+.btn-secondary:hover { background: var(--grey-300); }
+.btn-outline { background: transparent; border: 2px solid var(--cherry-dark); color: var(--cherry-dark); }
+.btn-outline:hover { background: var(--cherry-dark); color: white; }
+
+/* Industry Selection */
+.industry-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 20px 0;
+}
+.industry-card {
+  background: white; border: 2px solid var(--grey-300); border-radius: 10px;
+  padding: 24px; cursor: pointer; transition: all 0.2s; position: relative;
+}
+.industry-card:hover { border-color: var(--cherry-mid); box-shadow: 0 4px 12px rgba(139,26,26,0.1); }
+.industry-card.selected { border-color: var(--cherry-dark); background: #FFF5F5; }
+.industry-card h3 { color: var(--cherry-dark); font-size: 16px; margin-bottom: 6px; }
+.industry-card p { font-size: 12px; color: var(--grey-500); line-height: 1.5; }
+.industry-check {
+  position: absolute; top: 12px; right: 12px; width: 24px; height: 24px;
+  border-radius: 50%; background: var(--cherry-dark); color: white;
+  display: none; align-items: center; justify-content: center; font-size: 14px;
+}
+.industry-card.selected .industry-check { display: flex; }
+
+/* Assessment */
+.assessment-header {
+  background: white; border-radius: 12px; padding: 24px 30px; margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; justify-content: space-between; align-items: center;
+}
+.progress-info { font-size: 13px; color: var(--grey-500); }
+.progress-bar-container { width: 200px; height: 8px; background: var(--grey-200); border-radius: 4px; margin-top: 6px; }
+.progress-bar-fill { height: 100%; background: var(--cherry-dark); border-radius: 4px; transition: width 0.3s; }
+
+.dimension-section {
+  background: white; border-radius: 12px; margin-bottom: 16px; overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.dimension-header {
+  background: var(--cherry-dark); color: white; padding: 16px 24px;
+  font-size: 15px; font-weight: 700; letter-spacing: 0.5px;
+}
+.question-group-label {
+  padding: 10px 24px; font-size: 12px; font-weight: 600; color: var(--grey-500);
+  text-transform: uppercase; letter-spacing: 0.5px; background: var(--grey-100);
+}
+.question-row {
+  display: flex; align-items: flex-start; padding: 16px 24px; gap: 16px;
+  border-bottom: 1px solid var(--grey-200); transition: background 0.15s;
+}
+.question-row:hover { background: #FAFAFA; }
+.q-number { font-weight: 700; color: var(--cherry-dark); font-size: 13px; min-width: 32px; padding-top: 2px; }
+.q-text { flex: 1; font-size: 13.5px; line-height: 1.5; }
+.q-score { display: flex; gap: 6px; flex-shrink: 0; }
+.score-btn {
+  width: 36px; height: 36px; border-radius: 8px; border: 2px solid var(--grey-300);
+  background: white; cursor: pointer; font-weight: 700; font-size: 14px;
+  color: var(--charcoal); transition: all 0.15s; display: flex; align-items: center;
+  justify-content: center;
+}
+.score-btn:hover { border-color: var(--cherry-mid); }
+.score-btn.s1.active { background: #FFCDD2; border-color: #E57373; color: #C62828; }
+.score-btn.s2.active { background: #FFE0B2; border-color: #FFB74D; color: #E65100; }
+.score-btn.s3.active { background: #FFF9C4; border-color: #FFF176; color: #F57F17; }
+.score-btn.s4.active { background: #C8E6C9; border-color: #81C784; color: #2E7D32; }
+.score-btn.s5.active { background: #A5D6A7; border-color: #66BB6A; color: #1B5E20; }
+
+.guidance-inline {
+  display: none; padding: 14px 24px 14px 56px; background: #FFF8F0;
+  border-left: 4px solid var(--cherry-dark); font-size: 13px; line-height: 1.6;
+  color: #444; animation: guidanceFadeIn 0.25s ease;
+}
+.guidance-inline.visible { display: block; }
+.guidance-inline .guidance-label {
+  font-weight: 700; color: var(--cherry-dark); font-size: 12px;
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
+}
+@keyframes guidanceFadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Dashboard */
+.dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+.dash-card {
+  background: white; border-radius: 12px; padding: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.dash-card.full { grid-column: 1 / -1; }
+.dash-card h3 { color: var(--cherry-dark); font-size: 16px; margin-bottom: 16px; }
+
+.score-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.score-table th {
+  text-align: left; padding: 10px 12px; background: var(--cherry-dark);
+  color: white; font-weight: 600;
+}
+.score-table td { padding: 10px 12px; border-bottom: 1px solid var(--grey-200); }
+.score-table tr:hover td { background: #FAFAFA; }
+
+.rating-badge {
+  display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600;
+}
+.rating-not-started { background: var(--red-light); color: #C62828; }
+.rating-initial { background: var(--orange-light); color: #E65100; }
+.rating-defined { background: var(--yellow-light); color: #F57F17; }
+.rating-managed { background: var(--green-light); color: #2E7D32; }
+.rating-optimised { background: var(--green-mid); color: #1B5E20; }
+
+.overall-score-display {
+  text-align: center; padding: 20px;
+}
+.overall-number { font-size: 56px; font-weight: 800; color: var(--cherry-dark); }
+.overall-label { font-size: 14px; color: var(--grey-500); margin-top: 4px; }
+.overall-rating { font-size: 18px; font-weight: 700; margin-top: 8px; }
+
+/* Comparison */
+.change-positive { color: #2E7D32; font-weight: 700; }
+.change-negative { color: #C62828; font-weight: 700; }
+.change-neutral { color: var(--grey-500); }
+
+.status-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+.status-significant { background: #E8F5E9; color: #1B5E20; }
+.status-improved { background: #E3F2FD; color: #1565C0; }
+.status-stable { background: var(--grey-200); color: var(--charcoal); }
+.status-declined { background: #FFEBEE; color: #C62828; }
+
+/* Action Plan */
+.action-card {
+  background: white; border-radius: 10px; padding: 20px; margin-bottom: 12px;
+  border-left: 4px solid var(--grey-300); box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.action-card.critical { border-left-color: #E53935; }
+.action-card.high { border-left-color: #FF9800; }
+.action-card.medium { border-left-color: #4CAF50; }
+.action-card.maintain { border-left-color: #2196F3; }
+.action-card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.action-card h4 { font-size: 15px; color: var(--charcoal); }
+.priority-tag { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 12px; }
+.priority-critical { background: #FFEBEE; color: #C62828; }
+.priority-high { background: #FFF3E0; color: #E65100; }
+.priority-medium { background: #E8F5E9; color: #2E7D32; }
+.priority-maintain { background: #E3F2FD; color: #1565C0; }
+.action-card p { font-size: 13px; line-height: 1.6; color: #555; }
+
+.chart-container { position: relative; width: 100%; max-height: 350px; }
+canvas { max-height: 350px; }
+
+.btn-row { display: flex; gap: 12px; justify-content: center; margin-top: 30px; }
+
+/* Print */
+@media print {
+  .app-header, .nav-tabs, .btn-row, .guidance-inline, .no-print { display: none !important; }
+  .content { max-width: 100%; padding: 10px; }
+  .dash-card, .dimension-section, .action-card { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+  body { background: white; }
+}
+
+.section-title { font-size: 22px; font-weight: 700; color: var(--cherry-dark); margin-bottom: 20px; }
+.section-subtitle { font-size: 14px; color: var(--grey-500); margin-bottom: 24px; }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.footer { text-align: center; padding: 30px; color: var(--grey-500); font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div>
+    <h1>CHERRYSTONE</h1>
+    <div class="subtitle">Process Maturity Assessment Tool</div>
+  </div>
+  <div style="font-size:12px;opacity:0.7">www.cherrystone.co.za</div>
+</div>
+
+<div class="nav-tabs" id="navTabs">
+  <div class="nav-tab active" data-tab="welcome">Welcome</div>
+  <div class="nav-tab" data-tab="industry">Industry</div>
+  <div class="nav-tab disabled" data-tab="pre-assessment">Pre-Assessment</div>
+  <div class="nav-tab disabled" data-tab="results">Results</div>
+  <div class="nav-tab disabled" data-tab="post-assessment">Post-Assessment</div>
+  <div class="nav-tab disabled" data-tab="comparison">Comparison</div>
+  <div class="nav-tab disabled" data-tab="action-plan">Action Plan</div>
+</div>
+
+<!-- WELCOME -->
+<div class="tab-content active" id="tab-welcome">
+<div class="content">
+  <div class="welcome-card">
+    <h2>Process Maturity Assessment</h2>
+    <p class="tagline">Evaluate your organisation's process maturity across six core dimensions, plus industry-specific methodology dimensions tailored to your sector.</p>
+    <div class="steps">
+      <div class="step"><div class="step-num">1</div><div class="step-text"><strong>Select your industry</strong> to unlock tailored assessment questions</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text"><strong>Complete the Pre-Assessment</strong> — answer all 48 questions (score 1–5)</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text"><strong>Review your results</strong> on the interactive dashboard with radar charts</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-text"><strong>After your Cherrystone engagement</strong>, complete the Post-Assessment</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-text"><strong>View the comparison</strong> to measure improvement and export your report</div></div>
+    </div>
+    <div class="scoring-guide">
+      <h4>SCORING GUIDE</h4>
+      <div class="score-item"><div class="score-badge" style="background:#FFCDD2">1</div> <strong>Not Started</strong> — No evidence of this practice</div>
+      <div class="score-item"><div class="score-badge" style="background:#FFE0B2">2</div> <strong>Initial</strong> — Ad hoc, inconsistent application</div>
+      <div class="score-item"><div class="score-badge" style="background:#FFF9C4">3</div> <strong>Defined</strong> — Documented and standardised</div>
+      <div class="score-item"><div class="score-badge" style="background:#C8E6C9">4</div> <strong>Managed</strong> — Measured, controlled, and actively improved</div>
+      <div class="score-item"><div class="score-badge" style="background:#A5D6A7">5</div> <strong>Optimised</strong> — Best-in-class, continuously innovating</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goTab('industry')">Get Started</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- INDUSTRY -->
+<div class="tab-content" id="tab-industry">
+<div class="content">
+  <h2 class="section-title">Select Your Industry</h2>
+  <p class="section-subtitle">Choose your industry to unlock tailored assessment questions for your sector.</p>
+  <div class="industry-grid" id="industryGrid"></div>
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="goTab('welcome')">Back</button>
+    <button class="btn btn-primary" id="btnStartAssessment" style="opacity:0.4;pointer-events:none" onclick="startPreAssessment()">Continue to Assessment</button>
+  </div>
+</div>
+</div>
+
+<!-- PRE-ASSESSMENT -->
+<div class="tab-content" id="tab-pre-assessment">
+<div class="content">
+  <div class="assessment-header">
+    <div>
+      <h2 class="section-title" style="margin-bottom:4px">Pre-Engagement Assessment</h2>
+      <p class="section-subtitle" style="margin-bottom:0">Score each question 1 (Not Started) to 5 (Optimised). Click a score to see guidance.</p>
+    </div>
+    <div style="text-align:right">
+      <div class="progress-info"><span id="preProgress">0</span>/48 answered</div>
+      <div class="progress-bar-container"><div class="progress-bar-fill" id="preProgressBar" style="width:0%"></div></div>
+    </div>
+  </div>
+  <div id="preQuestions"></div>
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="goTab('industry')">Back</button>
+    <button class="btn btn-primary" id="btnViewResults" onclick="showResults()">View Results</button>
+  </div>
+</div>
+</div>
+
+<!-- RESULTS -->
+<div class="tab-content" id="tab-results">
+<div class="content">
+  <h2 class="section-title">Process Maturity Results — Pre-Engagement</h2>
+  <p class="section-subtitle">Your current process maturity scores across all dimensions.</p>
+  <div class="dashboard-grid">
+    <div class="dash-card">
+      <h3>Universal Dimensions</h3>
+      <table class="score-table"><thead><tr><th>Dimension</th><th>Score</th><th>Rating</th></tr></thead><tbody id="resultsUniversalTable"></tbody></table>
+      <div class="overall-score-display" style="margin-top:16px"><div style="font-size:13px;color:var(--grey-500)">OVERALL UNIVERSAL</div><div id="resultsOverallUniversal" class="overall-number" style="font-size:36px">—</div></div>
+    </div>
+    <div class="dash-card">
+      <h3>Radar — Universal Dimensions</h3>
+      <div class="chart-container"><canvas id="radarPreChart"></canvas></div>
+    </div>
+    <div class="dash-card">
+      <h3>Industry-Specific Dimensions</h3>
+      <table class="score-table"><thead><tr><th>Dimension</th><th>Score</th><th>Rating</th></tr></thead><tbody id="resultsIndustryTable"></tbody></table>
+      <div class="overall-score-display" style="margin-top:16px"><div style="font-size:13px;color:var(--grey-500)">OVERALL INDUSTRY</div><div id="resultsOverallIndustry" class="overall-number" style="font-size:36px">—</div></div>
+    </div>
+    <div class="dash-card">
+      <h3>Bar Chart — All Dimensions</h3>
+      <div class="chart-container"><canvas id="barPreChart"></canvas></div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="goTab('pre-assessment')">Back to Assessment</button>
+    <button class="btn btn-outline" onclick="goTab('action-plan')">View Action Plan</button>
+    <button class="btn btn-primary" onclick="goTab('post-assessment')">Start Post-Assessment</button>
+  </div>
+</div>
+</div>
+
+<!-- POST-ASSESSMENT -->
+<div class="tab-content" id="tab-post-assessment">
+<div class="content">
+  <div class="assessment-header">
+    <div>
+      <h2 class="section-title" style="margin-bottom:4px">Post-Engagement Assessment</h2>
+      <p class="section-subtitle" style="margin-bottom:0">Complete this after your Cherrystone engagement to measure improvement.</p>
+    </div>
+    <div style="text-align:right">
+      <div class="progress-info"><span id="postProgress">0</span>/48 answered</div>
+      <div class="progress-bar-container"><div class="progress-bar-fill" id="postProgressBar" style="width:0%"></div></div>
+    </div>
+  </div>
+  <div id="postQuestions"></div>
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="goTab('results')">Back</button>
+    <button class="btn btn-primary" onclick="showComparison()">View Comparison</button>
+  </div>
+</div>
+</div>
+
+<!-- COMPARISON -->
+<div class="tab-content" id="tab-comparison">
+<div class="content">
+  <h2 class="section-title">Pre vs Post Engagement Comparison</h2>
+  <p class="section-subtitle">Measuring the impact of your Cherrystone engagement across all dimensions.</p>
+  <div class="dashboard-grid">
+    <div class="dash-card full">
+      <h3>Universal Dimension Comparison</h3>
+      <table class="score-table">
+        <thead><tr><th>Dimension</th><th>Pre</th><th>Post</th><th>Change</th><th>% Improvement</th><th>Status</th></tr></thead>
+        <tbody id="compUniversalTable"></tbody>
+      </table>
+    </div>
+    <div class="dash-card">
+      <h3>Pre vs Post — Universal</h3>
+      <div class="chart-container"><canvas id="compBarChart"></canvas></div>
+    </div>
+    <div class="dash-card">
+      <h3>Pre vs Post — Radar Overlay</h3>
+      <div class="chart-container"><canvas id="compRadarChart"></canvas></div>
+    </div>
+    <div class="dash-card full">
+      <h3>Industry-Specific Dimension Comparison</h3>
+      <table class="score-table">
+        <thead><tr><th>Dimension</th><th>Pre</th><th>Post</th><th>Change</th><th>% Improvement</th><th>Status</th></tr></thead>
+        <tbody id="compIndustryTable"></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="goTab('post-assessment')">Back</button>
+    <button class="btn btn-primary" onclick="exportReport()">Export PDF Report</button>
+  </div>
+</div>
+</div>
+
+<!-- ACTION PLAN -->
+<div class="tab-content" id="tab-action-plan">
+<div class="content">
+  <h2 class="section-title">Process Improvement Action Plan</h2>
+  <p class="section-subtitle">Prioritised recommendations based on your assessment scores.</p>
+  <div id="actionPlanCards"></div>
+  <div class="btn-row">
+    <button class="btn btn-secondary" onclick="goTab('results')">Back to Results</button>
+    <button class="btn btn-primary" onclick="exportReport()">Export PDF Report</button>
+  </div>
+</div>
+</div>
+
+<!-- Guidance Popup -->
+<!-- Guidance is now shown inline below each question -->
+
+<div class="footer">Cherrystone — Empowering Process Excellence &bull; www.cherrystone.co.za</div>
+
+<script>
+// ===================== DATA =====================
+const DIMENSIONS = [
+  {num:1, name:"Process Knowledge", key:"Process Knowledge"},
+  {num:2, name:"Process Ownership", key:"Process Ownership"},
+  {num:3, name:"Process Effectiveness", key:"Process Effectiveness"},
+  {num:4, name:"Performance Metric Alignment", key:"Performance Metric Alignment"},
+  {num:5, name:"Organisation Enablement", key:"Organisation Enablement"},
+  {num:6, name:"Technology Enablement", key:"Technology Enablement"}
+];
+
+const UNIVERSAL_QUESTIONS = {
+  "1.1":"Are your core business processes formally documented and accessible to all stakeholders?",
+  "1.2":"Do employees understand how their individual tasks connect to end-to-end process flows?",
+  "1.3":"Is there a centralised repository (e.g., process maps, SOPs) that is regularly maintained?",
+  "1.4":"Are process dependencies, handoffs, and escalation paths clearly defined and communicated?",
+  "2.1":"Is there a clearly designated owner for each core business process?",
+  "2.2":"Do process owners have the authority and accountability to drive changes and improvements?",
+  "2.3":"Are RACI matrices or equivalent frameworks used to define roles within processes?",
+  "2.4":"Is there a formal governance structure that reviews process performance and ownership regularly?",
+  "3.1":"Are your processes delivering the intended outcomes consistently and predictably?",
+  "3.2":"Is there a mechanism to identify and eliminate process bottlenecks and waste?",
+  "3.3":"Are cycle times, error rates, and rework rates tracked and actively managed?",
+  "3.4":"Do your processes adapt quickly when business requirements or external conditions change?",
+  "4.1":"Are KPIs and metrics directly linked to strategic business objectives?",
+  "4.2":"Do process metrics provide actionable insights that drive decision-making?",
+  "4.3":"Are leading indicators used alongside lagging indicators to anticipate process issues?",
+  "4.4":"Is there a balanced scorecard or similar framework that aligns metrics across departments?",
+  "5.1":"Does the organisational structure support efficient process execution without silos?",
+  "5.2":"Is there a culture of continuous improvement (e.g., Kaizen, PDCA) embedded in the organisation?",
+  "5.3":"Are employees trained and empowered to identify process issues and suggest improvements?",
+  "5.4":"Is change management formally integrated into process improvement initiatives?",
+  "6.1":"Are your technology platforms aligned with and supportive of core business processes?",
+  "6.2":"Is process automation applied where it can reduce manual effort and human error?",
+  "6.3":"Do your systems provide real-time data and analytics to monitor process performance?",
+  "6.4":"Is there a technology roadmap that prioritises process improvement investments?"
+};
+
+const INDUSTRY_QUESTIONS = {"Learning":{"Process Knowledge_Q1":"Are instructional design methodologies (e.g., ADDIE, SAM) documented and consistently followed?","Process Knowledge_Q2":"Is there a learning taxonomy (e.g., Bloom\u2019s) used to structure curriculum development processes?","Process Knowledge_Q3":"Are learner journey maps created to visualise the end-to-end learning experience?","Process Knowledge_Q4":"Do subject matter experts follow a structured knowledge transfer process for content creation?","Process Ownership_Q1":"Is there a dedicated Learning & Development process owner with cross-functional authority?","Process Ownership_Q2":"Are curriculum review committees established with clear mandates and meeting cadences?","Process Ownership_Q3":"Do facilitators and instructional designers have defined ownership of content lifecycle stages?","Process Ownership_Q4":"Is there a governance model for managing learning technology platform decisions?","Process Effectiveness_Q1":"Are learning outcomes measured using Kirkpatrick\u2019s four levels of evaluation?","Process Effectiveness_Q2":"Is the content development-to-deployment cycle time tracked and optimised?","Process Effectiveness_Q3":"Are learner completion rates, assessment pass rates, and feedback scores actively managed?","Process Effectiveness_Q4":"Do you apply rapid prototyping or agile methods to iterate on learning content quickly?","Performance Metric Alignment_Q1":"Are learning metrics tied to business performance outcomes (e.g., productivity, retention)?","Performance Metric Alignment_Q2":"Do you track ROI on learning programmes using standardised measurement frameworks?","Performance Metric Alignment_Q3":"Are skill gap analyses used to align training priorities with workforce planning?","Performance Metric Alignment_Q4":"Is learning data integrated with HR analytics to measure talent development impact?","Organisation Enablement_Q1":"Is a learning culture actively promoted through leadership sponsorship and incentives?","Organisation Enablement_Q2":"Are communities of practice or peer learning networks established across the organisation?","Organisation Enablement_Q3":"Is there a formal mentorship or coaching programme integrated with learning pathways?","Organisation Enablement_Q4":"Are employees given dedicated time and resources for professional development?","Technology Enablement_Q1":"Is your LMS/LXP integrated with HR systems for seamless learner data flow?","Technology Enablement_Q2":"Are adaptive learning technologies used to personalise learning experiences?","Technology Enablement_Q3":"Do you leverage AI or analytics to recommend content and predict learning needs?","Technology Enablement_Q4":"Is there a microlearning or mobile-first strategy for just-in-time knowledge delivery?"},"Finance":{"Process Knowledge_Q1":"Are financial close processes (month-end, quarter-end) mapped with detailed sub-process steps?","Process Knowledge_Q2":"Is there a documented chart of accounts with clear classification guidelines?","Process Knowledge_Q3":"Are regulatory compliance requirements (e.g., IFRS, SOX) embedded into process documentation?","Process Knowledge_Q4":"Do finance teams have documented intercompany reconciliation and elimination procedures?","Process Ownership_Q1":"Is there a designated controller or process owner for each financial reporting cycle?","Process Ownership_Q2":"Are treasury, AP, AR, and GL processes owned by specific individuals with clear mandates?","Process Ownership_Q3":"Is there a finance transformation office that oversees process standardisation?","Process Ownership_Q4":"Do process owners conduct formal post-close reviews to identify improvement opportunities?","Process Effectiveness_Q1":"Is the financial close completed within target timelines (e.g., 5-day close)?","Process Effectiveness_Q2":"Are journal entry error rates and adjustment volumes tracked and reduced over time?","Process Effectiveness_Q3":"Is straight-through processing (STP) measured for AP/AR transaction flows?","Process Effectiveness_Q4":"Are variance analysis and exception handling processes automated and efficient?","Performance Metric Alignment_Q1":"Are finance KPIs aligned with enterprise value drivers (e.g., DSO, DPO, working capital)?","Performance Metric Alignment_Q2":"Is cost-to-serve measured for core finance functions (e.g., cost per invoice, cost per payment)?","Performance Metric Alignment_Q3":"Are financial planning accuracy metrics (forecast vs. actual) tracked and improved?","Performance Metric Alignment_Q4":"Do finance dashboards provide real-time visibility into cash flow and liquidity positions?","Organisation Enablement_Q1":"Is a shared services or centre of excellence model used for transactional finance processes?","Organisation Enablement_Q2":"Are finance business partners embedded in operational teams to drive decision support?","Organisation Enablement_Q3":"Is there a structured finance talent development programme with rotation opportunities?","Organisation Enablement_Q4":"Are three lines of defence (operations, risk, audit) clearly defined and operational?","Technology Enablement_Q1":"Is robotic process automation (RPA) deployed for high-volume, rule-based finance tasks?","Technology Enablement_Q2":"Are ERP systems configured to enforce financial controls and segregation of duties?","Technology Enablement_Q3":"Is advanced analytics or AI used for fraud detection, forecasting, or anomaly identification?","Technology Enablement_Q4":"Is there a finance technology roadmap that includes cloud migration and API integration?"},"Supply Chain":{"Process Knowledge_Q1":"Are end-to-end supply chain processes (Plan, Source, Make, Deliver, Return) mapped using SCOR?","Process Knowledge_Q2":"Is there a documented value stream map identifying waste (Muda) across the supply chain?","Process Knowledge_Q3":"Are supplier qualification and onboarding processes standardised and documented?","Process Knowledge_Q4":"Do logistics and warehousing teams follow documented standard work instructions?","Process Ownership_Q1":"Is there an end-to-end supply chain process owner with cross-functional authority?","Process Ownership_Q2":"Are S&OP (Sales & Operations Planning) meetings chaired by a designated process owner?","Process Ownership_Q3":"Do category managers own supplier relationship and procurement process outcomes?","Process Ownership_Q4":"Is there a formal governance structure for supply chain risk management?","Process Effectiveness_Q1":"Are Lean principles (5S, Kanban, pull systems) actively applied to reduce waste?","Process Effectiveness_Q2":"Is Overall Equipment Effectiveness (OEE) tracked and used to drive manufacturing improvements?","Process Effectiveness_Q3":"Are order-to-delivery cycle times benchmarked against industry standards?","Process Effectiveness_Q4":"Is Six Sigma (DMAIC) methodology used to reduce process variation and defects?","Performance Metric Alignment_Q1":"Are SCOR metrics (Perfect Order, Cash-to-Cash, Supply Chain Cost) used as primary KPIs?","Performance Metric Alignment_Q2":"Is inventory performance measured using turns, GMROI, and days of supply?","Performance Metric Alignment_Q3":"Are supplier scorecards aligned with total cost of ownership (TCO) principles?","Performance Metric Alignment_Q4":"Is demand forecast accuracy measured and used to improve planning processes?","Organisation Enablement_Q1":"Is a continuous improvement (CI) culture embedded with formal Kaizen event programmes?","Organisation Enablement_Q2":"Are cross-functional teams used for supply chain problem-solving (e.g., A3 thinking)?","Organisation Enablement_Q3":"Is there a formal supply chain talent development programme with Lean/Six Sigma certification?","Organisation Enablement_Q4":"Are supplier development programmes in place to build strategic partner capabilities?","Technology Enablement_Q1":"Is an integrated supply chain planning platform (e.g., IBP, APS) deployed and adopted?","Technology Enablement_Q2":"Are IoT sensors and real-time tracking used for inventory and logistics visibility?","Technology Enablement_Q3":"Is predictive analytics applied for demand sensing and supply chain risk mitigation?","Technology Enablement_Q4":"Are digital twin or simulation technologies used for supply chain scenario planning?"},"Software Development":{"Process Knowledge_Q1":"Are SDLC processes (Agile, Scrum, Kanban) documented with clear ceremonies and artifacts?","Process Knowledge_Q2":"Is there a documented Definition of Done (DoD) and Definition of Ready (DoR) for all teams?","Process Knowledge_Q3":"Are CI/CD pipeline processes documented with clear stage gates and quality checks?","Process Knowledge_Q4":"Is the incident management and post-mortem process standardised across all teams?","Process Ownership_Q1":"Are Product Owners empowered with clear accountability for backlog prioritisation and delivery?","Process Ownership_Q2":"Is there a designated Engineering Manager or Tech Lead who owns development process quality?","Process Ownership_Q3":"Are Scrum Masters or Agile Coaches accountable for continuous process improvement?","Process Ownership_Q4":"Is there a platform or DevOps team that owns the toolchain and infrastructure processes?","Process Effectiveness_Q1":"Are sprint velocity, lead time, and cycle time tracked to measure delivery predictability?","Process Effectiveness_Q2":"Is the deployment frequency and change failure rate measured (DORA metrics)?","Process Effectiveness_Q3":"Are code review turnaround times and merge-to-deploy durations actively optimised?","Process Effectiveness_Q4":"Is technical debt quantified and managed through a structured reduction programme?","Performance Metric Alignment_Q1":"Are engineering metrics (DORA, SPACE) aligned with product and business objectives?","Performance Metric Alignment_Q2":"Is customer-facing quality measured through error rates, uptime SLAs, and NPS feedback?","Performance Metric Alignment_Q3":"Are team health and developer experience metrics tracked alongside delivery metrics?","Performance Metric Alignment_Q4":"Is there a balanced metrics framework that avoids optimising for speed at the expense of quality?","Organisation Enablement_Q1":"Is a DevOps culture actively fostered with shared ownership between Dev and Ops teams?","Organisation Enablement_Q2":"Are engineering guilds or chapters used to share knowledge and standardise practices?","Organisation Enablement_Q3":"Is there a structured onboarding programme that accelerates new developer productivity?","Organisation Enablement_Q4":"Are retrospectives consistently conducted and action items tracked to completion?","Technology Enablement_Q1":"Is Infrastructure as Code (IaC) used for environment provisioning and configuration?","Technology Enablement_Q2":"Are automated testing frameworks (unit, integration, E2E) embedded in the CI/CD pipeline?","Technology Enablement_Q3":"Is observability (logging, tracing, metrics) implemented for production systems?","Technology Enablement_Q4":"Are feature flags and progressive delivery mechanisms used for controlled releases?"}};
+
+const GUIDANCE = {"Process Knowledge":{1:"Critical gap: No formal process documentation exists. Immediate action: Conduct process discovery workshops with key stakeholders. Map your top 5 core processes using swim-lane diagrams. Engage Cherrystone to facilitate structured process mapping sessions.",2:"Developing: Some informal documentation exists but is incomplete. Next step: Prioritise documenting high-impact processes. Create a centralised digital repository (e.g., Confluence, SharePoint). Standardise templates for process maps and SOPs.",3:"Defined: Documentation exists but may be outdated or inconsistently used. Next step: Implement a review cycle (quarterly) for all process documents. Assign document owners. Integrate process maps into onboarding and training programmes.",4:"Managed: Strong documentation with regular updates. Next step: Enhance with process simulation and scenario modelling. Link process documentation to performance dashboards. Explore process mining to validate documented vs. actual flows.",5:"Optimised: World-class process knowledge management. Maintain through continuous process mining, AI-driven documentation updates, and cross-functional knowledge sharing. Benchmark against industry leaders."},"Process Ownership":{1:"Critical gap: No clear process ownership. Immediate action: Identify and appoint process owners for top 5 critical processes. Define RACI matrices. Establish executive sponsorship for process governance.",2:"Developing: Informal ownership exists but lacks authority. Next step: Formalise process owner roles with documented responsibilities. Include process KPIs in owner performance reviews. Create escalation paths.",3:"Defined: Ownership is assigned but governance is inconsistent. Next step: Implement a Process Governance Board with regular review cadence. Empower owners with budget and decision-making authority. Establish cross-functional process councils.",4:"Managed: Strong ownership with active governance. Next step: Introduce process maturity assessments led by owners. Implement peer benchmarking across process domains. Develop succession planning for process owners.",5:"Optimised: Exemplary process governance. Maintain through advanced governance frameworks, process owner communities of practice, and continuous leadership development in process management."},"Process Effectiveness":{1:"Critical gap: Processes are ad hoc with unpredictable outcomes. Immediate action: Identify the top 3 processes with highest failure/rework rates. Conduct root cause analysis (5 Whys, Fishbone). Establish baseline performance measurements.",2:"Developing: Some processes are managed but bottlenecks persist. Next step: Implement process performance dashboards. Apply Lean waste elimination to reduce non-value-adding steps. Standardise handoff procedures between teams.",3:"Defined: Processes are mostly effective but lack consistency. Next step: Introduce statistical process control for critical processes. Implement formal continuous improvement cycles (PDCA). Benchmark against industry standards.",4:"Managed: Processes are highly effective with proactive management. Next step: Apply advanced analytics to predict process failures. Implement intelligent automation for complex decision points. Pursue process excellence certifications.",5:"Optimised: Best-in-class process effectiveness. Maintain through predictive process analytics, AI-driven optimisation, and regular innovation sprints to reimagine existing processes."},"Performance Metric Alignment":{1:"Critical gap: No meaningful process metrics exist. Immediate action: Define 3\u20135 KPIs for each core process linked to strategic objectives. Implement basic data collection mechanisms. Create a simple scorecard framework.",2:"Developing: Metrics exist but are disconnected from strategy. Next step: Map each metric to specific strategic objectives. Introduce leading indicators alongside lagging measures. Establish regular metric review meetings.",3:"Defined: Metrics are aligned but insights are not actionable. Next step: Implement a balanced scorecard framework. Create real-time dashboards with drill-down capability. Train managers on data-driven decision-making.",4:"Managed: Strong metric alignment with actionable insights. Next step: Introduce predictive analytics and scenario modelling. Implement automated alerting for metric thresholds. Develop cross-functional metric correlation analysis.",5:"Optimised: World-class measurement and analytics. Maintain through AI-powered analytics, real-time predictive dashboards, and continuous refinement of metric frameworks based on business evolution."},"Organisation Enablement":{1:"Critical gap: Organisational structure hinders process execution. Immediate action: Assess current structure against process flows to identify silos. Initiate cross-functional collaboration forums. Begin change readiness assessment.",2:"Developing: Some cross-functional awareness but silos remain. Next step: Establish formal cross-functional process teams. Introduce continuous improvement training (Lean basics). Create internal communication channels for process improvement.",3:"Defined: Cross-functional collaboration is emerging. Next step: Embed continuous improvement methodologies into the organisational DNA. Develop internal process improvement certification programmes. Establish communities of practice.",4:"Managed: Strong organisational enablement with active CI culture. Next step: Implement innovation labs and process hackathons. Develop advanced change management capabilities. Create external benchmarking partnerships.",5:"Optimised: Truly process-centric organisation. Maintain through continuous organisational learning, advanced change management, and leadership programmes focused on process thinking and innovation."},"Technology Enablement":{1:"Critical gap: Technology is misaligned or absent for process support. Immediate action: Conduct a technology-process gap analysis. Identify quick-win automation opportunities. Develop a basic technology roadmap aligned with process priorities.",2:"Developing: Some technology supports processes but integration is poor. Next step: Prioritise system integration to eliminate data silos. Implement workflow automation for top manual processes. Evaluate cloud-based process management platforms.",3:"Defined: Technology supports processes but lacks advanced capabilities. Next step: Implement process mining tools to identify hidden inefficiencies. Deploy RPA for rule-based repetitive tasks. Integrate real-time analytics dashboards.",4:"Managed: Strong technology enablement with proactive investment. Next step: Explore AI/ML for predictive process optimisation. Implement digital twin technology for process simulation. Develop API-first architecture for process agility.",5:"Optimised: Cutting-edge technology-enabled processes. Maintain through continuous technology innovation, AI-driven process optimisation, and active participation in industry technology consortiums."}};
+
+const INDUSTRY_DIM_LABELS = {
+  "Learning":["Instructional Design Maturity","Learning Governance","Learning Outcomes & Evaluation","Learning Analytics & ROI","Learning Culture & Capability","Learning Technology & Innovation"],
+  "Finance":["Financial Process Maturity","Financial Governance & Control","Financial Operations Excellence","Financial Performance Analytics","Finance Organisation Capability","Finance Technology & Automation"],
+  "Supply Chain":["Supply Chain Process Maturity","Supply Chain Governance","Supply Chain Operational Excellence","Supply Chain Performance Analytics","Supply Chain Organisation Capability","Supply Chain Technology & Innovation"],
+  "Software Development":["SDLC Process Maturity","Engineering Governance","Delivery Effectiveness","Engineering Analytics & Metrics","Engineering Culture & Capability","DevOps & Toolchain Maturity"]
+};
+
+const INDUSTRIES = [
+  {name:"Learning", desc:"L&D, EdTech, Training \u2014 Evaluates ADDIE/SAM, Bloom\u2019s Taxonomy, Kirkpatrick, LMS/LXP integration"},
+  {name:"Finance", desc:"Financial Services, Accounting, Treasury \u2014 Evaluates close processes, IFRS/SOX, RPA, ERP controls"},
+  {name:"Supply Chain", desc:"Logistics, Manufacturing, Procurement \u2014 Evaluates SCOR, Lean, Six Sigma, S&OP, OEE, IoT"},
+  {name:"Software Development", desc:"Engineering, Product, DevOps \u2014 Evaluates Agile/Scrum, DORA metrics, CI/CD, IaC, observability"}
+];
+
+// ===================== STATE =====================
+let selectedIndustry = null;
+let preScores = {};
+let postScores = {};
+let charts = {};
+
+// ===================== NAV =====================
+document.querySelectorAll('.nav-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    if (tab.classList.contains('disabled')) return;
+    goTab(tab.dataset.tab);
+  });
+});
+
+function goTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  document.querySelector(`.nav-tab[data-tab="${id}"]`).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function enableTab(id) {
+  document.querySelector(`.nav-tab[data-tab="${id}"]`).classList.remove('disabled');
+}
+
+// ===================== INDUSTRY =====================
+function renderIndustries() {
+  const grid = document.getElementById('industryGrid');
+  grid.innerHTML = INDUSTRIES.map(ind => `
+    <div class="industry-card" data-ind="${ind.name}" onclick="selectIndustry('${ind.name}')">
+      <div class="industry-check">\u2713</div>
+      <h3>${ind.name}</h3>
+      <p>${ind.desc}</p>
+    </div>
+  `).join('');
+}
+
+function selectIndustry(name) {
+  selectedIndustry = name;
+  document.querySelectorAll('.industry-card').forEach(c => c.classList.remove('selected'));
+  document.querySelector(`.industry-card[data-ind="${name}"]`).classList.add('selected');
+  const btn = document.getElementById('btnStartAssessment');
+  btn.style.opacity = '1';
+  btn.style.pointerEvents = 'auto';
+}
+
+// ===================== ASSESSMENT =====================
+function buildQuestions(containerId, scoreObj, progressId, progressBarId) {
+  const container = document.getElementById(containerId);
+  let html = '';
+  DIMENSIONS.forEach((dim, di) => {
+    const indQs = INDUSTRY_QUESTIONS[selectedIndustry];
+    const indLabels = INDUSTRY_DIM_LABELS[selectedIndustry];
+    html += `<div class="dimension-section">`;
+    html += `<div class="dimension-header">DIMENSION ${dim.num}: ${dim.name.toUpperCase()}</div>`;
+    html += `<div class="question-group-label">Universal Process Questions</div>`;
+    for (let q = 1; q <= 4; q++) {
+      const qid = `${dim.num}.${q}`;
+      const text = UNIVERSAL_QUESTIONS[qid];
+      html += questionRow(qid, text, scoreObj, containerId, dim.key);
+    }
+    html += `<div class="question-group-label">Industry-Specific Questions (${selectedIndustry})</div>`;
+    for (let q = 1; q <= 4; q++) {
+      const qid = `${dim.num}.${q+4}`;
+      const qKey = `${dim.key}_Q${q}`;
+      const text = indQs[qKey] || 'Question not available';
+      html += questionRow(qid, text, scoreObj, containerId, dim.key);
+    }
+    html += `</div>`;
+  });
+  container.innerHTML = html;
+}
+
+function questionRow(qid, text, scoreObj, containerId, dimKey) {
+  const prefix = containerId === 'preQuestions' ? 'pre' : 'post';
+  return `<div class="question-row">
+    <div class="q-number">${qid}</div>
+    <div class="q-text">${text}</div>
+    <div class="q-score">
+      ${[1,2,3,4,5].map(s => `<button class="score-btn s${s}" data-qid="${qid}" data-score="${s}" data-prefix="${prefix}" data-dim="${dimKey}" onclick="setScore(this)">${s}</button>`).join('')}
+    </div>
+  </div>
+  <div class="guidance-inline" id="guidance-${prefix}-${qid.replace('.','_')}">
+    <div class="guidance-label"></div>
+    <div class="guidance-text"></div>
+  </div>`;
+}
+
+function setScore(btn) {
+  const {qid, score, prefix, dim} = btn.dataset;
+  const scoreObj = prefix === 'pre' ? preScores : postScores;
+  scoreObj[qid] = parseInt(score);
+
+  // Update UI
+  btn.parentElement.querySelectorAll('.score-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  // Update progress
+  const total = Object.keys(scoreObj).length;
+  document.getElementById(prefix + 'Progress').textContent = total;
+  document.getElementById(prefix + 'ProgressBar').style.width = ((total/48)*100) + '%';
+
+  // Show inline guidance below this question
+  showInlineGuidance(prefix, qid, dim, parseInt(score));
+}
+
+function showInlineGuidance(prefix, qid, dimKey, score) {
+  // Hide any previously open guidance in this assessment
+  document.querySelectorAll(`#${prefix}Questions .guidance-inline.visible`).forEach(el => el.classList.remove('visible'));
+  const g = GUIDANCE[dimKey];
+  if (!g || !g[score]) return;
+  const elId = `guidance-${prefix}-${qid.replace('.','_')}`;
+  const el = document.getElementById(elId);
+  if (!el) return;
+  el.querySelector('.guidance-label').textContent = `${dimKey} — Score ${score} Guidance`;
+  el.querySelector('.guidance-text').textContent = g[score];
+  el.classList.add('visible');
+}
+
+function startPreAssessment() {
+  if (!selectedIndustry) return;
+  buildQuestions('preQuestions', preScores, 'preProgress', 'preProgressBar');
+  enableTab('pre-assessment');
+  goTab('pre-assessment');
+}
+
+// ===================== CALCULATIONS =====================
+function calcDimScores(scoreObj) {
+  const universal = {}, industry = {};
+  DIMENSIONS.forEach(dim => {
+    const uScores = [], iScores = [];
+    for (let q = 1; q <= 4; q++) {
+      const v = scoreObj[`${dim.num}.${q}`];
+      if (v) uScores.push(v);
+    }
+    for (let q = 5; q <= 8; q++) {
+      const v = scoreObj[`${dim.num}.${q}`];
+      if (v) iScores.push(v);
+    }
+    universal[dim.key] = uScores.length ? +(uScores.reduce((a,b)=>a+b,0)/uScores.length).toFixed(1) : null;
+    industry[dim.key] = iScores.length ? +(iScores.reduce((a,b)=>a+b,0)/iScores.length).toFixed(1) : null;
+  });
+  return {universal, industry};
+}
+
+function getRating(score) {
+  if (score === null) return {text:'—', cls:''};
+  if (score <= 1.5) return {text:'Not Started', cls:'rating-not-started'};
+  if (score <= 2.5) return {text:'Initial', cls:'rating-initial'};
+  if (score <= 3.5) return {text:'Defined', cls:'rating-defined'};
+  if (score <= 4.5) return {text:'Managed', cls:'rating-managed'};
+  return {text:'Optimised', cls:'rating-optimised'};
+}
+
+function avg(arr) {
+  const valid = arr.filter(v => v !== null);
+  return valid.length ? +(valid.reduce((a,b)=>a+b,0)/valid.length).toFixed(1) : null;
+}
+
+// ===================== RESULTS =====================
+function showResults() {
+  const {universal, industry} = calcDimScores(preScores);
+  enableTab('results');
+  enableTab('post-assessment');
+  enableTab('action-plan');
+  goTab('results');
+
+  // Universal table
+  const uTable = document.getElementById('resultsUniversalTable');
+  uTable.innerHTML = DIMENSIONS.map(dim => {
+    const s = universal[dim.key];
+    const r = getRating(s);
+    return `<tr><td>${dim.name}</td><td>${s !== null ? s : '—'}</td><td><span class="rating-badge ${r.cls}">${r.text}</span></td></tr>`;
+  }).join('');
+
+  const overallU = avg(DIMENSIONS.map(d => universal[d.key]));
+  const rU = getRating(overallU);
+  document.getElementById('resultsOverallUniversal').textContent = overallU !== null ? overallU : '—';
+  document.getElementById('resultsOverallUniversal').style.color = overallU >= 3.5 ? '#2E7D32' : overallU >= 2.5 ? '#F57F17' : '#C62828';
+
+  // Industry table
+  const indLabels = INDUSTRY_DIM_LABELS[selectedIndustry];
+  const iTable = document.getElementById('resultsIndustryTable');
+  iTable.innerHTML = DIMENSIONS.map((dim, i) => {
+    const s = industry[dim.key];
+    const r = getRating(s);
+    return `<tr><td>${indLabels[i]}</td><td>${s !== null ? s : '—'}</td><td><span class="rating-badge ${r.cls}">${r.text}</span></td></tr>`;
+  }).join('');
+
+  const overallI = avg(DIMENSIONS.map(d => industry[d.key]));
+  document.getElementById('resultsOverallIndustry').textContent = overallI !== null ? overallI : '—';
+  document.getElementById('resultsOverallIndustry').style.color = overallI >= 3.5 ? '#2E7D32' : overallI >= 2.5 ? '#F57F17' : '#C62828';
+
+  // Charts
+  renderRadarChart('radarPreChart', DIMENSIONS.map(d=>d.name), DIMENSIONS.map(d=>universal[d.key]||0), null, 'Pre-Assessment');
+  renderBarChart('barPreChart',
+    DIMENSIONS.map(d=>d.name),
+    [{label:'Universal', data: DIMENSIONS.map(d=>universal[d.key]||0), bg:'rgba(139,26,26,0.7)'},
+     {label:'Industry', data: DIMENSIONS.map(d=>industry[d.key]||0), bg:'rgba(178,34,34,0.4)'}]
+  );
+
+  // Build post-assessment questions
+  buildQuestions('postQuestions', postScores, 'postProgress', 'postProgressBar');
+
+  // Action plan
+  renderActionPlan(universal);
+}
+
+// ===================== COMPARISON =====================
+function showComparison() {
+  const pre = calcDimScores(preScores);
+  const post = calcDimScores(postScores);
+  enableTab('comparison');
+  goTab('comparison');
+
+  function compRow(name, preVal, postVal) {
+    const change = (preVal !== null && postVal !== null) ? +(postVal - preVal).toFixed(1) : null;
+    const pct = (preVal !== null && postVal !== null && preVal > 0) ? +((postVal - preVal)/preVal * 100).toFixed(1) : null;
+    let status = '', statusCls = '';
+    if (pct !== null) {
+      if (pct >= 20) { status = 'Significant'; statusCls = 'status-significant'; }
+      else if (pct >= 10) { status = 'Improved'; statusCls = 'status-improved'; }
+      else if (pct >= 0) { status = 'Stable'; statusCls = 'status-stable'; }
+      else { status = 'Declined'; statusCls = 'status-declined'; }
+    }
+    const changeCls = change > 0 ? 'change-positive' : change < 0 ? 'change-negative' : 'change-neutral';
+    return `<tr>
+      <td>${name}</td>
+      <td>${preVal !== null ? preVal : '—'}</td>
+      <td>${postVal !== null ? postVal : '—'}</td>
+      <td class="${changeCls}">${change !== null ? (change > 0 ? '+' : '') + change : '—'}</td>
+      <td>${pct !== null ? (pct > 0 ? '+' : '') + pct + '%' : '—'}</td>
+      <td>${status ? `<span class="status-badge ${statusCls}">${status}</span>` : '—'}</td>
+    </tr>`;
+  }
+
+  document.getElementById('compUniversalTable').innerHTML = DIMENSIONS.map(d =>
+    compRow(d.name, pre.universal[d.key], post.universal[d.key])
+  ).join('');
+
+  const indLabels = INDUSTRY_DIM_LABELS[selectedIndustry];
+  document.getElementById('compIndustryTable').innerHTML = DIMENSIONS.map((d, i) =>
+    compRow(indLabels[i], pre.industry[d.key], post.industry[d.key])
+  ).join('');
+
+  // Charts
+  renderBarChart('compBarChart',
+    DIMENSIONS.map(d=>d.name),
+    [{label:'Pre', data: DIMENSIONS.map(d=>pre.universal[d.key]||0), bg:'rgba(139,26,26,0.5)'},
+     {label:'Post', data: DIMENSIONS.map(d=>post.universal[d.key]||0), bg:'rgba(76,175,80,0.6)'}]
+  );
+
+  renderRadarChart('compRadarChart',
+    DIMENSIONS.map(d=>d.name),
+    DIMENSIONS.map(d=>pre.universal[d.key]||0),
+    DIMENSIONS.map(d=>post.universal[d.key]||0),
+    'Pre', 'Post'
+  );
+}
+
+// ===================== ACTION PLAN =====================
+function renderActionPlan(universal) {
+  const container = document.getElementById('actionPlanCards');
+  const sorted = DIMENSIONS.map(d => ({name: d.name, key: d.key, score: universal[d.key]}))
+    .filter(d => d.score !== null)
+    .sort((a,b) => a.score - b.score);
+
+  container.innerHTML = sorted.map(d => {
+    let priority, priorityCls, cardCls;
+    if (d.score <= 2) { priority = 'Critical'; priorityCls = 'priority-critical'; cardCls = 'critical'; }
+    else if (d.score <= 3) { priority = 'High'; priorityCls = 'priority-high'; cardCls = 'high'; }
+    else if (d.score <= 4) { priority = 'Medium'; priorityCls = 'priority-medium'; cardCls = 'medium'; }
+    else { priority = 'Maintain'; priorityCls = 'priority-maintain'; cardCls = 'maintain'; }
+    const scoreInt = Math.round(d.score);
+    const guidance = GUIDANCE[d.key][scoreInt] || '';
+    return `<div class="action-card ${cardCls}">
+      <div class="action-card-header">
+        <h4>${d.name} <span style="font-weight:400;color:var(--grey-500);font-size:13px">Score: ${d.score}</span></h4>
+        <span class="priority-tag ${priorityCls}">${priority}</span>
+      </div>
+      <p>${guidance}</p>
+    </div>`;
+  }).join('');
+
+  if (sorted.length === 0) {
+    container.innerHTML = '<div class="action-card"><p>Complete the Pre-Assessment to generate your personalised action plan.</p></div>';
+  }
+}
+
+// ===================== CHARTS =====================
+function renderRadarChart(canvasId, labels, data1, data2, label1, label2) {
+  if (charts[canvasId]) charts[canvasId].destroy();
+  const datasets = [{
+    label: label1 || 'Score',
+    data: data1,
+    backgroundColor: 'rgba(139,26,26,0.15)',
+    borderColor: 'rgba(139,26,26,0.8)',
+    borderWidth: 2,
+    pointBackgroundColor: '#8B1A1A',
+    pointRadius: 4,
+  }];
+  if (data2) {
+    datasets.push({
+      label: label2 || 'Post',
+      data: data2,
+      backgroundColor: 'rgba(76,175,80,0.15)',
+      borderColor: 'rgba(76,175,80,0.8)',
+      borderWidth: 2,
+      pointBackgroundColor: '#4CAF50',
+      pointRadius: 4,
+    });
+  }
+  charts[canvasId] = new Chart(document.getElementById(canvasId), {
+    type: 'radar',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: { r: { beginAtZero: true, max: 5, ticks: { stepSize: 1, font: {size:11} }, pointLabels: { font: {size:11} } } },
+      plugins: { legend: { position: 'bottom', labels: {font:{size:12}} } }
+    }
+  });
+}
+
+function renderBarChart(canvasId, labels, datasets) {
+  if (charts[canvasId]) charts[canvasId].destroy();
+  charts[canvasId] = new Chart(document.getElementById(canvasId), {
+    type: 'bar',
+    data: {
+      labels: labels.map(l => l.length > 18 ? l.substring(0,16)+'...' : l),
+      datasets: datasets.map(ds => ({
+        label: ds.label,
+        data: ds.data,
+        backgroundColor: ds.bg,
+        borderRadius: 4,
+      }))
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      scales: { y: { beginAtZero: true, max: 5, ticks: { stepSize: 1 } }, x: { ticks: { font: {size:10} } } },
+      plugins: { legend: { position: 'bottom', labels: {font:{size:12}} } }
+    }
+  });
+}
+
+// ===================== EXPORT =====================
+function exportReport() {
+  const pre = calcDimScores(preScores);
+  const post = calcDimScores(postScores);
+  const hasPost = Object.keys(postScores).length > 0;
+  const indLabels = INDUSTRY_DIM_LABELS[selectedIndustry];
+  const date = new Date().toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'});
+
+  let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Cherrystone Process Maturity Report</title>
+<style>
+body{font-family:Arial,sans-serif;color:#2D2D2D;max-width:800px;margin:0 auto;padding:40px;font-size:13px;line-height:1.6;}
+h1{color:#8B1A1A;font-size:24px;border-bottom:3px solid #8B1A1A;padding-bottom:10px;}
+h2{color:#8B1A1A;font-size:18px;margin-top:30px;border-bottom:1px solid #ddd;padding-bottom:6px;}
+h3{color:#333;font-size:14px;margin-top:20px;}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12px;}
+th{background:#8B1A1A;color:white;padding:8px 10px;text-align:left;}
+td{padding:8px 10px;border-bottom:1px solid #eee;}
+.score-high{color:#2E7D32;font-weight:bold;} .score-mid{color:#F57F17;font-weight:bold;} .score-low{color:#C62828;font-weight:bold;}
+.action{padding:12px;margin:8px 0;border-left:4px solid #8B1A1A;background:#f9f9f9;}
+.footer{text-align:center;color:#888;font-size:11px;margin-top:40px;border-top:1px solid #ddd;padding-top:12px;}
+@media print{body{padding:20px;}}
+</style></head><body>
+<h1>CHERRYSTONE \u2014 Process Maturity Report</h1>
+<p><strong>Industry:</strong> ${selectedIndustry} &nbsp;|&nbsp; <strong>Date:</strong> ${date}</p>
+<p><strong>Assessment Type:</strong> ${hasPost ? 'Pre & Post Engagement Comparison' : 'Pre-Engagement Baseline'}</p>
+
+<h2>Universal Dimension Scores</h2>
+<table><tr><th>Dimension</th><th>Pre-Score</th>${hasPost?'<th>Post-Score</th><th>Change</th>':''}<th>Rating</th></tr>`;
+
+  DIMENSIONS.forEach(d => {
+    const preS = pre.universal[d.key];
+    const postS = post.universal[d.key];
+    const r = getRating(hasPost && postS !== null ? postS : preS);
+    const cls = preS >= 3.5 ? 'score-high' : preS >= 2.5 ? 'score-mid' : 'score-low';
+    html += `<tr><td>${d.name}</td><td class="${cls}">${preS !== null ? preS : '\u2014'}</td>`;
+    if (hasPost) {
+      const change = preS !== null && postS !== null ? +(postS-preS).toFixed(1) : null;
+      html += `<td>${postS !== null ? postS : '\u2014'}</td><td>${change !== null ? (change>0?'+':'')+change : '\u2014'}</td>`;
+    }
+    html += `<td>${r.text}</td></tr>`;
+  });
+
+  const overallPre = avg(DIMENSIONS.map(d=>pre.universal[d.key]));
+  const overallPost = avg(DIMENSIONS.map(d=>post.universal[d.key]));
+  html += `<tr style="font-weight:bold;background:#f5f5f5"><td>OVERALL</td><td>${overallPre||'\u2014'}</td>`;
+  if (hasPost) {
+    const change = overallPre && overallPost ? +(overallPost-overallPre).toFixed(1) : null;
+    html += `<td>${overallPost||'\u2014'}</td><td>${change!==null?(change>0?'+':'')+change:'\u2014'}</td>`;
+  }
+  html += `<td>${getRating(hasPost && overallPost ? overallPost : overallPre).text}</td></tr></table>`;
+
+  html += `<h2>Industry-Specific Dimension Scores (${selectedIndustry})</h2>
+<table><tr><th>Dimension</th><th>Pre-Score</th>${hasPost?'<th>Post-Score</th><th>Change</th>':''}<th>Rating</th></tr>`;
+  DIMENSIONS.forEach((d,i) => {
+    const preS = pre.industry[d.key];
+    const postS = post.industry[d.key];
+    const r = getRating(hasPost && postS !== null ? postS : preS);
+    html += `<tr><td>${indLabels[i]}</td><td>${preS!==null?preS:'\u2014'}</td>`;
+    if (hasPost) {
+      const change = preS!==null&&postS!==null?+(postS-preS).toFixed(1):null;
+      html += `<td>${postS!==null?postS:'\u2014'}</td><td>${change!==null?(change>0?'+':'')+change:'\u2014'}</td>`;
+    }
+    html += `<td>${r.text}</td></tr>`;
+  });
+  html += `</table>`;
+
+  html += `<h2>Action Plan \u2014 Priority Recommendations</h2>`;
+  const sorted = DIMENSIONS.map(d=>({name:d.name,key:d.key,score:pre.universal[d.key]})).filter(d=>d.score!==null).sort((a,b)=>a.score-b.score);
+  sorted.forEach(d => {
+    let priority;
+    if(d.score<=2) priority='CRITICAL'; else if(d.score<=3) priority='HIGH'; else if(d.score<=4) priority='MEDIUM'; else priority='MAINTAIN';
+    const scoreInt = Math.round(d.score);
+    html += `<div class="action"><strong>${d.name}</strong> (Score: ${d.score}) \u2014 Priority: ${priority}<br>${GUIDANCE[d.key][scoreInt]||''}</div>`;
+  });
+
+  html += `<div class="footer">\u00A9 Cherrystone \u2014 Empowering Process Excellence &bull; www.cherrystone.co.za</div></body></html>`;
+
+  const blob = new Blob([html], {type:'text/html'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `Cherrystone_Maturity_Report_${date.replace(/\s/g,'_')}.html`;
+  a.click();
+  URL.revokeObjectURL(url);
+  
+  setTimeout(() => {
+    const printWin = window.open(url);
+    if (printWin) {
+      printWin.onload = () => printWin.print();
+    }
+  }, 100);
+}
+
+// ===================== INIT =====================
+renderIndustries();
+// Guidance is shown inline — no popup overlay needed
+</script>
+</body>
+</html>

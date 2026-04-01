@@ -8,7 +8,7 @@ import Contact from './pages/Contact'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import Biostone from './pages/Biostone'
-import EasterOverlay from './components/EasterOverlay'
+import ProcessMapper from './pages/ProcessMapper'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -22,7 +22,6 @@ function App() {
   return (
     <>
       <ScrollToTop />
-      <EasterOverlay />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
@@ -32,6 +31,7 @@ function App() {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/biostone" element={<Biostone />} />
+        <Route path="/tools/process-mapper" element={<ProcessMapper />} />
       </Routes>
     </>
   )
