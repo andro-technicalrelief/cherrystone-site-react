@@ -10,9 +10,9 @@ import useReveal from '../hooks/useReveal'
 const logos = [
   { src: '/images/worth-logonobg.png', alt: 'Worth' },
   { src: '/images/wchsolutions-logonobg.png', alt: 'WCHSolutions' },
+  { src: '/images/capitec-logonobg.png', alt: 'Capitec' },
   { src: '/images/metaperformance-logonobg.png', alt: 'Metaperformance', scale: true },
   { src: '/images/gainmaker-logonobg.png', alt: 'Gainmaker' },
-  { src: '/images/capitec-logonobg.png', alt: 'Capitec' },
   { src: '/images/jec-logonobg.png', alt: 'JEC' },
 ]
 
@@ -34,10 +34,14 @@ export default function References() {
 
     const handleScroll = () => {
       const st = window.pageYOffset || document.documentElement.scrollTop
-      if (st > lastScrollTopRef.current) {
-        targetRateRef.current = -1
-      } else if (st < lastScrollTopRef.current) {
-        targetRateRef.current = 1
+      const diff = Math.abs(st - lastScrollTopRef.current)
+      
+      if (diff > 5) { // Add threshold to prevent jitter
+        if (st > lastScrollTopRef.current) {
+          targetRateRef.current = -1
+        } else if (st < lastScrollTopRef.current) {
+          targetRateRef.current = 1
+        }
       }
       lastScrollTopRef.current = st <= 0 ? 0 : st
     }

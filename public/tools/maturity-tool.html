@@ -234,26 +234,7 @@ canvas { max-height:350px; }
 </head>
 <body>
 
-<!-- ===== AUTH OVERLAY ===== -->
-<div class="auth-overlay" id="authOverlay">
-  <div class="auth-card">
-    <h1>CHERRYSTONE</h1>
-    <p class="auth-subtitle">Process Maturity Assessment Tool</p>
-    <div class="auth-tabs">
-      <div class="auth-tab active" onclick="switchAuthTab('login')">Sign In</div>
-      <div class="auth-tab" onclick="switchAuthTab('signup')">Create Account</div>
-    </div>
-    <div class="auth-name-fields" id="authNameFields">
-      <input class="auth-input" id="authName" type="text" placeholder="Full name">
-      <input class="auth-input" id="authOrg" type="text" placeholder="Organisation (optional)">
-    </div>
-    <input class="auth-input" id="authEmail" type="email" placeholder="Email address">
-    <input class="auth-input" id="authPassword" type="password" placeholder="Password (min 6 characters)">
-    <div class="auth-error" id="authError"></div>
-    <button class="btn btn-primary" style="width:100%" id="authSubmitBtn" onclick="handleAuth()">Sign In</button>
-    <p style="font-size:11px;color:var(--grey-500);margin-top:16px">www.cherrystone.co.za</p>
-  </div>
-</div>
+<!-- ===== AUTH OVERLAY REMOVED ===== -->
 
 <!-- ===== MAIN APP ===== -->
 <div class="app-header">
@@ -509,17 +490,17 @@ async function handleAuth() {
 async function handleLogout() {
   await supabase.auth.signOut();
   currentUser = null; currentAssessmentId = null;
-  document.getElementById('authOverlay').classList.remove('hidden');
+  // document.getElementById('authOverlay').classList.remove('hidden');
 }
 
 supabase.auth.onAuthStateChange(async (event, session) => {
   if (session?.user) {
     currentUser = session.user;
-    document.getElementById('authOverlay').classList.add('hidden');
-    document.getElementById('userName').textContent = currentUser.user_metadata?.full_name || currentUser.email;
+    const overlay = document.getElementById('authOverlay');
+    if (overlay) overlay.classList.add('hidden');
+    const uName = document.getElementById('userName');
+    if(uName) uName.textContent = currentUser.user_metadata?.full_name || currentUser.email;
     loadAssessments();
-  } else {
-    document.getElementById('authOverlay').classList.remove('hidden');
   }
 });
 
@@ -767,7 +748,7 @@ function exportReport() {
 
 // ===================== INIT =====================
 renderIndustries();
-(async()=>{const{data}=await supabase.auth.getSession();if(!data.session)document.getElementById('authOverlay').classList.remove('hidden');})();
+newAssessment(); // Bypass auth and start directly
 </script>
 </body>
 </html>
