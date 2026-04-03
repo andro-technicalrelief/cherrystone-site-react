@@ -15,9 +15,9 @@ import {
 import * as d3 from "d3";
 import _ from "lodash";
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   BRAND â€” Maturity Tool Light Palette
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ═══════════════════════════════════════════════════════════════════════════
+   BRAND — Maturity Tool Light Palette
+   ═══════════════════════════════════════════════════════════════════════════ */
 const C = {
   cherryDark: "#8B1A1A", cherryMid: "#B22222", cherryLight: "#D4443A",
   charcoal: "#2D2D2D", grey50: "#FAFAFA", grey100: "#F7F7F7", grey200: "#EEEEEE",
@@ -33,16 +33,16 @@ const RISK_COLORS = { low: C.green, medium: C.amber, high: C.cherryMid, critical
 const RISK_BG = { low: C.greenLight, medium: C.amberLight, high: C.redLight, critical: "#FFCDD2" };
 const DURATION_UNITS = ["minutes", "hours", "days", "weeks"];
 const CURRENCIES = [
-  {code:"USD",symbol:"$",name:"US Dollar"},{code:"EUR",symbol:"â‚¬",name:"Euro"},{code:"GBP",symbol:"Â£",name:"British Pound"},
+  {code:"USD",symbol:"$",name:"US Dollar"},{code:"EUR",symbol:"€",name:"Euro"},{code:"GBP",symbol:"£",name:"British Pound"},
   {code:"ZAR",symbol:"R",name:"South African Rand"},{code:"AUD",symbol:"A$",name:"Australian Dollar"},
   {code:"CAD",symbol:"C$",name:"Canadian Dollar"},{code:"CHF",symbol:"CHF",name:"Swiss Franc"},
-  {code:"JPY",symbol:"Â¥",name:"Japanese Yen"},{code:"INR",symbol:"â‚¹",name:"Indian Rupee"},
+  {code:"JPY",symbol:"¥",name:"Japanese Yen"},{code:"INR",symbol:"₹",name:"Indian Rupee"},
 ];
 const CATEGORIES = ["approval","data-entry","communication","review","transformation","handoff","verification","notification"];
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════════════════════════════
    TEMPLATES
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ═══════════════════════════════════════════════════════════════════════════ */
 const TEMPLATES = {
   onboarding: { name: "Employee Onboarding", description: `HR initiates the onboarding process by creating an employee record in the HR system with the new hire's personal details, start date, and assigned department. The hiring manager then prepares the role-specific onboarding plan, outlining required training modules, initial assignments, and mentorship pairings. IT provisions the employee's workstation, email account, VPN access, and necessary software licenses within 2 days. If the role requires elevated system access, the security team must review and approve the access request before IT can proceed. Meanwhile, the facilities team simultaneously prepares the physical workspace, including desk assignment, access badge, and parking permit. The HR coordinator schedules orientation sessions covering company policies, benefits enrollment, and compliance training, which takes approximately 3 hours. The new employee completes all required compliance training modules within the first week. The assigned mentor conducts an introductory session to walk through team norms, project workflows, and communication channels. The hiring manager reviews and approves the completed onboarding checklist. If any items are incomplete, the HR coordinator follows up with the responsible parties to resolve gaps. Finally, HR sends a 30-day check-in survey to the new employee and their manager to assess the onboarding experience.` },
   invoice: { name: "Invoice Processing", description: `The accounts payable clerk receives the vendor invoice via email or postal mail and logs it into the invoice tracking system within 24 hours. The clerk verifies the invoice against the corresponding purchase order and delivery receipt to confirm quantities, pricing, and terms match. If there are discrepancies, the clerk contacts the vendor for clarification and flags the invoice for review. For invoices under $5,000, the department manager reviews and approves the payment. For invoices between $5,000 and $25,000, the finance director must approve. Invoices exceeding $25,000 require VP of Finance approval and a secondary review by the controller. Once approved, the payment team schedules the payment according to the vendor's payment terms, typically net-30 or net-60. The system generates a payment batch which the treasury analyst reviews before execution. After payment is processed, the accounts payable clerk reconciles the payment against the general ledger and updates the vendor account. If payment fails or is rejected by the bank, the treasury analyst investigates the cause and resubmits within 2 business days. Monthly, the AP manager generates an aging report and reviews outstanding invoices for escalation.` },
@@ -51,9 +51,9 @@ const TEMPLATES = {
   vendorRisk: { name: "Vendor Risk Assessment", description: `The procurement specialist initiates the vendor risk assessment by collecting the vendor's business documentation, including financial statements, insurance certificates, and compliance certifications. The compliance officer reviews the vendor's regulatory standing, checking for sanctions, litigation history, and industry-specific compliance requirements within 3 days. If the vendor operates in a high-risk jurisdiction, an enhanced due diligence review is triggered, requiring additional documentation and a background investigation. The information security team evaluates the vendor's cybersecurity posture, reviewing their SOC 2 report, penetration test results, and data handling procedures within 5 days. Meanwhile, the finance team assesses the vendor's financial stability using credit reports and financial ratio analysis. The legal team reviews the proposed contract terms, focusing on liability clauses, data protection obligations, indemnification, and termination rights. If any risk area scores above the acceptable threshold, the risk committee convenes to determine whether to proceed with additional controls, request remediation, or reject the vendor. The risk committee issues a formal risk rating and recommendation. Once all assessments are complete, the vendor management office compiles the comprehensive risk report and presents it to the approval authority. Depending on the contract value, approval may require sign-off from the CPO, CFO, or the board of directors.` },
 };
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   NL PARSER â€” Clause-aware, Bulletproof
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ═══════════════════════════════════════════════════════════════════════════
+   NL PARSER — Clause-aware, Bulletproof
+   ═══════════════════════════════════════════════════════════════════════════ */
 const ROLE_KEYWORDS = [
   "accounts payable clerk","HR coordinator","hiring manager","department manager",
   "finance director","VP of Finance","treasury analyst","AP manager","payment team",
@@ -125,9 +125,9 @@ function extractRole(sentence) {
       if (before === "" || /\bthe\b/.test(before) || before.endsWith(",")) return titleCase(role);
     }
   }
-  // Passive voice detection: "X is triggered/processed/initiated" â†’ System
+  // Passive voice detection: "X is triggered/processed/initiated" → System
   if (/\b(?:is|are|was|were)\s+(?:triggered|processed|initiated|generated|required|closed|sent)\b/i.test(mainClause)) return "System";
-  // "approval may require" / generic policy statements â†’ Approval Authority
+  // "approval may require" / generic policy statements → Approval Authority
   if (/\bapproval\s+(?:may|must|should|will|is)\b/i.test(mainClause)) return "Approval Authority";
   const sm = mainClause.match(/^(?:the\s+)?([A-Z][a-z]+(?:\s+[a-z]+){0,3}?)(?:\s+(?:then|will|must|shall|should|can|has|have|is|are|reviews?|creates?|sends?|submits?|prepares?|conducts?|performs?|generates?|initiates?|receives?|completes?|assigns?|checks?|approves?|rejects?|verifies?|schedules?|identifies?|logs?|contacts?|evaluates?|determines?|develops?|presents?|reconciles?|investigates?|updates?|fixes?|closes?|documents?|categorizes?|diagnoses?|triages?|coordinates?|implements?|executes?|monitors?|assesses?|compiles?|convenes?|issues?|collects?|quarantines?))/);
   if (sm) { const c = sm[1].trim(); if (c.length > 1 && !["The","A","An","This","That","It","They","All","Any","Each"].includes(c)) return c; }
@@ -243,7 +243,7 @@ function genId(i) { return `step_${String(i+1).padStart(3,"0")}`; }
 
 function parseNaturalLanguage(text) {
   if (!text || !text.trim()) return [];
-  const raw = text.replace(/(\d+)\.\s+/g,"|||$1. ").replace(/([a-z)]+)\)\s+/g,"|||$1) ").replace(/^[-â€¢]\s+/gm,"|||").replace(/\n/g," ||| ").split(/(?<=[.;])\s+|\|\|\|/).map(s=>s.trim()).filter(s=>s.length>15);
+  const raw = text.replace(/(\d+)\.\s+/g,"|||$1. ").replace(/([a-z)]+)\)\s+/g,"|||$1) ").replace(/^[-•]\s+/gm,"|||").replace(/\n/g," ||| ").split(/(?<=[.;])\s+|\|\|\|/).map(s=>s.trim()).filter(s=>s.length>15);
   const merged = [];
   for (const s of raw) { if (merged.length>0 && s.length<30 && !s.match(/^[A-Z]/)) merged[merged.length-1]+=" "+s; else merged.push(s); }
 
@@ -300,9 +300,9 @@ function extractOutcomes(s) {
   return ["Yes","No"];
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════════════════════════════
    STATE
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ═══════════════════════════════════════════════════════════════════════════ */
 const initialState = {
   process:{name:"Untitled Process",description:"",version:"1.0",author:"Cherrystone Consulting",status:"Draft",createdDate:new Date().toISOString().split("T")[0]},
   steps:[],
@@ -328,9 +328,9 @@ function reducer(state,action) {
   }
 }
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════════════════════════════
    ANALYSIS FUNCTIONS
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ═══════════════════════════════════════════════════════════════════════════ */
 function toHours(d,u){return u==="minutes"?d/60:u==="days"?d*8:u==="weeks"?d*40:d;}
 function computeMetrics(steps){const ps=steps.filter(s=>s.type!=="start"&&s.type!=="end");const t=ps.length;const roles=_.uniq(ps.map(s=>s.role));const dec=ps.filter(s=>s.type==="decision").length;let ho=0;for(let i=1;i<ps.length;i++){if(ps[i].role!==ps[i-1].role)ho++;}const pg=ps.filter(s=>s.parallel).length;const td=ps.reduce((s,p)=>s+toHours(p.duration,p.durationUnit),0);const cp=computeCriticalPath(steps);const cpd=cp.reduce((s,p)=>s+toHours(p.duration,p.durationUnit),0);const raw=(t*1)+(dec*2.5)+(roles.length*1.5)+(ho*2)+(pg*1.5);const ci=Math.min(10,Math.max(1,raw/5));const ac=ps.filter(s=>s.automatable).length;const ap=t>0?(ac/t)*100:0;const durs=ps.map(s=>toHours(s.duration,s.durationUnit));const md=_.mean(durs)||0;const sd=durs.length>1?Math.sqrt(_.sumBy(durs,d=>Math.pow(d-md,2))/durs.length):0;return{totalSteps:t,roles,decisions:dec,handoffs:ho,parallelGates:pg,totalDurationHours:td,criticalPath:cp,criticalPathDuration:cpd,complexityIndex:Math.round(ci*10)/10,automationPotential:Math.round(ap),automatableCount:ac,bottleneckSteps:ps.filter(s=>toHours(s.duration,s.durationUnit)>md+sd),meanDuration:md,stdDuration:sd,roleWorkload:_.countBy(ps,"role")};}
 function computeCriticalPath(steps){if(!steps.length)return[];const im={};steps.forEach(s=>{im[s.id]=s;});const dist={},prev={};steps.forEach(s=>{dist[s.id]=0;prev[s.id]=null;});const sorted=topoSort(steps);for(const s of sorted){for(const dep of s.dependencies){if(im[dep]&&dist[dep]+toHours(im[dep].duration,im[dep].durationUnit)>dist[s.id]){dist[s.id]=dist[dep]+toHours(im[dep].duration,im[dep].durationUnit);prev[s.id]=dep;}}}let mx=null,md=-1;for(const[id,d]of Object.entries(dist)){if(d>md){md=d;mx=id;}}const p=[];let c=mx;while(c){if(im[c])p.unshift(im[c]);c=prev[c];}return p;}
@@ -340,9 +340,9 @@ function computeHealth(steps,metrics){const ps=steps.filter(s=>s.type!=="start"&
 function genMitigation(s){const m=[];if(s.risk==="critical"||s.risk==="high"){m.push(`Add secondary review gate before "${s.name}"`);if(s.type==="decision")m.push("Implement decision audit trail with mandatory rationale");if(s.category==="approval")m.push("Enforce dual-approval with segregation of duties");if(s.duration>4)m.push(`Introduce SLA monitoring with ${Math.ceil(s.duration*0.75)} ${s.durationUnit} escalation trigger`);}if(s.risk==="medium"){if(s.type==="decision")m.push("Create standardized decision criteria checklist");m.push("Implement automated status notifications");if(s.category==="handoff")m.push("Add structured handoff template");}if(s.automatable)m.push("Evaluate RPA or workflow automation");if(!m.length)m.push("Monitor step performance against baseline KPIs");return m;}
 function getDefaultRate(r){const l=r.toLowerCase();if(l.match(/vp|director|cfo|cpo/))return 175;if(l.match(/manager|lead|senior|architect/))return 125;if(l.match(/analyst|specialist|coordinator/))return 95;if(l.match(/clerk|agent/))return 65;if(l==="system")return 0;return 85;}
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════════════════════════════
    UI HELPERS
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ═══════════════════════════════════════════════════════════════════════════ */
 const Toast = memo(function Toast({toast,onDismiss}){if(!toast)return null;const bg=toast.type==="success"?C.green:toast.type==="error"?C.cherryMid:C.amber;return(<div style={{position:"fixed",top:20,right:20,zIndex:9999,background:bg,color:"#fff",padding:"12px 20px",borderRadius:10,fontFamily:FONT,fontSize:13,fontWeight:500,boxShadow:`0 4px 24px ${bg}44`,display:"flex",alignItems:"center",gap:8,animation:"slideIn 0.3s ease"}}>{toast.type==="success"?<CheckCircle size={16}/>:toast.type==="error"?<AlertTriangle size={16}/>:<Info size={16}/>}{toast.message}<button onClick={onDismiss} style={{background:"none",border:"none",color:"#fff",cursor:"pointer",marginLeft:8}}><X size={14}/></button></div>);});
 const Badge = memo(function Badge({label,color,bg,small}){return(<span style={{display:"inline-block",padding:small?"1px 8px":"3px 10px",borderRadius:12,fontSize:small?10:11,fontWeight:600,background:bg||color+"18",color,letterSpacing:"0.3px"}}>{label}</span>);});
 
@@ -352,9 +352,9 @@ const MetricCard = memo(function MetricCard({icon:Icon,label,value,sub,accent}){
 
 const EmptyState = memo(function EmptyState({icon:Icon,title,description,actionLabel,onAction}){return(<div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:60,textAlign:"center"}}><div style={{width:80,height:80,borderRadius:"50%",background:C.cherryDark+"0A",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:20}}><Icon size={32} style={{color:C.cherryDark}}/></div><h3 style={{color:C.charcoal,fontSize:18,fontWeight:700,marginBottom:8,fontFamily:FONT}}>{title}</h3><p style={{color:C.grey500,fontSize:13,maxWidth:400,lineHeight:1.6,fontFamily:FONT}}>{description}</p>{actionLabel&&<button onClick={onAction} style={{marginTop:20,padding:"10px 28px",background:`linear-gradient(135deg,${C.cherryDark},${C.cherryMid})`,color:"#fff",border:"none",borderRadius:8,fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:FONT}}>{actionLabel}</button>}</div>);});
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════════════════════════════
    SIDEBAR
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ═══════════════════════════════════════════════════════════════════════════ */
 const Sidebar = memo(function Sidebar({state,dispatch}){
   const pages=[{id:"input",label:"Process Input",icon:Edit3},{id:"visualization",label:"Visualization",icon:GitBranch},{id:"analysis",label:"Analysis",icon:BarChart3},{id:"brd",label:"BRD Report",icon:FileText}];
   return(
@@ -362,15 +362,15 @@ const Sidebar = memo(function Sidebar({state,dispatch}){
       <div style={{padding:"20px 18px 16px",borderBottom:"1px solid rgba(255,255,255,0.15)"}}>
         <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}>
           <div style={{width:38,height:38,borderRadius:10,background:"rgba(255,255,255,0.15)",display:"flex",alignItems:"center",justifyContent:"center"}}><Workflow size={20} style={{color:"#fff"}}/></div>
-          <div><div style={{color:"#fff",fontSize:16,fontWeight:800}}>BIO-stone</div><div style={{color:"rgba(255,255,255,0.6)",fontSize:9,fontWeight:600,letterSpacing:"1.5px",textTransform:"uppercase"}}>V3 â€” Cherrystone</div></div>
+          <div><div style={{color:"#fff",fontSize:16,fontWeight:800}}>BIO-stone</div><div style={{color:"rgba(255,255,255,0.6)",fontSize:9,fontWeight:600,letterSpacing:"1.5px",textTransform:"uppercase"}}>V3 — Cherrystone</div></div>
         </div>
         <input value={state.process.name} onChange={e=>dispatch({type:"SET_PROCESS",payload:{name:e.target.value}})} style={{width:"100%",padding:"9px 12px",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:8,color:"#fff",fontSize:13,fontFamily:FONT,outline:"none"}} placeholder="Process name..."/>
       </div>
-      <div style={{padding:"12px 10px",flex:1}}>
+      <nav style={{padding:"12px 10px",flex:1}}>
         {pages.map(p=>{const active=state.ui.activePage===p.id;const Ic=p.icon;return(
           <button key={p.id} onClick={()=>dispatch({type:"SET_UI",payload:{activePage:p.id}})} style={{width:"100%",display:"flex",alignItems:"center",gap:10,padding:"11px 14px",marginBottom:4,borderRadius:10,background:active?"rgba(255,255,255,0.15)":"transparent",border:"none",color:active?"#fff":"rgba(255,255,255,0.7)",cursor:"pointer",fontSize:13,fontWeight:active?600:400,fontFamily:FONT,transition:"all 0.2s"}}><Ic size={18} style={{color:active?"#fff":"rgba(255,255,255,0.5)"}}/>{p.label}</button>
         );})}
-      </div>
+      </nav>
       <div style={{padding:"14px 18px",borderTop:"1px solid rgba(255,255,255,0.15)"}}>
         {[["Steps",state.steps.filter(s=>s.type!=="start"&&s.type!=="end").length],["Version",state.process.version],["Status",state.process.status]].map(([l,v])=>(<div key={l} style={{display:"flex",justifyContent:"space-between",marginBottom:5}}><span style={{color:"rgba(255,255,255,0.5)",fontSize:11}}>{l}</span><span style={{color:"#fff",fontSize:11,fontWeight:600}}>{v}</span></div>))}
       </div>
@@ -378,9 +378,9 @@ const Sidebar = memo(function Sidebar({state,dispatch}){
   );
 });
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════════════════════════════
    NL INPUT
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ═══════════════════════════════════════════════════════════════════════════ */
 const NLInput = memo(function NLInput({state,dispatch}){
   const [text,setText]=useState("");
   const [parsing,setParsing]=useState(false);
@@ -412,9 +412,9 @@ const NLInput = memo(function NLInput({state,dispatch}){
   );
 });
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════════════════════════════
    STEP BUILDER + DETAIL PANEL + IMPORT
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ═══════════════════════════════════════════════════════════════════════════ */
 const StepBuilder = memo(function StepBuilder({state,dispatch}){
   const ps=useMemo(()=>state.steps.filter(s=>s.type!=="start"&&s.type!=="end"),[state.steps]);
   if(!ps.length)return <div style={{padding:28}}><EmptyState icon={ClipboardList} title="No Steps" description="Add steps manually." actionLabel="Add First Step" onAction={()=>dispatch({type:"ADD_STEP"})}/></div>;
@@ -492,9 +492,9 @@ const InputPage = memo(function InputPage({state,dispatch}){
   );
 });
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   FLOWCHART â€” Clean 2D with proper Bezier curves
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ═══════════════════════════════════════════════════════════════════════════
+   FLOWCHART — Clean 2D with proper Bezier curves
+   ═══════════════════════════════════════════════════════════════════════════ */
 const FlowchartView = memo(function FlowchartView({steps,onSelect}){
   const roles = useMemo(()=>_.uniq(steps.map(s=>s.role)),[steps]);
   const layout = useMemo(()=>{
@@ -560,9 +560,9 @@ const FlowchartView = memo(function FlowchartView({steps,onSelect}){
   );
 });
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
-   NODE GRAPH â€” Sequenced, with slicers
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+/* ═══════════════════════════════════════════════════════════════════════════
+   NODE GRAPH — Sequenced, with slicers
+   ═══════════════════════════════════════════════════════════════════════════ */
 const NodeGraphView = memo(function NodeGraphView({steps,slicer,onSlicerChange}){
   const svgRef=useRef(null);
   const ps=useMemo(()=>steps.filter(s=>s.type!=="start"&&s.type!=="end"),[steps]);
@@ -643,9 +643,9 @@ const NodeGraphView = memo(function NodeGraphView({steps,slicer,onSlicerChange})
   );
 });
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════════════════════════════
    VISUALIZATION PAGE
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ═══════════════════════════════════════════════════════════════════════════ */
 const VizPage = memo(function VizPage({state,dispatch}){
   const handleSelect=useCallback(id=>{dispatch({type:"SET_UI",payload:{selectedStepId:id,showDetailPanel:true}});},[dispatch]);
   const handleSlicer=useCallback(s=>{dispatch({type:"SET_UI",payload:{nodeSlice:s}});},[dispatch]);
@@ -660,9 +660,9 @@ const VizPage = memo(function VizPage({state,dispatch}){
   );
 });
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════════════════════════════
    ANALYSIS DASHBOARD
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ═══════════════════════════════════════════════════════════════════════════ */
 const AnalysisDash = memo(function AnalysisDash({state,dispatch}){
   const metrics=useMemo(()=>computeMetrics(state.steps),[state.steps]);
   const raci=useMemo(()=>computeRACI(state.steps),[state.steps]);
@@ -695,11 +695,11 @@ const AnalysisDash = memo(function AnalysisDash({state,dispatch}){
       <h2 style={{color:C.charcoal,fontSize:24,fontWeight:800,marginBottom:18,fontFamily:FONT}}>Analysis Dashboard</h2>
       <div style={{display:"flex",gap:4,marginBottom:20,flexWrap:"wrap"}}>{tabs.map(t=>{const active=tab===t.id;const Ic=t.icon;return(<button key={t.id} onClick={()=>setTab(t.id)} style={{display:"flex",alignItems:"center",gap:5,padding:"8px 16px",borderRadius:8,background:active?C.cherryDark+"0D":"transparent",border:`1px solid ${active?C.cherryDark+"33":C.grey300}`,color:active?C.cherryDark:C.grey500,fontSize:12,fontWeight:500,cursor:"pointer",fontFamily:FONT}}><Ic size={14}/>{t.label}</button>);})}</div>
 
-      {tab==="overview"&&<div><div style={{display:"flex",gap:12,flexWrap:"wrap",marginBottom:16}}><MetricCard icon={Layers} label="Total Steps" value={metrics.totalSteps}/><MetricCard icon={Users} label="Roles" value={metrics.roles.length} accent={C.green}/><MetricCard icon={Diamond} label="Decisions" value={metrics.decisions} accent={C.amber}/><MetricCard icon={Clock} label="Critical Path" value={`${Math.round(metrics.criticalPathDuration)}h`} sub={`${metrics.criticalPath.length} steps`} accent={C.cherryLight}/></div><div style={{display:"flex",gap:12,flexWrap:"wrap"}}><MetricCard icon={Target} label="Complexity" value={metrics.complexityIndex} sub="/10" accent={C.amber}/><MetricCard icon={Zap} label="Automation" value={`${metrics.automationPotential}%`} sub={`${metrics.automatableCount} steps`} accent={C.green}/><MetricCard icon={ArrowRight} label="Handoffs" value={metrics.handoffs}/><MetricCard icon={AlertTriangle} label="Bottlenecks" value={metrics.bottleneckSteps.length} sub="> mean + 1Ïƒ"/></div></div>}
+      {tab==="overview"&&<div><div style={{display:"flex",gap:12,flexWrap:"wrap",marginBottom:16}}><MetricCard icon={Layers} label="Total Steps" value={metrics.totalSteps}/><MetricCard icon={Users} label="Roles" value={metrics.roles.length} accent={C.green}/><MetricCard icon={Diamond} label="Decisions" value={metrics.decisions} accent={C.amber}/><MetricCard icon={Clock} label="Critical Path" value={`${Math.round(metrics.criticalPathDuration)}h`} sub={`${metrics.criticalPath.length} steps`} accent={C.cherryLight}/></div><div style={{display:"flex",gap:12,flexWrap:"wrap"}}><MetricCard icon={Target} label="Complexity" value={metrics.complexityIndex} sub="/10" accent={C.amber}/><MetricCard icon={Zap} label="Automation" value={`${metrics.automationPotential}%`} sub={`${metrics.automatableCount} steps`} accent={C.green}/><MetricCard icon={ArrowRight} label="Handoffs" value={metrics.handoffs}/><MetricCard icon={AlertTriangle} label="Bottlenecks" value={metrics.bottleneckSteps.length} sub="> mean + 1σ"/></div></div>}
 
-      {tab==="raci"&&<Card elevated><div style={{overflow:"auto"}}><table style={{width:"100%",borderCollapse:"collapse",fontSize:12,fontFamily:FONT}}><thead><tr><th style={{...thS,position:"sticky",left:0,zIndex:1}}>Step</th>{raci.roles.map(r=><th key={r} style={thS}>{r.length>14?r.substring(0,12)+"...":r}</th>)}</tr></thead><tbody>{raci.matrix.map(row=>(<tr key={row.step.id}><td style={{...tdS,fontWeight:500,color:C.charcoal,background:C.white,position:"sticky",left:0}}>{row.step.name}</td>{raci.roles.map(r=>{const v=row.assignments[r];return(<td key={r} style={{...tdS,textAlign:"center",fontWeight:700,fontSize:13,color:v?raciCol[v]:"transparent",background:v?raciBg[v]+"55":"transparent"}}>{v||"â€“"}</td>);})}</tr>))}<tr><td style={{...tdS,fontWeight:700,color:C.charcoal,background:C.grey100,position:"sticky",left:0}}>Workload (R+A)</td>{raci.roles.map(r=>{const ct=raci.matrix.reduce((s,row)=>s+(row.assignments[r]==="R"||row.assignments[r]==="A"?1:0),0);return<td key={r} style={{...tdS,textAlign:"center",color:C.charcoal,fontWeight:700,fontSize:14,background:C.grey100}}>{ct}</td>;})}</tr></tbody></table></div></Card>}
+      {tab==="raci"&&<Card elevated><div style={{overflow:"auto"}}><table style={{width:"100%",borderCollapse:"collapse",fontSize:12,fontFamily:FONT}}><thead><tr><th style={{...thS,position:"sticky",left:0,zIndex:1}}>Step</th>{raci.roles.map(r=><th key={r} style={thS}>{r.length>14?r.substring(0,12)+"...":r}</th>)}</tr></thead><tbody>{raci.matrix.map(row=>(<tr key={row.step.id}><td style={{...tdS,fontWeight:500,color:C.charcoal,background:C.white,position:"sticky",left:0}}>{row.step.name}</td>{raci.roles.map(r=>{const v=row.assignments[r];return(<td key={r} style={{...tdS,textAlign:"center",fontWeight:700,fontSize:13,color:v?raciCol[v]:"transparent",background:v?raciBg[v]+"55":"transparent"}}>{v||"–"}</td>);})}</tr>))}<tr><td style={{...tdS,fontWeight:700,color:C.charcoal,background:C.grey100,position:"sticky",left:0}}>Workload (R+A)</td>{raci.roles.map(r=>{const ct=raci.matrix.reduce((s,row)=>s+(row.assignments[r]==="R"||row.assignments[r]==="A"?1:0),0);return<td key={r} style={{...tdS,textAlign:"center",color:C.charcoal,fontWeight:700,fontSize:14,background:C.grey100}}>{ct}</td>;})}</tr></tbody></table></div></Card>}
 
-      {tab==="risk"&&<div><Card elevated style={{marginBottom:20}}><h3 style={{color:C.charcoal,fontSize:15,fontWeight:700,marginBottom:14,fontFamily:FONT}}>Risk Scatter Plot</h3><ResponsiveContainer width="100%" height={300}><ScatterChart margin={{top:10,right:20,bottom:30,left:20}}><CartesianGrid strokeDasharray="3 3" stroke={C.grey200}/><XAxis type="number" dataKey="likelihood" domain={[0,5.5]} tick={{fill:C.grey500,fontSize:11}} label={{value:"Likelihood",fill:C.grey500,fontSize:12,position:"bottom"}}/><YAxis type="number" dataKey="impact" domain={[0,5.5]} tick={{fill:C.grey500,fontSize:11}} label={{value:"Impact",fill:C.grey500,fontSize:12,angle:-90,position:"insideLeft"}}/><ZAxis type="number" dataKey="duration" range={[40,200]}/><Tooltip content={({payload})=>{if(!payload?.[0])return null;const d=payload[0].payload;return<div style={{background:C.white,border:`1px solid ${C.grey300}`,padding:10,borderRadius:8,fontFamily:FONT,boxShadow:"0 4px 12px rgba(0,0,0,0.1)"}}><div style={{color:C.charcoal,fontSize:12,fontWeight:600}}>{d.name}</div><div style={{color:C.grey500,fontSize:11}}>Risk: {d.risk} | {d.duration}h</div></div>;}}/><Scatter data={ps.map(s=>{const l=s.risk==="critical"?5:s.risk==="high"?4:s.risk==="medium"?3:1.5;return{name:s.name,likelihood:Math.min(5,l),impact:Math.min(5,s.type==="decision"?l+0.5:l),duration:toHours(s.duration,s.durationUnit),risk:s.risk};})}>{ps.map((s,i)=><Cell key={i} fill={RISK_COLORS[s.risk]} fillOpacity={0.7}/>)}</Scatter></ScatterChart></ResponsiveContainer></Card><Card elevated><table style={{width:"100%",borderCollapse:"collapse",fontSize:12,fontFamily:FONT}}><thead><tr>{["Step","Risk","Rationale","Mitigations"].map(h=><th key={h} style={thS}>{h}</th>)}</tr></thead><tbody>{ps.filter(s=>s.risk!=="low").map(s=>(<tr key={s.id}><td style={tdS}>{s.name}</td><td style={tdS}><Badge label={s.risk} color={RISK_COLORS[s.risk]} bg={RISK_BG[s.risk]}/></td><td style={tdS}>{s.riskRationale}</td><td style={tdS}>{genMitigation(s).map((m,i)=><div key={i} style={{marginBottom:3}}>â€¢ {m}</div>)}</td></tr>))}</tbody></table></Card></div>}
+      {tab==="risk"&&<div><Card elevated style={{marginBottom:20}}><h3 style={{color:C.charcoal,fontSize:15,fontWeight:700,marginBottom:14,fontFamily:FONT}}>Risk Scatter Plot</h3><ResponsiveContainer width="100%" height={300}><ScatterChart margin={{top:10,right:20,bottom:30,left:20}}><CartesianGrid strokeDasharray="3 3" stroke={C.grey200}/><XAxis type="number" dataKey="likelihood" domain={[0,5.5]} tick={{fill:C.grey500,fontSize:11}} label={{value:"Likelihood",fill:C.grey500,fontSize:12,position:"bottom"}}/><YAxis type="number" dataKey="impact" domain={[0,5.5]} tick={{fill:C.grey500,fontSize:11}} label={{value:"Impact",fill:C.grey500,fontSize:12,angle:-90,position:"insideLeft"}}/><ZAxis type="number" dataKey="duration" range={[40,200]}/><Tooltip content={({payload})=>{if(!payload?.[0])return null;const d=payload[0].payload;return<div style={{background:C.white,border:`1px solid ${C.grey300}`,padding:10,borderRadius:8,fontFamily:FONT,boxShadow:"0 4px 12px rgba(0,0,0,0.1)"}}><div style={{color:C.charcoal,fontSize:12,fontWeight:600}}>{d.name}</div><div style={{color:C.grey500,fontSize:11}}>Risk: {d.risk} | {d.duration}h</div></div>;}}/><Scatter data={ps.map(s=>{const l=s.risk==="critical"?5:s.risk==="high"?4:s.risk==="medium"?3:1.5;return{name:s.name,likelihood:Math.min(5,l),impact:Math.min(5,s.type==="decision"?l+0.5:l),duration:toHours(s.duration,s.durationUnit),risk:s.risk};})}>{ps.map((s,i)=><Cell key={i} fill={RISK_COLORS[s.risk]} fillOpacity={0.7}/>)}</Scatter></ScatterChart></ResponsiveContainer></Card><Card elevated><table style={{width:"100%",borderCollapse:"collapse",fontSize:12,fontFamily:FONT}}><thead><tr>{["Step","Risk","Rationale","Mitigations"].map(h=><th key={h} style={thS}>{h}</th>)}</tr></thead><tbody>{ps.filter(s=>s.risk!=="low").map(s=>(<tr key={s.id}><td style={tdS}>{s.name}</td><td style={tdS}><Badge label={s.risk} color={RISK_COLORS[s.risk]} bg={RISK_BG[s.risk]}/></td><td style={tdS}>{s.riskRationale}</td><td style={tdS}>{genMitigation(s).map((m,i)=><div key={i} style={{marginBottom:3}}>• {m}</div>)}</td></tr>))}</tbody></table></Card></div>}
 
       {tab==="bottleneck"&&<div><Card elevated style={{marginBottom:20}}><h3 style={{color:C.charcoal,fontSize:15,fontWeight:700,marginBottom:14,fontFamily:FONT}}>Step Duration Analysis</h3><ResponsiveContainer width="100%" height={280}><BarChart data={bnData} margin={{top:10,right:20,bottom:50,left:20}}><CartesianGrid strokeDasharray="3 3" stroke={C.grey200}/><XAxis dataKey="name" tick={{fill:C.grey500,fontSize:10}} angle={-35} textAnchor="end" height={60}/><YAxis tick={{fill:C.grey500,fontSize:11}}/><Tooltip/><Bar dataKey="duration" radius={[6,6,0,0]}>{bnData.map((e,i)=><Cell key={i} fill={e.fill} fillOpacity={0.8}/>)}</Bar></BarChart></ResponsiveContainer></Card><Card elevated><h3 style={{color:C.charcoal,fontSize:15,fontWeight:700,marginBottom:14,fontFamily:FONT}}>Role Workload</h3><ResponsiveContainer width="100%" height={250}><RPieChart><Pie data={rwData} cx="50%" cy="50%" innerRadius={50} outerRadius={90} paddingAngle={3} dataKey="value" label={({name,value})=>`${name}: ${value}`}>{rwData.map((e,i)=><Cell key={i} fill={COLORS[i%COLORS.length]}/>)}</Pie><Tooltip/></RPieChart></ResponsiveContainer></Card></div>}
 
@@ -710,9 +710,9 @@ const AnalysisDash = memo(function AnalysisDash({state,dispatch}){
   );
 });
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════════════════════════════
    BRD GENERATOR
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+   ═══════════════════════════════════════════════════════════════════════════ */
 const BRDGen = memo(function BRDGen({state}){
   const metrics=useMemo(()=>computeMetrics(state.steps),[state.steps]);
   const raci=useMemo(()=>computeRACI(state.steps),[state.steps]);
@@ -720,7 +720,7 @@ const BRDGen = memo(function BRDGen({state}){
   const ps=useMemo(()=>state.steps.filter(s=>s.type!=="start"&&s.type!=="end"),[state.steps]);
   const today=new Date().toISOString().split("T")[0];
   const handleExport=useCallback(()=>{
-    const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>BRD - ${state.process.name}</title><style>body{font-family:Calibri,Arial,sans-serif;color:#1a1a1a;margin:40px;line-height:1.6}h1{color:#8B1A1A;font-size:24pt;border-bottom:3px solid #8B1A1A;padding-bottom:8px}h2{color:#B22222;font-size:16pt;border-bottom:1px solid #B22222;padding-bottom:4px;margin-top:24pt}h3{color:#8B1A1A;font-size:13pt}table{border-collapse:collapse;width:100%;margin:12px 0}th{background-color:#8B1A1A;color:white;padding:8px 10px;text-align:left;font-size:10pt}td{padding:6px 10px;border:1px solid #ddd;font-size:10pt}tr:nth-child(even){background-color:#f8f6f3}p{margin:6px 0;font-size:11pt}</style></head><body><h1>Business Requirements Document</h1><h2>1. Document Control</h2><table><tr><td><b>Title</b></td><td>${state.process.name} â€” BRD</td></tr><tr><td><b>Version</b></td><td>${state.process.version}</td></tr><tr><td><b>Date</b></td><td>${today}</td></tr><tr><td><b>Author</b></td><td>${state.process.author}</td></tr><tr><td><b>Status</b></td><td>${state.process.status}</td></tr></table><h2>2. Executive Summary</h2><p>This document defines requirements for the <b>${state.process.name}</b> process: ${metrics.totalSteps} steps, ${metrics.roles.length} roles, ${metrics.decisions} decisions, ${metrics.handoffs} handoffs. Critical path: ${Math.round(metrics.criticalPathDuration)}h across ${metrics.criticalPath.length} steps. Complexity: ${metrics.complexityIndex}/10. Automation: ${metrics.automationPotential}%. Health: ${health.overall}/100.</p><h2>3. Stakeholders</h2><table><tr><th>Role</th><th>Steps</th><th>Share</th></tr>${metrics.roles.map(r=>`<tr><td>${r}</td><td>${metrics.roleWorkload[r]||0}</td><td>${Math.round(((metrics.roleWorkload[r]||0)/Math.max(metrics.totalSteps,1))*100)}%</td></tr>`).join("")}</table><h2>4. Process Overview</h2><table><tr><th>#</th><th>Step</th><th>Role</th><th>Type</th><th>Duration</th><th>Risk</th></tr>${ps.map((s,i)=>`<tr><td>${i+1}</td><td>${s.name}</td><td>${s.role}</td><td>${s.type}</td><td>${s.duration} ${s.durationUnit}</td><td>${s.risk}</td></tr>`).join("")}</table><h2>5. Detailed Flow</h2>${ps.map((s,i)=>`<h3>5.${i+1} ${s.name}</h3><p><b>Owner:</b> ${s.role} | <b>Type:</b> ${s.type} | <b>Duration:</b> ${s.duration} ${s.durationUnit} | <b>Risk:</b> ${s.risk}</p><p>${s.description}</p><p><b>Inputs:</b> ${s.inputs.join(", ")||"N/A"} | <b>Outputs:</b> ${s.outputs.join(", ")||"N/A"}</p>`).join("")}<h2>6. RACI</h2><table><tr><th>Step</th>${raci.roles.map(r=>`<th>${r}</th>`).join("")}</tr>${raci.matrix.map(row=>`<tr><td>${row.step.name}</td>${raci.roles.map(r=>`<td style="text-align:center;font-weight:bold;color:${({R:"#8B1A1A",A:"#B22222",C:"#4CAF50",I:"#888"})[row.assignments[r]]||"#ccc"}">${row.assignments[r]||"â€“"}</td>`).join("")}</tr>`).join("")}</table><h2>7. Approval</h2><table><tr><th>Role</th><th>Name</th><th>Signature</th><th>Date</th></tr>${metrics.roles.slice(0,4).map(r=>`<tr><td>${r}</td><td></td><td></td><td></td></tr>`).join("")}</table><p style="text-align:center;color:#999;margin-top:40px;font-size:9pt">BIO-stone V3 â€” Cherrystone â€” ${today}</p></body></html>`;
+    const html=`<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>BRD - ${state.process.name}</title><style>body{font-family:Calibri,Arial,sans-serif;color:#1a1a1a;margin:40px;line-height:1.6}h1{color:#8B1A1A;font-size:24pt;border-bottom:3px solid #8B1A1A;padding-bottom:8px}h2{color:#B22222;font-size:16pt;border-bottom:1px solid #B22222;padding-bottom:4px;margin-top:24pt}h3{color:#8B1A1A;font-size:13pt}table{border-collapse:collapse;width:100%;margin:12px 0}th{background-color:#8B1A1A;color:white;padding:8px 10px;text-align:left;font-size:10pt}td{padding:6px 10px;border:1px solid #ddd;font-size:10pt}tr:nth-child(even){background-color:#f8f6f3}p{margin:6px 0;font-size:11pt}</style></head><body><h1>Business Requirements Document</h1><h2>1. Document Control</h2><table><tr><td><b>Title</b></td><td>${state.process.name} — BRD</td></tr><tr><td><b>Version</b></td><td>${state.process.version}</td></tr><tr><td><b>Date</b></td><td>${today}</td></tr><tr><td><b>Author</b></td><td>${state.process.author}</td></tr><tr><td><b>Status</b></td><td>${state.process.status}</td></tr></table><h2>2. Executive Summary</h2><p>This document defines requirements for the <b>${state.process.name}</b> process: ${metrics.totalSteps} steps, ${metrics.roles.length} roles, ${metrics.decisions} decisions, ${metrics.handoffs} handoffs. Critical path: ${Math.round(metrics.criticalPathDuration)}h across ${metrics.criticalPath.length} steps. Complexity: ${metrics.complexityIndex}/10. Automation: ${metrics.automationPotential}%. Health: ${health.overall}/100.</p><h2>3. Stakeholders</h2><table><tr><th>Role</th><th>Steps</th><th>Share</th></tr>${metrics.roles.map(r=>`<tr><td>${r}</td><td>${metrics.roleWorkload[r]||0}</td><td>${Math.round(((metrics.roleWorkload[r]||0)/Math.max(metrics.totalSteps,1))*100)}%</td></tr>`).join("")}</table><h2>4. Process Overview</h2><table><tr><th>#</th><th>Step</th><th>Role</th><th>Type</th><th>Duration</th><th>Risk</th></tr>${ps.map((s,i)=>`<tr><td>${i+1}</td><td>${s.name}</td><td>${s.role}</td><td>${s.type}</td><td>${s.duration} ${s.durationUnit}</td><td>${s.risk}</td></tr>`).join("")}</table><h2>5. Detailed Flow</h2>${ps.map((s,i)=>`<h3>5.${i+1} ${s.name}</h3><p><b>Owner:</b> ${s.role} | <b>Type:</b> ${s.type} | <b>Duration:</b> ${s.duration} ${s.durationUnit} | <b>Risk:</b> ${s.risk}</p><p>${s.description}</p><p><b>Inputs:</b> ${s.inputs.join(", ")||"N/A"} | <b>Outputs:</b> ${s.outputs.join(", ")||"N/A"}</p>`).join("")}<h2>6. RACI</h2><table><tr><th>Step</th>${raci.roles.map(r=>`<th>${r}</th>`).join("")}</tr>${raci.matrix.map(row=>`<tr><td>${row.step.name}</td>${raci.roles.map(r=>`<td style="text-align:center;font-weight:bold;color:${({R:"#8B1A1A",A:"#B22222",C:"#4CAF50",I:"#888"})[row.assignments[r]]||"#ccc"}">${row.assignments[r]||"–"}</td>`).join("")}</tr>`).join("")}</table><h2>7. Approval</h2><table><tr><th>Role</th><th>Name</th><th>Signature</th><th>Date</th></tr>${metrics.roles.slice(0,4).map(r=>`<tr><td>${r}</td><td></td><td></td><td></td></tr>`).join("")}</table><p style="text-align:center;color:#999;margin-top:40px;font-size:9pt">BIO-stone V3 — Cherrystone — ${today}</p></body></html>`;
     const blob=new Blob([html],{type:"application/msword"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=`BRD_${state.process.name.replace(/\s+/g,"_")}_${today}.doc`;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
   },[state,metrics,raci,health,ps,today]);
 
@@ -736,18 +736,18 @@ const BRDGen = memo(function BRDGen({state}){
         <h2 style={{color:C.charcoal,fontSize:24,fontWeight:800,fontFamily:FONT}}>Business Requirements Document</h2>
         <button onClick={handleExport} style={{display:"flex",alignItems:"center",gap:6,padding:"10px 24px",background:`linear-gradient(135deg,${C.cherryDark},${C.cherryMid})`,border:"none",borderRadius:8,color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:FONT,boxShadow:`0 4px 16px ${C.cherryDark}33`}}><Download size={16}/>Export .doc</button>
       </div>
-      <div style={sS}><h2 style={h2S}>1. Document Control</h2><table style={{borderCollapse:"collapse",fontSize:13}}><tbody>{[["Title",`${state.process.name} â€” BRD`],["Version",state.process.version],["Date",today],["Author",state.process.author],["Status",state.process.status]].map(([l,v])=><tr key={l}><td style={{padding:"4px 16px 4px 0",fontWeight:600,color:C.cherryDark,width:150}}>{l}</td><td style={{padding:"4px 0",color:C.charcoal}}>{v}</td></tr>)}</tbody></table></div>
+      <div style={sS}><h2 style={h2S}>1. Document Control</h2><table style={{borderCollapse:"collapse",fontSize:13}}><tbody>{[["Title",`${state.process.name} — BRD`],["Version",state.process.version],["Date",today],["Author",state.process.author],["Status",state.process.status]].map(([l,v])=><tr key={l}><td style={{padding:"4px 16px 4px 0",fontWeight:600,color:C.cherryDark,width:150}}>{l}</td><td style={{padding:"4px 0",color:C.charcoal}}>{v}</td></tr>)}</tbody></table></div>
       <div style={sS}><h2 style={h2S}>2. Executive Summary</h2><p style={pS}>This document defines the business requirements for <strong>{state.process.name}</strong>. The process comprises {metrics.totalSteps} steps executed by {metrics.roles.length} roles, with {metrics.decisions} decisions and {metrics.handoffs} handoffs. Critical path: {Math.round(metrics.criticalPathDuration)} hours. Complexity: {metrics.complexityIndex}/10. Automation: {metrics.automationPotential}%. Health: {health.overall}/100.</p></div>
       <div style={sS}><h2 style={h2S}>3. Process Overview</h2><table style={{width:"100%",borderCollapse:"collapse"}}><thead><tr>{["#","Step","Role","Type","Duration","Risk"].map(h=><th key={h} style={thS}>{h}</th>)}</tr></thead><tbody>{ps.map((s,i)=><tr key={s.id}><td style={tdS}>{i+1}</td><td style={{...tdS,fontWeight:500}}>{s.name}</td><td style={tdS}>{s.role}</td><td style={tdS}>{s.type}</td><td style={tdS}>{s.duration} {s.durationUnit}</td><td style={tdS}><span style={{color:RISK_COLORS[s.risk],fontWeight:600}}>{s.risk.toUpperCase()}</span></td></tr>)}</tbody></table></div>
-      <div style={{textAlign:"center",padding:20}}><span style={{color:C.grey500,fontSize:11,fontFamily:FONT}}>BIO-stone V3 â€” Cherrystone Consulting â€” {today}</span></div>
+      <div style={{textAlign:"center",padding:20}}><span style={{color:C.grey500,fontSize:11,fontFamily:FONT}}>BIO-stone V3 — Cherrystone Consulting — {today}</span></div>
     </div>
   );
 });
 
-/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* ═══════════════════════════════════════════════════════════════════════════
    MAIN
-   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
-export default function ProcessMapper(){
+   ═══════════════════════════════════════════════════════════════════════════ */
+export default function BIOstoneV3(){
   const [state,dispatch]=useReducer(reducer,initialState);
   const sel=useMemo(()=>state.ui.selectedStepId?state.steps.find(s=>s.id===state.ui.selectedStepId)||null:null,[state.ui.selectedStepId,state.steps]);
   const closeDetail=useCallback(()=>{dispatch({type:"SET_UI",payload:{selectedStepId:null,showDetailPanel:false}});},[]);
@@ -767,4 +767,3 @@ export default function ProcessMapper(){
     </div>
   );
 }
-
