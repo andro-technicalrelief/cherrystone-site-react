@@ -9,6 +9,7 @@ import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
 import Biostone from './pages/Biostone'
 import ProcessMapper from './pages/ProcessMapper'
+import MaturityAssessment from './pages/MaturityAssessment'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -32,6 +33,7 @@ function App() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/biostone" element={<Biostone />} />
         <Route path="/tools/process-mapper" element={<ProcessMapper />} />
+        <Route path="/tools/maturity-assessment" element={<MaturityAssessment />} />
       </Routes>
     </>
   )

@@ -206,10 +206,8 @@ export default function Biostone() {
           <div className="container" style={{ maxWidth: '800px', textAlign: 'left' }}>
             
             <div className="biostone-header" style={{ marginBottom: '40px', textAlign: 'center' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.1)', padding: '6px 16px', borderRadius: '50px', fontSize: '0.85rem', fontWeight: '700', letterSpacing: '0.1em', marginBottom: '20px', border: '1px solid rgba(255,255,255,0.2)' }}>
-                <span style={{ color: '#fff' }}>BIOSTONE</span>
-                <span style={{ color: '#fff', opacity: 0.6 }}>|</span>
-                <span style={{ color: '#fff' }}>BETA</span>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(255,255,255,0.1)', padding: '6px 20px', borderRadius: '50px', fontSize: '0.75rem', fontWeight: '800', letterSpacing: '0.2em', marginBottom: '20px', border: '1px solid rgba(255,255,255,0.2)' }}>
+                <span style={{ color: '#fff' }}>BIO-Stone</span>
               </div>
               <h1 className="hero-title" style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', marginBottom: '15px' }}>Business Maturity Assessment</h1>
               <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>

@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;800&display=swap');
+@import "tailwindcss";
 
 :root {
     --primary-red: #D32F2F;
