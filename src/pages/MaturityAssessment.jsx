@@ -669,7 +669,7 @@ const AssessmentTab = ({ isPost = false, scores, updateScore, progress, guidance
             const isActive = guidanceVisible === `${isPost ? 'post' : 'pre'}-${qid}`;
             return (
               <div key={qid} className="border-b border-gray-50 last:border-0">
-                <div className="px-5 sm:px-6 py-4 sm:py-5 hover:bg-gray-50/50 transition-colors">
+                <div className="px-6 sm:px-10 py-5 sm:py-6 hover:bg-gray-50/50 transition-colors">
                   <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
                     <div className="flex items-center gap-2 w-full sm:w-auto">
                       <span className="text-red-900 font-black text-[10px] sm:text-xs w-6 sm:w-8 shrink-0">{qid}</span>
@@ -714,7 +714,7 @@ const AssessmentTab = ({ isPost = false, scores, updateScore, progress, guidance
             const isActive = guidanceVisible === `${isPost ? 'post' : 'pre'}-${qid}`;
             return (
               <div key={qid} className="border-b border-gray-50 last:border-0">
-                <div className="px-5 sm:px-6 py-4 sm:py-5 hover:bg-gray-50/50 transition-colors">
+                <div className="px-6 sm:px-10 py-5 sm:py-6 hover:bg-gray-50/50 transition-colors">
                   <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
                     <div className="flex items-center gap-2 w-full sm:w-auto">
                       <span className="text-red-900 font-black text-[10px] sm:text-xs w-6 sm:w-8 shrink-0">{qid}</span>
@@ -1562,7 +1562,7 @@ export default function ProcessMaturityApp() {
   };
 
   return (
-    <div className="maturity-app flex flex-col min-h-screen bg-[#FDFDFD] text-[#080808] font-sans w-[100vw] overflow-x-hidden relative">
+    <div className="maturity-app flex flex-col min-h-[100dvh] bg-[#FDFDFD] text-[#080808] font-sans w-full overflow-x-hidden relative">
       <style>{`
         /*
          * CORE FIX: index.css has * { padding: 0; margin: 0 } as unlayered author CSS.
@@ -1644,10 +1644,10 @@ export default function ProcessMaturityApp() {
           </div>
 
           {/* Mobile Navigation Dropdown */}
-          <div className="flex sm:hidden w-full px-4 py-2 relative">
+          <div className="flex sm:hidden w-full px-6 py-3 relative">
             <button
               onClick={() => setMobileNavOpen(!mobileNavOpen)}
-              className="w-full h-10 bg-gray-50 border border-gray-200 rounded-xl px-4 flex items-center justify-between group active:scale-[0.98] transition-all"
+              className="w-full h-12 bg-gray-50 border border-gray-200 rounded-2xl px-6 flex items-center justify-between group active:scale-[0.98] transition-all shadow-sm"
             >
               <div className="flex items-center gap-3">
                 <div className="w-1.5 h-1.5 rounded-full bg-red-900" />
@@ -1661,7 +1661,7 @@ export default function ProcessMaturityApp() {
             </button>
 
             {mobileNavOpen && (
-              <div className="absolute top-full left-0 w-full px-4 mt-1 z-50 animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="absolute top-full left-0 w-full px-6 mt-1 z-50 animate-in fade-in slide-in-from-top-2 duration-300">
                 <div className="bg-white border border-gray-200 rounded-2xl shadow-2xl overflow-hidden py-2">
                   {tabs.map((tab) => (
                     <button
@@ -1692,8 +1692,8 @@ export default function ProcessMaturityApp() {
 
 
       {/* Main Content Area */}
-      <div className="w-full flex justify-center relative">
-        <div className="w-full max-w-[2000px] px-4 sm:px-6 mx-auto min-h-[70vh] py-8 relative flex flex-col items-center">
+      <div className="w-full flex-1 flex justify-center relative bg-gray-50/30">
+        <div className="w-full max-w-[2000px] px-8 sm:px-12 mx-auto py-8 relative flex flex-col items-center">
           {renderActiveTab()}
         </div>
       </div>

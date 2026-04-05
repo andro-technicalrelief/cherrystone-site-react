@@ -422,6 +422,7 @@ const Sidebar = memo(function Sidebar({state,dispatch}){
    NL INPUT
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 const NLInput = memo(function NLInput({state,dispatch}){
+  const isMobile = window.innerWidth < 1024;
   const [text,setText]=useState("");
   const [parsing,setParsing]=useState(false);
   const [stage,setStage]=useState("");
@@ -434,18 +435,20 @@ const NLInput = memo(function NLInput({state,dispatch}){
     const iv=setInterval(()=>{if(i<stages.length){setStage(stages[i].msg);setProgress(stages[i].pct);i++;}else{clearInterval(iv);const steps=parseNaturalLanguage(text);dispatch({type:"SET_STEPS",payload:steps});setParsing(false);setStage("");setProgress(0);if(steps.length>0){dispatch({type:"SHOW_TOAST",payload:{type:"success",message:`Parsed ${steps.length-2} process steps.`}});dispatch({type:"SET_UI",payload:{activePage:"visualization"}});}else dispatch({type:"SHOW_TOAST",payload:{type:"error",message:"No steps found. Try a more detailed description."}});}},300);
   },[text,dispatch]);
   return(
-    <div style={{padding:28,maxWidth:920}}>
+    <div style={{padding: isMobile ? "24px 32px" : "40px", maxWidth:1200, margin:"0 auto", width:"100%"}}>
       <h2 style={{color:C.charcoal,fontSize:24,fontWeight:800,marginBottom:6,fontFamily:FONT}}>Natural Language Input</h2>
       <p style={{color:C.grey500,fontSize:13,marginBottom:20,fontFamily:FONT}}>Describe your business process. Activities are auto-named with verb-first conventions; roles are extracted from clause subjects.</p>
       <div style={{display:"flex",gap:8,marginBottom:16,flexWrap:"wrap"}}>
         {Object.entries(TEMPLATES).map(([k,t])=>(<button key={k} onClick={()=>{setText(t.description);dispatch({type:"SET_PROCESS",payload:{name:t.name}});}} style={{padding:"7px 16px",borderRadius:8,background:C.grey100,border:`1px solid ${C.grey300}`,color:C.grey600,fontSize:12,fontWeight:500,cursor:"pointer",fontFamily:FONT,transition:"all 0.2s"}}>{t.name}</button>))}
       </div>
-      <textarea value={text} onChange={e=>setText(e.target.value)} placeholder="e.g., The hiring manager submits a job requisition to HR..." style={{width:"100%",minHeight:220,padding:16,background:C.white,border:`1px solid ${C.grey300}`,borderRadius:12,color:C.charcoal,fontSize:13,fontFamily:FONT,lineHeight:1.7,resize:"vertical",outline:"none"}}/>
-      <div style={{display:"flex",alignItems:"center",gap:12,marginTop:14}}>
-        <button onClick={handleParse} disabled={parsing} style={{display:"flex",alignItems:"center",gap:8,padding:"11px 30px",borderRadius:10,background:parsing?C.grey400:`linear-gradient(135deg,${C.cherryDark},${C.cherryMid})`,border:"none",color:"#fff",fontSize:14,fontWeight:700,cursor:parsing?"wait":"pointer",fontFamily:FONT,boxShadow:parsing?"none":`0 4px 16px ${C.cherryDark}33`}}>
-          {parsing?<RefreshCw size={16} style={{animation:"spin 1s linear infinite"}}/>:<Zap size={16}/>}{parsing?"Parsing...":"Parse Process"}
-        </button>
-        <span style={{color:C.grey500,fontSize:12}}>{text.length} chars</span>
+      <textarea value={text} onChange={e=>setText(e.target.value)} placeholder="e.g., The hiring manager submits a job requisition to HR..." style={{width:"100%",minHeight:260,padding:16,background:C.white,border:`1px solid ${C.grey300}`,borderRadius:12,color:C.charcoal,fontSize:13,fontFamily:FONT,lineHeight:1.7,resize:"vertical",outline:"none"}}/>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:12,marginTop:14}}>
+        <div style={{display:"flex",alignItems:"center",gap:12}}>
+          <button onClick={handleParse} disabled={parsing} style={{display:"flex",alignItems:"center",gap:8,padding:"11px 30px",borderRadius:10,background:parsing?C.grey400:`linear-gradient(135deg,${C.cherryDark},${C.cherryMid})`,border:"none",color:"#fff",fontSize:14,fontWeight:700,cursor:parsing?"wait":"pointer",fontFamily:FONT,boxShadow:parsing?"none":`0 4px 16px ${C.cherryDark}33`}}>
+            {parsing?<RefreshCw size={16} style={{animation:"spin 1s linear infinite"}}/>:<Zap size={16}/>}{parsing?"Parsing...":"Parse Process"}
+          </button>
+          <span style={{color:C.grey500,fontSize:12, display: window.innerWidth < 640 ? "none" : "block"}}>{text.length} chars</span>
+        </div>
       </div>
       {parsing&&(<div style={{marginTop:20}}><div style={{height:5,background:C.grey200,borderRadius:3,overflow:"hidden",marginBottom:10}}><div style={{height:"100%",width:`${progress}%`,background:`linear-gradient(90deg,${C.cherryDark},${C.cherryLight})`,borderRadius:3,transition:"width 0.3s ease"}}/></div><div style={{display:"flex",alignItems:"center",gap:8}}><Cpu size={14} style={{color:C.cherryMid,animation:"spin 2s linear infinite"}}/><p style={{color:C.grey600,fontSize:12,fontFamily:FONT}}>{stage}</p></div></div>)}
     </div>
@@ -456,10 +459,11 @@ const NLInput = memo(function NLInput({state,dispatch}){
    STEP BUILDER + DETAIL PANEL + IMPORT
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 const StepBuilder = memo(function StepBuilder({state,dispatch}){
+  const isMobile = window.innerWidth < 1024;
   const ps=useMemo(()=>state.steps.filter(s=>s.type!=="start"&&s.type!=="end"),[state.steps]);
-  if(!ps.length)return <div style={{padding:28}}><EmptyState icon={ClipboardList} title="No Steps" description="Add steps manually." actionLabel="Add First Step" onAction={()=>dispatch({type:"ADD_STEP"})}/></div>;
+  if(!ps.length)return <div style={{padding: isMobile ? "24px 32px" : "40px", maxWidth:1200, margin:"0 auto"}}><EmptyState icon={ClipboardList} title="No Steps" description="Add steps manually." actionLabel="Add First Step" onAction={()=>dispatch({type:"ADD_STEP"})}/></div>;
   return(
-    <div style={{padding:28,maxWidth:1000}}>
+    <div style={{padding: isMobile ? "24px 32px" : "40px", maxWidth:1200, margin:"0 auto"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:18}}>
         <h2 style={{color:C.charcoal,fontSize:22,fontWeight:800,fontFamily:FONT}}>Step Builder</h2>
         <button onClick={()=>dispatch({type:"ADD_STEP"})} style={{display:"flex",alignItems:"center",gap:6,padding:"8px 18px",background:`linear-gradient(135deg,${C.cherryDark},${C.cherryMid})`,border:"none",borderRadius:8,color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:FONT}}><Plus size={16}/>Add Step</button>
@@ -582,11 +586,14 @@ const DocImport = memo(function DocImport({dispatch}){
 });
 
 const InputPage = memo(function InputPage({state,dispatch}){
-  const tabs=[{id:"natural",label:"Natural Language",icon:Zap},{id:"builder",label:"Step Builder",icon:ClipboardList},{id:"import",label:"Import",icon:Upload}];
+  const isMobile = window.innerWidth < 1024;
+  const tabs=[{id:"natural",label:"Language",icon:Zap},{id:"builder",label:"Steps",icon:ClipboardList},{id:"import",label:"Import",icon:Upload}];
   return(
-    <div>
-      <div style={{display:"flex",gap:2,padding:"16px 28px 0",borderBottom:`1px solid ${C.grey200}`}}>
-        {tabs.map(t=>{const active=state.ui.inputMode===t.id;const Ic=t.icon;return(<button key={t.id} onClick={()=>dispatch({type:"SET_UI",payload:{inputMode:t.id}})} style={{display:"flex",alignItems:"center",gap:6,padding:"10px 18px",background:active?C.white:"transparent",borderBottom:active?`2px solid ${C.cherryDark}`:"2px solid transparent",border:"none",borderRadius:"8px 8px 0 0",color:active?C.charcoal:C.grey500,cursor:"pointer",fontSize:13,fontWeight:active?600:400,fontFamily:FONT}}><Ic size={15}/>{t.label}</button>);})}
+    <div style={{minHeight:"100%"}}>
+      <div style={{display:"flex",justifyContent:"center",borderBottom:`1px solid ${C.grey200}`,background:C.white,position:"sticky",top:0,zIndex:10}}>
+        <div style={{display:"flex",gap:2,padding:"8px 16px 0", width:"100%", maxWidth:1200}}>
+          {tabs.map(t=>{const active=state.ui.inputMode===t.id;const Ic=t.icon;return(<button key={t.id} onClick={()=>dispatch({type:"SET_UI",payload:{inputMode:t.id}})} style={{display:"flex",alignItems:"center",gap:6,padding:"10px 18px",background:active?C.white:"transparent",borderBottom:active?`2px solid ${C.cherryDark}`:"2px solid transparent",border:"none",borderRadius:"8px 8px 0 0",color:active?C.charcoal:C.grey500,cursor:"pointer",fontSize:12,fontWeight:active?700:500,fontFamily:FONT,textTransform:"uppercase",letterSpacing:"0.5px"}}><Ic size={14}/>{t.label}</button>);})}
+        </div>
       </div>
       {state.ui.inputMode==="natural"&&<NLInput state={state} dispatch={dispatch}/>}
       {state.ui.inputMode==="builder"&&<StepBuilder state={state} dispatch={dispatch}/>}
@@ -904,12 +911,19 @@ const BRDGen = memo(function BRDGen({state}){
    MAIN
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 export default function ProcessMapper(){
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const [state,dispatch]=useReducer(reducer,initialState);
   const sel=useMemo(()=>state.ui.selectedStepId?state.steps.find(s=>s.id===state.ui.selectedStepId)||null:null,[state.ui.selectedStepId,state.steps]);
   const closeDetail=useCallback(()=>{dispatch({type:"SET_UI",payload:{selectedStepId:null,showDetailPanel:false}});},[]);
   useEffect(()=>{if(state.ui.toast){const t=setTimeout(()=>dispatch({type:"CLEAR_TOAST"}),3500);return()=>clearTimeout(t);}},[state.ui.toast]);
   return(
-    <div style={{display:"flex",height:"100vh",overflow:"hidden",background:C.grey100,fontFamily:FONT,color:C.charcoal}}>
+    <div style={{display:"flex",height:"100dvh",width:"100vw",overflow:"hidden",background:C.grey100,fontFamily:FONT,color:C.charcoal}}>
       <style>{`
         @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
         @keyframes slideIn{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
@@ -935,11 +949,13 @@ export default function ProcessMapper(){
           </button>
           <span style={{fontWeight:800, color:C.charcoal, fontSize:14}}>Process Mapper</span>
         </div>
-        <div style={{flex:1,overflow:"auto"}}>
-          {state.ui.activePage==="input"&&<InputPage state={state} dispatch={dispatch}/>}
-          {state.ui.activePage==="visualization"&&<VizPage state={state} dispatch={dispatch}/>}
-          {state.ui.activePage==="analysis"&&<AnalysisDash state={state} dispatch={dispatch}/>}
-          {state.ui.activePage==="brd"&&<BRDGen state={state}/>}
+        <div style={{flex:1,overflow:"auto",background:C.grey50}}>
+          <div style={{minHeight:"100%", width:"100%", display:"flex", flexDirection:"column"}}>
+            {state.ui.activePage==="input"&&<InputPage state={state} dispatch={dispatch}/>}
+            {state.ui.activePage==="visualization"&&<VizPage state={state} dispatch={dispatch}/>}
+            {state.ui.activePage==="analysis"&&<AnalysisDash state={state} dispatch={dispatch}/>}
+            {state.ui.activePage==="brd"&&<BRDGen state={state}/>}
+          </div>
         </div>
       </main>
       {state.ui.showDetailPanel&&sel&&<StepDetail step={sel} dispatch={dispatch} onClose={closeDetail}/>}
