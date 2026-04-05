@@ -303,10 +303,17 @@ function extractOutcomes(s) {
 /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    STATE
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+const PAGES = [
+  { id: "input", label: "Step Builder", icon: Edit3 },
+  { id: "visualization", label: "Process Map", icon: Network },
+  { id: "analysis", label: "Intelligence", icon: BarChart3 },
+  { id: "brd", label: "Documentation", icon: FileText }
+];
+
 const initialState = {
   process:{name:"Untitled Process",description:"",version:"1.0",author:"Cherrystone Consulting",status:"Draft",createdDate:new Date().toISOString().split("T")[0]},
   steps:[],
-  ui:{activePage:"input",inputMode:"natural",selectedStepId:null,showDetailPanel:false,toast:null,vizMode:"flowchart",nodeSlice:"risk"},
+  ui:{activePage:"input",inputMode:"natural",selectedStepId:null,showDetailPanel:false,toast:null,vizMode:"flowchart",nodeSlice:"risk",sidebarOpen:true},
   analysis:{costRates:{},currency:"USD"},
 };
 
@@ -356,9 +363,34 @@ const EmptyState = memo(function EmptyState({icon:Icon,title,description,actionL
    SIDEBAR
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 const Sidebar = memo(function Sidebar({state,dispatch}){
-  const pages=[{id:"input",label:"Process Input",icon:Edit3},{id:"visualization",label:"Visualization",icon:GitBranch},{id:"analysis",label:"Analysis",icon:BarChart3},{id:"brd",label:"BRD Report",icon:FileText}];
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isOpen = isMobile ? state.ui.sidebarOpen : true;
+
   return(
-    <div style={{width:260,minWidth:260,height:"100vh",background:`linear-gradient(180deg,${C.cherryDark},${C.cherryMid})`,display:"flex",flexDirection:"column",fontFamily:FONT,boxShadow:"2px 0 12px rgba(0,0,0,0.1)"}}>
+    <div style={{
+      width: isMobile ? (isOpen ? "100%" : "0") : 260,
+      minWidth: isMobile ? 0 : 260,
+      height: "100vh",
+      background: `linear-gradient(180deg, ${C.cherryDark}, ${C.cherryMid})`,
+      display: "flex",
+      flexDirection: "column",
+      fontFamily: FONT,
+      boxShadow: "2px 0 12px rgba(0,0,0,0.1)",
+      position: isMobile ? "fixed" : "relative",
+      left: 0,
+      top: 0,
+      zIndex: 1000,
+      transition: "all 0.3s ease-in-out",
+      overflow: "hidden",
+      opacity: isMobile && !isOpen ? 0 : 1,
+      pointerEvents: isMobile && !isOpen ? "none" : "auto"
+    }}>
       <div style={{padding:"20px 18px 16px",borderBottom:"1px solid rgba(255,255,255,0.15)"}}>
         <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}>
           <div style={{width:38,height:38,borderRadius:10,background:"rgba(255,255,255,0.15)",display:"flex",alignItems:"center",justifyContent:"center"}}><Workflow size={20} style={{color:"#fff"}}/></div>
@@ -367,10 +399,18 @@ const Sidebar = memo(function Sidebar({state,dispatch}){
         <input value={state.process.name} onChange={e=>dispatch({type:"SET_PROCESS",payload:{name:e.target.value}})} style={{width:"100%",padding:"9px 12px",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",borderRadius:8,color:"#fff",fontSize:13,fontFamily:FONT,outline:"none"}} placeholder="Process name..."/>
       </div>
       <div style={{padding:"12px 10px",flex:1}}>
-        {pages.map(p=>{const active=state.ui.activePage===p.id;const Ic=p.icon;return(
-          <button key={p.id} onClick={()=>dispatch({type:"SET_UI",payload:{activePage:p.id}})} style={{width:"100%",display:"flex",alignItems:"center",gap:10,padding:"11px 14px",marginBottom:4,borderRadius:10,background:active?"rgba(255,255,255,0.15)":"transparent",border:"none",color:active?"#fff":"rgba(255,255,255,0.7)",cursor:"pointer",fontSize:13,fontWeight:active?600:400,fontFamily:FONT,transition:"all 0.2s"}}><Ic size={18} style={{color:active?"#fff":"rgba(255,255,255,0.5)"}}/>{p.label}</button>
+        {PAGES.map(p=>{const active=state.ui.activePage===p.id;const Ic=p.icon;return(
+          <button key={p.id} onClick={()=>{dispatch({type:"SET_UI",payload:{activePage:p.id, sidebarOpen: !isMobile}});}} style={{width:"100%",display:"flex",alignItems:"center",gap:10,padding:"11px 14px",marginBottom:4,borderRadius:10,background:active?"rgba(255,255,255,0.15)":"transparent",border:"none",color:active?"#fff":"rgba(255,255,255,0.7)",cursor:"pointer",fontSize:13,fontWeight:active?600:400,fontFamily:FONT,transition:"all 0.2s"}}><Ic size={18} style={{color:active?"#fff":"rgba(255,255,255,0.5)"}}/>{p.label}</button>
         );})}
       </div>
+      {isMobile && isOpen && (
+        <button 
+          onClick={() => dispatch({type:"SET_UI",payload:{sidebarOpen: false}})}
+          style={{position:"absolute", top:10, right:10, background:"rgba(255,255,255,0.1)", border:"none", borderRadius:8, padding:8, color:"white", cursor:"pointer"}}
+        >
+          <X size={20}/>
+        </button>
+      )}
       <div style={{padding:"14px 18px",borderTop:"1px solid rgba(255,255,255,0.15)"}}>
         {[["Steps",state.steps.filter(s=>s.type!=="start"&&s.type!=="end").length],["Version",state.process.version],["Status",state.process.status]].map(([l,v])=>(<div key={l} style={{display:"flex",justifyContent:"space-between",marginBottom:5}}><span style={{color:"rgba(255,255,255,0.5)",fontSize:11}}>{l}</span><span style={{color:"#fff",fontSize:11,fontWeight:600}}>{v}</span></div>))}
       </div>
@@ -424,33 +464,96 @@ const StepBuilder = memo(function StepBuilder({state,dispatch}){
         <h2 style={{color:C.charcoal,fontSize:22,fontWeight:800,fontFamily:FONT}}>Step Builder</h2>
         <button onClick={()=>dispatch({type:"ADD_STEP"})} style={{display:"flex",alignItems:"center",gap:6,padding:"8px 18px",background:`linear-gradient(135deg,${C.cherryDark},${C.cherryMid})`,border:"none",borderRadius:8,color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:FONT}}><Plus size={16}/>Add Step</button>
       </div>
-      <div style={{display:"flex",flexDirection:"column",gap:6}}>
-        {ps.map((step,idx)=>(<div key={step.id} onClick={()=>dispatch({type:"SET_UI",payload:{selectedStepId:step.id,showDetailPanel:true}})} style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",background:state.ui.selectedStepId===step.id?C.cherryDark+"08":C.white,border:`1px solid ${state.ui.selectedStepId===step.id?C.cherryMid+"44":C.grey300}`,borderRadius:10,cursor:"pointer",transition:"all 0.2s"}}>
-          <span style={{color:C.grey500,fontSize:11,fontWeight:700,minWidth:28}}>#{idx+1}</span>
-          <input value={step.name} onChange={e=>{e.stopPropagation();dispatch({type:"UPDATE_STEP",payload:{id:step.id,changes:{name:e.target.value}}});}} onClick={e=>e.stopPropagation()} style={{flex:1,background:"transparent",border:"none",color:C.charcoal,fontSize:13,fontWeight:500,fontFamily:FONT,outline:"none"}}/>
-          <span style={{color:C.grey600,fontSize:12,minWidth:100}}>{step.role}</span>
-          <Badge label={step.type} color={C.cherryMid} small/>
-          <Badge label={step.risk} color={RISK_COLORS[step.risk]} bg={RISK_BG[step.risk]} small/>
-          <span style={{color:C.grey500,fontSize:11,minWidth:40}}>{step.duration}{step.durationUnit.charAt(0)}</span>
-          <div style={{display:"flex",gap:2}} onClick={e=>e.stopPropagation()}>
-            <button onClick={()=>{const fi=state.steps.findIndex(s=>s.id===step.id);if(fi>0)dispatch({type:"REORDER_STEPS",payload:{fromIndex:fi,toIndex:fi-1}});}} style={{background:"none",border:"none",color:C.grey400,cursor:"pointer",padding:2}}><ChevronUp size={14}/></button>
-            <button onClick={()=>{const fi=state.steps.findIndex(s=>s.id===step.id);if(fi<state.steps.length-1)dispatch({type:"REORDER_STEPS",payload:{fromIndex:fi,toIndex:fi+1}});}} style={{background:"none",border:"none",color:C.grey400,cursor:"pointer",padding:2}}><ChevronDown size={14}/></button>
-            <button onClick={()=>dispatch({type:"DUPLICATE_STEP",payload:step.id})} style={{background:"none",border:"none",color:C.grey400,cursor:"pointer",padding:2}}><Copy size={14}/></button>
-            <button onClick={()=>dispatch({type:"DELETE_STEP",payload:step.id})} style={{background:"none",border:"none",color:C.cherryMid,cursor:"pointer",padding:2}}><Trash2 size={14}/></button>
-          </div>
-        </div>))}
+      <div style={{display:"flex",flexDirection:"column",gap:8}}>
+        {ps.map((step,idx)=>{
+          const isRowMobile = window.innerWidth < 640;
+          return (
+            <div key={step.id} onClick={()=>dispatch({type:"SET_UI",payload:{selectedStepId:step.id,showDetailPanel:true}})} style={{
+              display:"flex",
+              flexDirection: isRowMobile ? "column" : "row",
+              alignItems: isRowMobile ? "flex-start" : "center",
+              gap: isRowMobile ? 8 : 10,
+              padding: isRowMobile ? "12px 16px" : "10px 14px",
+              background:state.ui.selectedStepId===step.id?C.cherryDark+"08":C.white,
+              border:`1px solid ${state.ui.selectedStepId===step.id?C.cherryMid+"44":C.grey300}`,
+              borderRadius:12,
+              cursor:"pointer",
+              transition:"all 0.2s"
+            }}>
+              <div style={{display:"flex", alignItems:"center", gap:10, width:"100%"}}>
+                <span style={{color:C.grey500,fontSize:11,fontWeight:700,minWidth:28}}>#{idx+1}</span>
+                <input 
+                  value={step.name} 
+                  onChange={e=>{e.stopPropagation();dispatch({type:"UPDATE_STEP",payload:{id:step.id,changes:{name:e.target.value}}});}} 
+                  onClick={e=>e.stopPropagation()} 
+                  style={{flex:1,background:"transparent",border:"none",color:C.charcoal,fontSize:13,fontWeight:600,fontFamily:FONT,outline:"none"}}
+                />
+                {!isRowMobile && (
+                  <div style={{display:"flex", gap:2}} onClick={e=>e.stopPropagation()}>
+                    <button onClick={()=>{const fi=state.steps.findIndex(s=>s.id===step.id);if(fi>0)dispatch({type:"REORDER_STEPS",payload:{fromIndex:fi,toIndex:fi-1}});}} style={{background:"none",border:"none",color:C.grey400,cursor:"pointer",padding:2}}><ChevronUp size={14}/></button>
+                    <button onClick={()=>{const fi=state.steps.findIndex(s=>s.id===step.id);if(fi<state.steps.length-1)dispatch({type:"REORDER_STEPS",payload:{fromIndex:fi,toIndex:fi+1}});}} style={{background:"none",border:"none",color:C.grey400,cursor:"pointer",padding:2}}><ChevronDown size={14}/></button>
+                  </div>
+                )}
+              </div>
+              
+              <div style={{display:"flex", flexWrap:"wrap", alignItems:"center", gap:8, width:"100%", justifyContent: "space-between"}}>
+                <div style={{display:"flex", gap:8, alignItems:"center"}}>
+                  <span style={{color:C.grey600,fontSize:11, fontWeight: 500}}>{step.role}</span>
+                  <Badge label={step.type} color={C.cherryMid} small/>
+                  <Badge label={step.risk} color={RISK_COLORS[step.risk]} bg={RISK_BG[step.risk]} small/>
+                  <span style={{color:C.grey500,fontSize:10}}>{step.duration}{step.durationUnit.charAt(0)}</span>
+                </div>
+                
+                <div style={{display:"flex",gap:4}} onClick={e=>e.stopPropagation()}>
+                  {isRowMobile && (
+                    <>
+                      <button onClick={()=>{const fi=state.steps.findIndex(s=>s.id===step.id);if(fi>0)dispatch({type:"REORDER_STEPS",payload:{fromIndex:fi,toIndex:fi-1}});}} style={{background:C.grey100, border:`1px solid ${C.grey200}`, color:C.grey600, borderRadius:6, padding:4}}><ChevronUp size={14}/></button>
+                      <button onClick={()=>{const fi=state.steps.findIndex(s=>s.id===step.id);if(fi<state.steps.length-1)dispatch({type:"REORDER_STEPS",payload:{fromIndex:fi,toIndex:fi+1}});}} style={{background:C.grey100, border:`1px solid ${C.grey200}`, color:C.grey600, borderRadius:6, padding:4}}><ChevronDown size={14}/></button>
+                    </>
+                  )}
+                  <button onClick={()=>dispatch({type:"DUPLICATE_STEP",payload:step.id})} style={{background:C.grey100, border:`1px solid ${C.grey200}`, color:C.grey600, borderRadius:6, padding:4}}><Copy size={14}/></button>
+                  <button onClick={()=>dispatch({type:"DELETE_STEP",payload:step.id})} style={{background:C.redLight, border:`1px solid ${C.cherryMid}33`, color:C.cherryMid, borderRadius:6, padding:4}}><Trash2 size={14}/></button>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 });
 
 const StepDetail = memo(function StepDetail({step,dispatch,onClose}){
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   if(!step)return null;
+
   const fs={width:"100%",padding:"8px 12px",background:C.grey50,border:`1px solid ${C.grey300}`,borderRadius:8,color:C.charcoal,fontSize:12,fontFamily:FONT,outline:"none"};
   const ls={color:C.grey500,fontSize:10,fontWeight:700,marginBottom:4,display:"block",textTransform:"uppercase",letterSpacing:"0.8px"};
   const ch=(f,v)=>dispatch({type:"UPDATE_STEP",payload:{id:step.id,changes:{[f]:v}}});
   return(
-    <div style={{width:320,minWidth:320,height:"100vh",background:C.white,borderLeft:`1px solid ${C.grey300}`,padding:"18px 16px",overflow:"auto",fontFamily:FONT,boxShadow:"-4px 0 16px rgba(0,0,0,0.06)"}}>
+    <div style={{
+      width: isMobile ? "100%" : 320,
+      minWidth: isMobile ? 0 : 320,
+      height: isMobile ? "90vh" : "100vh",
+      background: C.white,
+      borderLeft: isMobile ? "none" : `1px solid ${C.grey300}`,
+      borderTop: isMobile ? `1px solid ${C.grey300}` : "none",
+      padding: "18px 16px",
+      overflow: "auto",
+      fontFamily: FONT,
+      boxShadow: isMobile ? "0 -8px 48px rgba(0,0,0,0.15)" : "-4px 0 16px rgba(0,0,0,0.06)",
+      position: isMobile ? "fixed" : "relative",
+      bottom: 0,
+      right: 0,
+      zIndex: 1100,
+      borderRadius: isMobile ? "32px 32px 0 0" : 0
+    }}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:18}}><h3 style={{color:C.charcoal,fontSize:15,fontWeight:700}}>Step Details</h3><button onClick={onClose} style={{background:"none",border:"none",color:C.grey400,cursor:"pointer"}}><X size={18}/></button></div>
       {[{l:"Name (verb-first)",f:"name"},{l:"Role",f:"role"},{l:"Action",f:"action"}].map(x=>(<div key={x.f} style={{marginBottom:12}}><label style={ls}>{x.l}</label><input value={step[x.f]||""} onChange={e=>ch(x.f,e.target.value)} style={fs}/></div>))}
       <div style={{marginBottom:12}}><label style={ls}>Description</label><textarea value={step.description||""} onChange={e=>ch("description",e.target.value)} style={{...fs,minHeight:70,resize:"vertical"}}/></div>
@@ -624,21 +727,62 @@ const NodeGraphView = memo(function NodeGraphView({steps,slicer,onSlicerChange})
     return()=>{sim.stop();};
   },[ps,roleColors,slicer,costRates]);
 
-  if(!ps.length) return <EmptyState icon={Network} title="No Process Data" description="Parse or build a process first."/>;
+  const [showOverlays, setShowOverlays] = useState(window.innerWidth > 768);
+  const isMobile = window.innerWidth <= 768;
 
   return(
     <div style={{width:"100%",height:"calc(100vh - 130px)",position:"relative",background:C.grey50}}>
       <svg ref={svgRef} width="100%" height="100%"/>
-      {/* Slicer controls */}
-      <div style={{position:"absolute",top:16,right:16,padding:14,background:C.white+"EE",borderRadius:10,border:`1px solid ${C.grey200}`,backdropFilter:"blur(8px)",boxShadow:"0 4px 12px rgba(0,0,0,0.06)"}}>
-        <div style={{color:C.grey500,fontSize:9,fontWeight:700,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:8,fontFamily:FONT,display:"flex",alignItems:"center",gap:4}}><SlidersHorizontal size={12}/>NODE SIZE BY</div>
-        {["risk","effort","cost"].map(s=>(<button key={s} onClick={()=>onSlicerChange(s)} style={{display:"block",width:"100%",padding:"6px 12px",marginBottom:3,borderRadius:6,background:slicer===s?C.cherryDark+"12":"transparent",border:`1px solid ${slicer===s?C.cherryDark+"33":"transparent"}`,color:slicer===s?C.cherryDark:C.grey500,fontSize:11,fontWeight:slicer===s?600:400,cursor:"pointer",fontFamily:FONT,textAlign:"left",textTransform:"capitalize"}}>{s}</button>))}
-      </div>
-      {/* Legend */}
-      <div style={{position:"absolute",bottom:16,left:16,padding:14,background:C.white+"EE",borderRadius:10,border:`1px solid ${C.grey200}`,backdropFilter:"blur(8px)"}}>
-        <div style={{color:C.grey500,fontSize:9,fontWeight:700,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:8,fontFamily:FONT}}>ROLES</div>
-        {roles.map(r=>(<div key={r} style={{display:"flex",alignItems:"center",gap:6,marginBottom:4}}><div style={{width:10,height:10,borderRadius:"50%",background:roleColors[r]}}/><span style={{color:C.grey600,fontSize:10,fontFamily:FONT}}>{r}</span></div>))}
-      </div>
+      
+      {isMobile && (
+        <button 
+          onClick={() => setShowOverlays(!showOverlays)}
+          style={{position:"absolute", top:16, right:16, zIndex:10, background:C.white, border:`1px solid ${C.grey200}`, borderRadius:8, padding:8, boxShadow:"0 2px 8px rgba(0,0,0,0.1)"}}
+        >
+          <SlidersHorizontal size={20} color={C.cherryDark}/>
+        </button>
+      )}
+
+      {showOverlays && (
+        <>
+          {/* Slicer controls */}
+          <div style={{
+            position:"absolute",
+            top: isMobile ? 60 : 16,
+            right: 16,
+            padding: 14,
+            background: C.white+"EE",
+            borderRadius: 10,
+            border: `1px solid ${C.grey200}`,
+            backdropFilter: "blur(8px)",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+            zIndex: 20
+          }}>
+            <div style={{color:C.grey500,fontSize:9,fontWeight:700,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:8,fontFamily:FONT,display:"flex",alignItems:"center",gap:4}}><SlidersHorizontal size={12}/>NODE SIZE</div>
+            <div style={{display:"flex", flexDirection: isMobile ? "row" : "column", gap: 4}}>
+              {["risk","effort","cost"].map(s=>(<button key={s} onClick={()=>onSlicerChange(s)} style={{display:"block",padding:"6px 12px",borderRadius:6,background:slicer===s?C.cherryDark+"12":"transparent",border:`1px solid ${slicer===s?C.cherryDark+"33":"transparent"}`,color:slicer===s?C.cherryDark:C.grey500,fontSize:11,fontWeight:slicer===s?600:400,cursor:"pointer",fontFamily:FONT,textAlign:"left",textTransform:"capitalize"}}>{s}</button>))}
+            </div>
+          </div>
+          {/* Legend */}
+          <div style={{
+            position:"absolute",
+            bottom: 16,
+            left: 16,
+            padding: 14,
+            background: C.white+"EE",
+            borderRadius: 10,
+            border: `1px solid ${C.grey200}`,
+            backdropFilter: "blur(8px)",
+            maxWidth: isMobile ? "calc(100% - 32px)" : 240,
+            zIndex: 20
+          }}>
+            <div style={{color:C.grey500,fontSize:9,fontWeight:700,letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:8,fontFamily:FONT}}>ROLES</div>
+            <div style={{display:"flex", flexWrap:"wrap", gap:8}}>
+              {roles.map(r=>(<div key={r} style={{display:"flex",alignItems:"center",gap:6}}><div style={{width:8,height:8,borderRadius:"50%",background:roleColors[r]}}/><span style={{color:C.grey600,fontSize:9,fontFamily:FONT}}>{r}</span></div>))}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 });
@@ -664,6 +808,13 @@ const VizPage = memo(function VizPage({state,dispatch}){
    ANALYSIS DASHBOARD
    â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
 const AnalysisDash = memo(function AnalysisDash({state,dispatch}){
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const metrics=useMemo(()=>computeMetrics(state.steps),[state.steps]);
   const raci=useMemo(()=>computeRACI(state.steps),[state.steps]);
   const health=useMemo(()=>computeHealth(state.steps,metrics),[state.steps,metrics]);
@@ -691,11 +842,16 @@ const AnalysisDash = memo(function AnalysisDash({state,dispatch}){
   const rcChart=Object.entries(costData.roleCosts).map(([r,c])=>({name:r.length>15?r.substring(0,13)+"...":r,value:Math.round(c)}));
 
   return(
-    <div style={{padding:28,overflow:"auto",height:"calc(100vh - 60px)"}}>
-      <h2 style={{color:C.charcoal,fontSize:24,fontWeight:800,marginBottom:18,fontFamily:FONT}}>Analysis Dashboard</h2>
-      <div style={{display:"flex",gap:4,marginBottom:20,flexWrap:"wrap"}}>{tabs.map(t=>{const active=tab===t.id;const Ic=t.icon;return(<button key={t.id} onClick={()=>setTab(t.id)} style={{display:"flex",alignItems:"center",gap:5,padding:"8px 16px",borderRadius:8,background:active?C.cherryDark+"0D":"transparent",border:`1px solid ${active?C.cherryDark+"33":C.grey300}`,color:active?C.cherryDark:C.grey500,fontSize:12,fontWeight:500,cursor:"pointer",fontFamily:FONT}}><Ic size={14}/>{t.label}</button>);})}</div>
+    <div style={{padding: isMobile ? 16 : 28, overflow:"auto", height:"calc(100vh - 60px)", scrollPadding: 20}}>
+      <h2 style={{color:C.charcoal,fontSize: isMobile ? 20 : 24,fontWeight:800,marginBottom:18,fontFamily:FONT}}>Analysis Dashboard</h2>
+      <div style={{display:"flex",gap:6,marginBottom:20,flexWrap:"wrap"}}>{tabs.map(t=>{const active=tab===t.id;const Ic=t.icon;return(<button key={t.id} onClick={()=>setTab(t.id)} style={{display:"flex",alignItems:"center",gap:5,padding: isMobile ? "7px 12px" : "8px 16px",borderRadius:8,background:active?C.cherryDark+"09":"transparent",border:`1px solid ${active?C.cherryDark+"33":C.grey300}`,color:active?C.cherryDark:C.grey500,fontSize: isMobile ? 11 : 12,fontWeight:500,cursor:"pointer",fontFamily:FONT, transition: "all 0.2s"}}><Ic size={14}/>{!isMobile && t.label}</button>);})}</div>
 
-      {tab==="overview"&&<div><div style={{display:"flex",gap:12,flexWrap:"wrap",marginBottom:16}}><MetricCard icon={Layers} label="Total Steps" value={metrics.totalSteps}/><MetricCard icon={Users} label="Roles" value={metrics.roles.length} accent={C.green}/><MetricCard icon={Diamond} label="Decisions" value={metrics.decisions} accent={C.amber}/><MetricCard icon={Clock} label="Critical Path" value={`${Math.round(metrics.criticalPathDuration)}h`} sub={`${metrics.criticalPath.length} steps`} accent={C.cherryLight}/></div><div style={{display:"flex",gap:12,flexWrap:"wrap"}}><MetricCard icon={Target} label="Complexity" value={metrics.complexityIndex} sub="/10" accent={C.amber}/><MetricCard icon={Zap} label="Automation" value={`${metrics.automationPotential}%`} sub={`${metrics.automatableCount} steps`} accent={C.green}/><MetricCard icon={ArrowRight} label="Handoffs" value={metrics.handoffs}/><MetricCard icon={AlertTriangle} label="Bottlenecks" value={metrics.bottleneckSteps.length} sub="> mean + 1Ïƒ"/></div></div>}
+      {tab==="overview"&&<div style={{display:"grid", gridTemplateColumns: isMobile ? "1fr 1fr" : "repeat(auto-fit, minmax(200px, 1fr))", gap:12, marginBottom:16}}>
+        <MetricCard icon={Layers} label="Total Steps" value={metrics.totalSteps}/>
+        <MetricCard icon={Users} label="Roles" value={metrics.roles.length} accent={C.green}/>
+        <MetricCard icon={Diamond} label="Decisions" value={metrics.decisions} accent={C.amber}/>
+        <MetricCard icon={Clock} label="Critical Path" value={`${Math.round(metrics.criticalPathDuration)}h`} accent={C.cherryLight}/>
+      </div>}
 
       {tab==="raci"&&<Card elevated><div style={{overflow:"auto"}}><table style={{width:"100%",borderCollapse:"collapse",fontSize:12,fontFamily:FONT}}><thead><tr><th style={{...thS,position:"sticky",left:0,zIndex:1}}>Step</th>{raci.roles.map(r=><th key={r} style={thS}>{r.length>14?r.substring(0,12)+"...":r}</th>)}</tr></thead><tbody>{raci.matrix.map(row=>(<tr key={row.step.id}><td style={{...tdS,fontWeight:500,color:C.charcoal,background:C.white,position:"sticky",left:0}}>{row.step.name}</td>{raci.roles.map(r=>{const v=row.assignments[r];return(<td key={r} style={{...tdS,textAlign:"center",fontWeight:700,fontSize:13,color:v?raciCol[v]:"transparent",background:v?raciBg[v]+"55":"transparent"}}>{v||"â€“"}</td>);})}</tr>))}<tr><td style={{...tdS,fontWeight:700,color:C.charcoal,background:C.grey100,position:"sticky",left:0}}>Workload (R+A)</td>{raci.roles.map(r=>{const ct=raci.matrix.reduce((s,row)=>s+(row.assignments[r]==="R"||row.assignments[r]==="A"?1:0),0);return<td key={r} style={{...tdS,textAlign:"center",color:C.charcoal,fontWeight:700,fontSize:14,background:C.grey100}}>{ct}</td>;})}</tr></tbody></table></div></Card>}
 
@@ -754,15 +910,38 @@ export default function ProcessMapper(){
   useEffect(()=>{if(state.ui.toast){const t=setTimeout(()=>dispatch({type:"CLEAR_TOAST"}),3500);return()=>clearTimeout(t);}},[state.ui.toast]);
   return(
     <div style={{display:"flex",height:"100vh",overflow:"hidden",background:C.grey100,fontFamily:FONT,color:C.charcoal}}>
-      <style>{`@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}@keyframes slideIn{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}::-webkit-scrollbar{width:8px;height:8px}::-webkit-scrollbar-track{background:${C.grey100}}::-webkit-scrollbar-thumb{background:${C.grey300};border-radius:4px}::-webkit-scrollbar-thumb:hover{background:${C.grey400}}::selection{background:${C.cherryDark}22}input::placeholder,textarea::placeholder{color:${C.grey400}}select{appearance:none}option{background:${C.white};color:${C.charcoal}}`}</style>
+      <style>{`
+        @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+        @keyframes slideIn{from{transform:translateX(20px);opacity:0}to{transform:translateX(0);opacity:1}}
+        ::-webkit-scrollbar{width:8px;height:8px}
+        ::-webkit-scrollbar-track{background:${C.grey100}}
+        ::-webkit-scrollbar-thumb{background:${C.grey300};border-radius:4px}
+        ::-webkit-scrollbar-thumb:hover{background:${C.grey400}}
+        ::selection{background:${C.cherryDark}22}
+        input::placeholder,textarea::placeholder{color:${C.grey400}}
+        select{appearance:none}
+        option{background:${C.white};color:${C.charcoal}}
+        @media (max-width: 768px) {
+          .mobile-hide { display: none !important; }
+          .mobile-full { width: 100% !important; min-width: 100% !important; }
+        }
+      `}</style>
       <Toast toast={state.ui.toast} onDismiss={useCallback(()=>dispatch({type:"CLEAR_TOAST"}),[])}/>
       <Sidebar state={state} dispatch={dispatch}/>
-      <main style={{flex:1,overflow:"hidden",display:"flex",flexDirection:"column"}}><div style={{flex:1,overflow:"auto"}}>
-        {state.ui.activePage==="input"&&<InputPage state={state} dispatch={dispatch}/>}
-        {state.ui.activePage==="visualization"&&<VizPage state={state} dispatch={dispatch}/>}
-        {state.ui.activePage==="analysis"&&<AnalysisDash state={state} dispatch={dispatch}/>}
-        {state.ui.activePage==="brd"&&<BRDGen state={state}/>}
-      </div></main>
+      <main style={{flex:1,overflow:"hidden",display:"flex",flexDirection:"column"}}>
+        <div style={{display: (window.innerWidth < 1024) ? "flex" : "none", alignItems:"center", padding:"12px 20px", background:C.white, borderBottom:`1px solid ${C.grey200}`, gap:12}}>
+          <button onClick={() => dispatch({type:"SET_UI",payload:{sidebarOpen: true}})} style={{background:"none", border:"none", color:C.cherryDark, cursor:"pointer"}}>
+            <SlidersHorizontal size={24}/>
+          </button>
+          <span style={{fontWeight:800, color:C.charcoal, fontSize:14}}>Process Mapper</span>
+        </div>
+        <div style={{flex:1,overflow:"auto"}}>
+          {state.ui.activePage==="input"&&<InputPage state={state} dispatch={dispatch}/>}
+          {state.ui.activePage==="visualization"&&<VizPage state={state} dispatch={dispatch}/>}
+          {state.ui.activePage==="analysis"&&<AnalysisDash state={state} dispatch={dispatch}/>}
+          {state.ui.activePage==="brd"&&<BRDGen state={state}/>}
+        </div>
+      </main>
       {state.ui.showDetailPanel&&sel&&<StepDetail step={sel} dispatch={dispatch} onClose={closeDetail}/>}
     </div>
   );

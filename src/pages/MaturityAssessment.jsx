@@ -286,20 +286,20 @@ const avgScores = (arr) => {
 // ============================================================
 
 const AuthView = ({ authMode, setAuthMode, email, setEmail, password, setPassword, fullName, setFullName, organisation, setOrganisation, authError, handleAuth, loading }) => (
-  <div className="bg-[#0b0b0b] rounded-[2rem] shadow-2xl p-8 sm:p-12 w-full max-w-[480px] mx-auto border border-white/10 my-16 relative overflow-hidden flex flex-col transition-all duration-500 auth-view">
+  <div className="bg-[#0b0b0b] rounded-[2rem] shadow-2xl p-6 sm:p-12 w-full max-w-[480px] mx-auto border border-white/10 my-8 sm:my-16 relative overflow-hidden flex flex-col transition-all duration-500 auth-view">
     <div className="absolute top-0 left-0 w-full h-1.5 bg-red-900 shrink-0"></div>
     
-    <div className="flex justify-center mb-10 shrink-0">
-      <div className="w-20 h-20 rounded-3xl bg-red-900/10 text-red-600 flex items-center justify-center shadow-2xl shadow-black/40 transform hover:scale-110 hover:rotate-3 transition-all duration-500 border border-red-900/20">
-        <Lock size={32} />
+    <div className="flex justify-center mb-6 sm:mb-10 shrink-0">
+      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-red-900/10 text-red-600 flex items-center justify-center shadow-2xl shadow-black/40 transform hover:scale-110 hover:rotate-3 transition-all duration-500 border border-red-900/20">
+        <Lock size={28} className="sm:w-8 sm:h-8" />
       </div>
     </div>
     
-    <div className="text-center mb-12 shrink-0 auth-view-header">
-      <h2 className="text-4xl font-light text-white mb-3 tracking-tight">
+    <div className="text-center mb-8 sm:mb-12 shrink-0 auth-view-header">
+      <h2 className="text-3xl sm:text-4xl font-light text-white mb-2 sm:mb-3 tracking-tight">
         {authMode === "login" ? "Secure Portal" : "Intelligence Portal"}
       </h2>
-      <p className="text-gray-400 text-[10px] uppercase font-bold tracking-[0.4em]">
+      <p className="text-gray-400 text-[9px] sm:text-[10px] uppercase font-bold tracking-[0.4em]">
         {authMode === "login" 
           ? "BIO-Stone Corporate Access" 
           : "Professional Excellence Framework"}
@@ -316,7 +316,7 @@ const AuthView = ({ authMode, setAuthMode, email, setEmail, password, setPasswor
             <input
               type="text"
               placeholder="Primary Contact Full Name"
-              className="w-full h-16 pr-6 bg-white/5 border border-white/10 rounded-2xl focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-900/50 transition-all text-white placeholder-gray-500 font-medium text-sm"
+              className="w-full h-12 sm:h-16 pr-6 bg-white/5 border border-white/10 rounded-2xl focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-900/50 transition-all text-white placeholder-gray-500 font-medium text-sm"
               style={{ paddingLeft: '3.5rem' }}
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
@@ -331,7 +331,7 @@ const AuthView = ({ authMode, setAuthMode, email, setEmail, password, setPasswor
             <input
               type="text"
               placeholder="Corporate Organisation"
-              className="w-full h-16 pr-6 bg-white/5 border border-white/10 rounded-2xl focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-900/50 transition-all text-white placeholder-gray-500 font-medium text-sm"
+              className="w-full h-12 sm:h-16 pr-6 bg-white/5 border border-white/10 rounded-2xl focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-900/50 transition-all text-white placeholder-gray-500 font-medium text-sm"
               style={{ paddingLeft: '3.5rem' }}
               value={organisation}
               onChange={(e) => setOrganisation(e.target.value)}
@@ -349,7 +349,7 @@ const AuthView = ({ authMode, setAuthMode, email, setEmail, password, setPasswor
         <input
           type="email"
           placeholder="Corporate Email Address"
-          className="w-full h-16 pr-6 bg-white/5 border border-white/10 rounded-2xl focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-900/50 transition-all text-white placeholder-gray-500 font-medium text-sm"
+          className="w-full h-12 sm:h-16 pr-6 bg-white/5 border border-white/10 rounded-2xl focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-900/50 transition-all text-white placeholder-gray-500 font-medium text-sm"
           style={{ paddingLeft: '3.5rem' }}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -365,7 +365,7 @@ const AuthView = ({ authMode, setAuthMode, email, setEmail, password, setPasswor
         <input
           type="password"
           placeholder="Intelligence Vault Password"
-          className="w-full h-16 pr-6 bg-white/5 border border-white/10 rounded-2xl focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-900/50 transition-all text-white placeholder-gray-500 font-medium text-sm"
+          className="w-full h-12 sm:h-16 pr-6 bg-white/5 border border-white/10 rounded-2xl focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-900/50 transition-all text-white placeholder-gray-500 font-medium text-sm"
           style={{ paddingLeft: '3.5rem' }}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -384,7 +384,7 @@ const AuthView = ({ authMode, setAuthMode, email, setEmail, password, setPasswor
       <button
         type="submit"
         disabled={loading}
-        className="w-full h-16 bg-red-900 text-white rounded-2xl font-black uppercase tracking-[0.3em] text-[10px] hover:bg-red-950 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-3 shadow-xl shadow-red-900/25 mt-4 group shrink-0"
+        className="w-full h-12 sm:h-16 bg-red-900 text-white rounded-2xl font-black uppercase tracking-[0.3em] text-[9px] sm:text-[10px] hover:bg-red-950 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-3 shadow-xl shadow-red-900/25 mt-2 sm:mt-4 group shrink-0"
       >
         {loading ? <Loader2 className="animate-spin" size={20} /> : (
           <>
@@ -412,11 +412,11 @@ const AuthView = ({ authMode, setAuthMode, email, setEmail, password, setPasswor
 
 const Header = ({ user, saving, selectedIndustry, saveToCloud, handleLogout }) => (
   <div className="bg-[#080808] border-b border-white/5 sticky top-0 z-50 shadow-2xl w-full flex justify-center">
-    <div className="w-full max-w-[2000px] px-6 md:px-12 h-20 flex justify-between items-center">
-      <div className="flex items-center gap-4">
-        <a href="/" className="shrink-0 outline-none flex items-center gap-3 hover:opacity-80 transition-opacity">
-          <img src="/images/iconwhite-nobg.png" className="w-8 h-8 object-contain" alt="CherryStone" />
-          <span className="text-white font-bold text-xl tracking-tight hidden sm:block">CherryStone</span>
+    <div className="w-full max-w-[2000px] px-4 sm:px-6 md:px-12 h-16 sm:h-20 flex justify-between items-center">
+      <div className="flex items-center gap-3 sm:gap-4">
+        <a href="/" className="shrink-0 outline-none flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity">
+          <img src="/images/iconwhite-nobg.png" className="w-6 h-6 sm:w-8 sm:h-8 object-contain" alt="CherryStone" />
+          <span className="text-white font-bold text-lg sm:text-xl tracking-tight hidden xs:block">CherryStone</span>
         </a>
         <div className="h-4 w-px bg-white/10 hidden md:block mx-1"></div>
         <div className="hidden md:block">
@@ -424,32 +424,32 @@ const Header = ({ user, saving, selectedIndustry, saveToCloud, handleLogout }) =
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 sm:gap-4">
         {user ? (
           <>
-            <div className="flex flex-col items-end mr-2">
-              <span className="text-xs font-bold text-white tracking-tight">{user.user_metadata?.full_name || user.email}</span>
-              <span className="text-[9px] text-red-500 font-bold uppercase tracking-widest">{user.user_metadata?.organisation || "Cherrystone Client"}</span>
+            <div className="flex flex-col items-end mr-1 sm:mr-2">
+              <span className="text-[10px] sm:text-xs font-bold text-white tracking-tight truncate max-w-[100px] sm:max-w-none">{user.user_metadata?.full_name || user.email}</span>
+              <span className="text-[8px] sm:text-[9px] text-red-500 font-bold uppercase tracking-widest truncate max-w-[100px] sm:max-w-none">{user.user_metadata?.organisation || "Cherrystone Client"}</span>
             </div>
             <button
               onClick={saveToCloud}
               disabled={saving || !selectedIndustry}
-              className="w-10 h-10 rounded-xl bg-white/5 text-gray-400 hover:bg-red-900 hover:text-white transition-all active:scale-95 disabled:opacity-30 flex items-center justify-center border border-white/5"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-white/5 text-gray-400 hover:bg-red-900 hover:text-white transition-all active:scale-95 disabled:opacity-30 flex items-center justify-center border border-white/5"
               title="Save Progress"
             >
-              {saving ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
+              {saving ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
             </button>
-            <div className="h-6 w-px bg-white/10"></div>
+            <div className="h-5 sm:h-6 w-px bg-white/10"></div>
             <button
               onClick={handleLogout}
-              className="w-10 h-10 rounded-xl text-gray-500 hover:text-white hover:bg-white/10 transition-all flex items-center justify-center border border-transparent"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl text-gray-500 hover:text-white hover:bg-white/10 transition-all flex items-center justify-center border border-transparent"
               title="Logout"
             >
-              <LogOut size={18} />
+              <LogOut size={16} />
             </button>
           </>
         ) : (
-          <div className="text-[9px] uppercase font-black text-gray-500 tracking-[0.3em] px-4 py-2 border border-white/10 rounded-full bg-white/2 outline-none">
+          <div className="text-[8px] sm:text-[9px] uppercase font-black text-gray-500 tracking-[0.2em] sm:tracking-[0.3em] px-3 sm:px-4 py-1.5 sm:py-2 border border-white/10 rounded-full bg-white/2 outline-none">
             Digital Operations Ecosystem
           </div>
         )}
@@ -669,16 +669,19 @@ const AssessmentTab = ({ isPost = false, scores, updateScore, progress, guidance
             const isActive = guidanceVisible === `${isPost ? 'post' : 'pre'}-${qid}`;
             return (
               <div key={qid} className="border-b border-gray-50 last:border-0">
-                <div className="px-6 py-5 hover:bg-gray-50/50 transition-colors">
-                  <div className="flex items-start gap-4">
-                    <span className="text-red-900 font-black text-xs mt-0.5 w-8 shrink-0">{qid}</span>
-                    <p className="flex-1 min-w-0 text-gray-800 text-sm leading-relaxed">{UNIVERSAL_QUESTIONS[qid]}</p>
-                    <div className="flex gap-1.5 shrink-0 ml-4">
+                <div className="px-5 sm:px-6 py-4 sm:py-5 hover:bg-gray-50/50 transition-colors">
+                  <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                      <span className="text-red-900 font-black text-[10px] sm:text-xs w-6 sm:w-8 shrink-0">{qid}</span>
+                      <p className="flex-1 sm:hidden text-gray-800 text-sm font-medium leading-relaxed">{UNIVERSAL_QUESTIONS[qid]}</p>
+                    </div>
+                    <p className="hidden sm:block flex-1 min-w-0 text-gray-800 text-sm leading-relaxed">{UNIVERSAL_QUESTIONS[qid]}</p>
+                    <div className="flex gap-1.5 shrink-0 w-full sm:w-auto justify-between sm:justify-start">
                       {[1, 2, 3, 4, 5].map((s) => (
                         <button
                           key={s}
                           onClick={() => updateScore(qid, s, isPost)}
-                          className={`w-9 h-9 rounded-lg border-2 font-black text-xs transition-all outline-none ${
+                          className={`flex-1 sm:flex-none w-auto sm:w-9 h-9 rounded-lg border-2 font-black text-xs transition-all outline-none ${
                             scores[qid] === s
                               ? 'bg-red-900 border-red-900 text-white shadow-md scale-105'
                               : 'bg-white border-gray-200 text-gray-400 hover:border-red-300 hover:text-red-900'
@@ -711,16 +714,19 @@ const AssessmentTab = ({ isPost = false, scores, updateScore, progress, guidance
             const isActive = guidanceVisible === `${isPost ? 'post' : 'pre'}-${qid}`;
             return (
               <div key={qid} className="border-b border-gray-50 last:border-0">
-                <div className="px-6 py-5 hover:bg-gray-50/50 transition-colors">
-                  <div className="flex items-start gap-4">
-                    <span className="text-red-900 font-black text-xs mt-0.5 w-8 shrink-0">{qid}</span>
-                    <p className="flex-1 min-w-0 text-gray-700 text-sm leading-relaxed">{indQ}</p>
-                    <div className="flex gap-1.5 shrink-0 ml-4">
+                <div className="px-5 sm:px-6 py-4 sm:py-5 hover:bg-gray-50/50 transition-colors">
+                  <div className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4">
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                      <span className="text-red-900 font-black text-[10px] sm:text-xs w-6 sm:w-8 shrink-0">{qid}</span>
+                      <p className="flex-1 sm:hidden text-gray-800 text-sm font-medium leading-relaxed">{indQ}</p>
+                    </div>
+                    <p className="hidden sm:block flex-1 min-w-0 text-gray-700 text-sm leading-relaxed">{indQ}</p>
+                    <div className="flex gap-1.5 shrink-0 w-full sm:w-auto justify-between sm:justify-start">
                       {[1, 2, 3, 4, 5].map((s) => (
                         <button
                           key={s}
                           onClick={() => updateScore(qid, s, isPost)}
-                          className={`w-9 h-9 rounded-lg border-2 font-black text-xs transition-all outline-none ${
+                          className={`flex-1 sm:flex-none w-auto sm:w-9 h-9 rounded-lg border-2 font-black text-xs transition-all outline-none ${
                             scores[qid] === s
                               ? 'bg-red-900 border-red-900 text-white shadow-md scale-105'
                               : 'bg-white border-gray-200 text-gray-400 hover:border-red-300 hover:text-red-900'
@@ -792,9 +798,31 @@ const ResultsTab = ({ preScores, selectedIndustry, navigateToTab }) => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
         {/* Universal Calibration */}
-        <div className="bg-white rounded-3xl shadow-sm p-8 border border-gray-100">
+        <div className="bg-white rounded-3xl shadow-sm p-6 sm:p-8 border border-gray-100">
           <h3 className="text-lg font-bold text-gray-900 mb-6 uppercase tracking-wider">Universal Maturity Baseline</h3>
-          <div className="overflow-x-auto">
+          
+          <div className="block sm:hidden space-y-4">
+            {DIMENSIONS.map((d) => {
+              const score = universal[d.key];
+              const rating = getRating(score);
+              return (
+                <div key={d.key} className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                  <div className="flex justify-between items-start mb-2">
+                    <span className="text-gray-900 font-bold text-sm">{d.name}</span>
+                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${rating.cls}`}>
+                      {rating.text}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center text-[10px] text-gray-400 font-black uppercase tracking-widest">
+                    <span>Performance Score</span>
+                    <span className="text-gray-900 text-lg">{score !== null ? score : "—"}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="hidden sm:block overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-100">
@@ -806,14 +834,14 @@ const ResultsTab = ({ preScores, selectedIndustry, navigateToTab }) => {
               <tbody>
                 {DIMENSIONS.map((d) => {
                   const score = universal[d.key];
-                  const rating = getRating(score);
+                   const rating = getRating(score);
                   return (
                     <tr key={d.key} className="border-b border-gray-50 last:border-0 hover:bg-gray-50/50 transition-colors">
                       <td className="py-4 text-gray-900 font-medium">{d.name}</td>
                       <td className="py-4 text-gray-900 font-black">{score !== null ? score : "—"}</td>
                       <td className="py-4 text-right">
                         <span className={`inline-block px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${rating.cls}`}>
-                          {rating.text}
+                           {rating.text}
                         </span>
                       </td>
                     </tr>
@@ -822,22 +850,51 @@ const ResultsTab = ({ preScores, selectedIndustry, navigateToTab }) => {
               </tbody>
             </table>
           </div>
-          <div className="mt-8 pt-8 border-t border-gray-100 flex justify-between items-center bg-gray-50 -mx-8 -mb-8 p-8 rounded-b-3xl">
+          <div className="mt-8 pt-8 border-t border-gray-100 flex justify-between items-center bg-gray-50 -mx-6 sm:-mx-8 -mb-6 sm:-mb-8 p-6 sm:p-8 rounded-b-3xl">
             <div className="text-[10px] uppercase font-black text-gray-400 tracking-widest">Universal Efficiency Metric</div>
-            <div className="text-4xl font-light text-red-900">{overallUniversal !== null ? overallUniversal : "—"}</div>
+            <div className="text-3xl sm:text-4xl font-light text-red-900">{overallUniversal !== null ? overallUniversal : "—"}</div>
           </div>
         </div>
 
         {/* Radar Chart */}
-        <div className="bg-white rounded-3xl shadow-sm p-8 border border-gray-100 flex flex-col items-center justify-center min-h-[400px]">
+        <div className="bg-white rounded-3xl shadow-sm p-6 sm:p-8 border border-gray-100 flex flex-col items-center justify-center min-h-[350px] sm:min-h-[400px]">
           <h3 className="text-lg font-bold text-gray-900 mb-6 uppercase tracking-wider self-start">Operational Fingerprint</h3>
-          <div className="w-full h-full min-h-[300px]">
+          <div className="w-full h-full min-h-[300px] sm:min-h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
-              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
+              <RadarChart 
+                cx="50%" 
+                cy="48%" 
+                outerRadius={window.innerWidth < 640 ? "55%" : "70%"} 
+                data={radarData}
+                margin={{ top: 10, right: 30, bottom: 20, left: 30 }}
+              >
                 <PolarGrid stroke="#f3f4f6" />
-                <PolarAngleAxis dataKey="dimension" tick={{ fill: '#9ca3af', fontSize: 9, fontWeight: 700 }} />
-                <PolarRadiusAxis angle={90} domain={[0, 5]} tick={{ fill: '#9ca3af', fontSize: 9 }} />
-                <Radar name="Score" dataKey="value" stroke="#8B1A1A" fill="#8B1A1A" fillOpacity={0.2} />
+                <PolarAngleAxis 
+                  dataKey="dimension" 
+                  tick={(props) => {
+                    const { payload, x, y, textAnchor, index } = props;
+                    const isBottom = y > 180;
+                    return (
+                      <g transform={`translate(${x}, ${y})`}>
+                        <text
+                          x={0}
+                          y={isBottom ? 12 : -12}
+                          textAnchor={textAnchor}
+                          fill="#9ca3af"
+                          fontSize={window.innerWidth < 640 ? 7 : 9}
+                          fontWeight={800}
+                          style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}
+                        >
+                          {payload.value.split(" ").map((word, i) => (
+                            <tspan x={0} dy={i === 0 ? 0 : 10} key={i}>{word}</tspan>
+                          ))}
+                        </text>
+                      </g>
+                    );
+                  }}
+                />
+                <PolarRadiusAxis angle={90} domain={[0, 5]} tick={{ fill: '#9ca3af', fontSize: 8 }} stroke="rgba(200,200,200,0.2)"/>
+                <Radar name="Score" dataKey="value" stroke="#8B1A1A" fill="#8B1A1A" fillOpacity={0.15} strokeWidth={2} />
               </RadarChart>
             </ResponsiveContainer>
           </div>
@@ -912,9 +969,50 @@ const ComparisonTab = ({ preScores, postScores, selectedIndustry, navigateToTab,
         </p>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-sm p-8 border border-gray-100 mb-8">
+      <div className="bg-white rounded-3xl shadow-sm p-4 sm:p-8 border border-gray-100 mb-8">
         <h3 className="text-lg font-bold text-gray-900 mb-6 uppercase tracking-wider">Universal Transformation Delta</h3>
-        <div className="overflow-x-auto">
+        
+        {/* Mobile/Tablet View (Cards) */}
+        <div className="block lg:hidden space-y-4">
+          {DIMENSIONS.map((d) => {
+            const comp = getComparisonData(d.name, pre.universal[d.key], post.universal[d.key]);
+            return (
+              <div key={d.key} className="p-5 bg-gray-50 rounded-2xl border border-gray-100">
+                <div className="flex justify-between items-start mb-4">
+                  <span className="text-gray-900 font-bold text-sm">{d.name}</span>
+                  {comp.status && (
+                    <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${comp.statusClass}`}>
+                      {comp.status}
+                    </span>
+                  )}
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="flex flex-col">
+                    <span className="text-[9px] uppercase font-black text-gray-400 tracking-widest mb-1">Baseline</span>
+                    <span className="text-gray-500 font-bold">{pre.universal[d.key] ?? "—"}</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] uppercase font-black text-gray-400 tracking-widest mb-1">Current</span>
+                    <span className="text-gray-900 font-black">{post.universal[d.key] ?? "—"}</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] uppercase font-black text-gray-400 tracking-widest mb-1">Change</span>
+                    <span className={`font-black ${comp.change > 0 ? "text-green-600" : comp.change < 0 ? "text-red-600" : "text-gray-400"}`}>
+                      {comp.change !== null ? (comp.change > 0 ? "+" : "") + comp.change : "—"}
+                    </span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] uppercase font-black text-gray-400 tracking-widest mb-1">% Lift</span>
+                    <span className="text-gray-900 font-black">{comp.pct !== null ? comp.pct + "%" : "—"}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop View (Table) */}
+        <div className="hidden lg:block overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-gray-100">
@@ -954,25 +1052,90 @@ const ComparisonTab = ({ preScores, postScores, selectedIndustry, navigateToTab,
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-        <div className="bg-white rounded-3xl shadow-sm p-8 border border-gray-100 min-h-[400px]">
+        <div className="bg-white rounded-3xl shadow-sm p-4 sm:p-8 border border-gray-100 min-h-[400px] sm:min-h-[450px]">
           <h3 className="text-lg font-bold text-gray-900 mb-6 uppercase tracking-wider">Comparative Overlay</h3>
-          <div className="w-full h-full min-h-[300px]">
+          <div className="w-full h-full min-h-[300px] sm:min-h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
-              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
+              <RadarChart 
+                cx="50%" 
+                cy="48%" 
+                outerRadius={window.innerWidth < 640 ? "55%" : "70%"} 
+                data={radarData}
+                margin={{ top: 10, right: 30, bottom: 40, left: 30 }}
+              >
                 <PolarGrid stroke="#f3f4f6" />
-                <PolarAngleAxis dataKey="dimension" tick={{ fill: '#9ca3af', fontSize: 9, fontWeight: 700 }} />
-                <PolarRadiusAxis angle={90} domain={[0, 5]} tick={{ fill: '#9ca3af', fontSize: 9 }} />
-                <Radar name="Baseline" dataKey="pre" stroke="#9ca3af" fill="#9ca3af" fillOpacity={0.1} />
-                <Radar name="Current" dataKey="post" stroke="#8B1A1A" fill="#8B1A1A" fillOpacity={0.2} />
-                <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '10px', textTransform: 'uppercase', fontWeight: 900, letterSpacing: '0.1em' }} />
+                <PolarAngleAxis 
+                  dataKey="dimension" 
+                  tick={(props) => {
+                    const { payload, x, y, textAnchor, index } = props;
+                    const isBottom = y > 180;
+                    return (
+                      <g transform={`translate(${x}, ${y})`}>
+                        <text
+                          x={0}
+                          y={isBottom ? 12 : -12}
+                          textAnchor={textAnchor}
+                          fill="#9ca3af"
+                          fontSize={window.innerWidth < 640 ? 7 : 9}
+                          fontWeight={800}
+                          style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}
+                        >
+                          {payload.value.split(" ").map((word, i) => (
+                            <tspan x={0} dy={i === 0 ? 0 : 10} key={i}>{word}</tspan>
+                          ))}
+                        </text>
+                      </g>
+                    );
+                  }}
+                />
+                <PolarRadiusAxis angle={90} domain={[0, 5]} tick={{ fill: '#9ca3af', fontSize: 8 }} stroke="rgba(200,200,200,0.2)"/>
+                <Radar name="Baseline" dataKey="pre" stroke="#9ca3af" fill="#9ca3af" fillOpacity={0.1} strokeWidth={2}/>
+                <Radar name="Current" dataKey="post" stroke="#8B1A1A" fill="#8B1A1A" fillOpacity={0.15} strokeWidth={2}/>
+                <Legend 
+                  iconType="circle" 
+                  verticalAlign="bottom"
+                  wrapperStyle={{ 
+                    paddingTop: '35px', 
+                    fontSize: '9px', 
+                    textTransform: 'uppercase', 
+                    fontWeight: 900, 
+                    letterSpacing: '0.1em' 
+                  }} 
+                />
               </RadarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-sm p-8 border border-gray-100">
+        <div className="bg-white rounded-3xl shadow-sm p-6 sm:p-8 border border-gray-100">
            <h3 className="text-lg font-bold text-gray-900 mb-6 uppercase tracking-wider">Sector Transformation: {selectedIndustry}</h3>
-           <div className="overflow-x-auto">
+           
+           {/* Mobile View */}
+           <div className="block sm:hidden space-y-4">
+             {DIMENSIONS.map((d, i) => {
+               const comp = getComparisonData(d.name, pre.industry[d.key], post.industry[d.key]);
+               const rating = getRating(post.industry[d.key]);
+               return (
+                 <div key={d.key} className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                   <div className="flex justify-between items-start mb-3">
+                     <span className="text-gray-900 font-bold text-sm leading-tight pr-4">{INDUSTRY_DIM_LABELS[selectedIndustry]?.[i] || d.name}</span>
+                     <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider shrink-0 ${rating.cls}`}>
+                       {rating.text}
+                     </span>
+                   </div>
+                   <div className="flex justify-between items-center">
+                     <span className="text-[9px] uppercase font-black text-gray-400 tracking-widest">Performance Shift</span>
+                     <span className={`font-black text-sm ${comp.change > 0 ? "text-green-600" : comp.change < 0 ? "text-red-600" : "text-gray-400"}`}>
+                       {comp.change !== null ? (comp.change > 0 ? "+" : "") + comp.change : "—"}
+                     </span>
+                   </div>
+                 </div>
+               );
+             })}
+           </div>
+
+           {/* Desktop View */}
+           <div className="hidden sm:block overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-100">
@@ -1122,6 +1285,7 @@ export default function ProcessMaturityApp() {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [organisation, setOrganisation] = useState("");
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   useEffect(() => {
     // Check session
@@ -1457,27 +1621,74 @@ export default function ProcessMaturityApp() {
         handleLogout={handleLogout} 
       />
 
-      {/* Navigation */}
-      <div className="bg-white border-b border-gray-200 shadow-sm overflow-x-auto scrollbar-hide sticky top-20 z-40 w-full flex justify-center">
-        <div className="px-6 h-16 flex items-end justify-center gap-4 sm:gap-8 w-full max-w-[2000px] mx-auto">
-          {tabs.map((tab) => (
+      {user && (
+        <div className="bg-white border-b border-gray-200 shadow-sm sticky top-16 sm:top-20 z-40 w-full flex justify-center">
+          {/* Desktop Navigation */}
+          <div className="hidden sm:flex px-6 h-16 items-end justify-center gap-8 w-full max-w-[2000px] mx-auto overflow-x-auto no-scrollbar">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => navigateToTab(tab.id)}
+                disabled={!tab.enabled}
+                className={`pb-4 px-2 text-sm font-semibold transition-all border-b-2 whitespace-nowrap shrink-0 group ${
+                  currentTab === tab.id
+                    ? "border-red-900 text-red-900"
+                    : tab.enabled
+                    ? "border-transparent text-gray-400 hover:text-red-900 hover:border-red-200"
+                    : "border-transparent text-gray-200 opacity-60 cursor-not-allowed"
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Mobile Navigation Dropdown */}
+          <div className="flex sm:hidden w-full px-4 py-2 relative">
             <button
-              key={tab.id}
-              onClick={() => navigateToTab(tab.id)}
-              disabled={!tab.enabled}
-              className={`pb-4 px-2 text-sm font-semibold transition-all border-b-2 whitespace-nowrap shrink-0 group ${
-                currentTab === tab.id
-                  ? "border-red-900 text-red-900"
-                  : tab.enabled
-                  ? "border-transparent text-gray-500 hover:text-red-900 hover:border-red-200"
-                  : "border-transparent text-gray-300 opacity-60 cursor-not-allowed"
-              }`}
+              onClick={() => setMobileNavOpen(!mobileNavOpen)}
+              className="w-full h-10 bg-gray-50 border border-gray-200 rounded-xl px-4 flex items-center justify-between group active:scale-[0.98] transition-all"
             >
-              {tab.label}
+              <div className="flex items-center gap-3">
+                <div className="w-1.5 h-1.5 rounded-full bg-red-900" />
+                <span className="text-[11px] font-black uppercase tracking-widest text-gray-900">
+                  {tabs.find(t => t.id === currentTab)?.label || "Menu"}
+                </span>
+              </div>
+              <div className={`transition-transform duration-300 ${mobileNavOpen ? 'rotate-180' : ''}`}>
+                <Plus size={16} className="text-gray-400 group-hover:text-red-900" />
+              </div>
             </button>
-          ))}
+
+            {mobileNavOpen && (
+              <div className="absolute top-full left-0 w-full px-4 mt-1 z-50 animate-in fade-in slide-in-from-top-2 duration-300">
+                <div className="bg-white border border-gray-200 rounded-2xl shadow-2xl overflow-hidden py-2">
+                  {tabs.map((tab) => (
+                    <button
+                      key={tab.id}
+                      disabled={!tab.enabled}
+                      onClick={() => {
+                        navigateToTab(tab.id);
+                        setMobileNavOpen(false);
+                      }}
+                      className={`w-full px-5 py-3 text-left flex items-center justify-between transition-colors ${
+                        currentTab === tab.id
+                          ? "bg-red-50 text-red-900 font-bold"
+                          : tab.enabled
+                          ? "text-gray-600 hover:bg-gray-50"
+                          : "text-gray-300 opacity-60 cursor-not-allowed"
+                      }`}
+                    >
+                      <span className="text-[10px] uppercase font-black tracking-widest">{tab.label}</span>
+                      {currentTab === tab.id && <div className="w-1.5 h-1.5 rounded-full bg-red-900" />}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
 
       {/* Main Content Area */}
