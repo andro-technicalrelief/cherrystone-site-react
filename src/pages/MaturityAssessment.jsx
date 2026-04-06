@@ -286,17 +286,17 @@ const avgScores = (arr) => {
 // ============================================================
 
 const AuthView = ({ authMode, setAuthMode, email, setEmail, password, setPassword, fullName, setFullName, organisation, setOrganisation, authError, handleAuth, loading }) => (
-  <div className="bg-[#0b0b0b] rounded-[2rem] shadow-2xl p-6 sm:p-12 w-full max-w-[480px] mx-auto border border-white/10 my-8 sm:my-16 relative overflow-hidden flex flex-col transition-all duration-500 auth-view">
+  <div className="bg-white rounded-[2rem] shadow-2xl p-6 sm:p-12 w-full max-w-[480px] mx-auto border border-gray-100 my-8 sm:my-16 relative overflow-hidden flex flex-col transition-all duration-500 auth-view">
     <div className="absolute top-0 left-0 w-full h-1.5 bg-red-900 shrink-0"></div>
     
     <div className="flex justify-center mb-6 sm:mb-10 shrink-0">
-      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-red-900/10 text-red-600 flex items-center justify-center shadow-2xl shadow-black/40 transform hover:scale-110 hover:rotate-3 transition-all duration-500 border border-red-900/20">
+      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-3xl bg-red-50 text-red-900 flex items-center justify-center shadow-lg shadow-red-900/5 transform hover:scale-110 hover:rotate-3 transition-all duration-500 border border-red-100">
         <Lock size={28} className="sm:w-8 sm:h-8" />
       </div>
     </div>
     
     <div className="text-center mb-8 sm:mb-12 shrink-0 auth-view-header">
-      <h2 className="text-3xl sm:text-4xl font-light text-white mb-2 sm:mb-3 tracking-tight">
+      <h2 className="text-3xl sm:text-4xl font-light text-gray-900 mb-2 sm:mb-3 tracking-tight">
         {authMode === "login" ? "Secure Portal" : "Intelligence Portal"}
       </h2>
       <p className="text-gray-400 text-[9px] sm:text-[10px] uppercase font-bold tracking-[0.4em]">
@@ -310,13 +310,13 @@ const AuthView = ({ authMode, setAuthMode, email, setEmail, password, setPasswor
       {authMode === "signup" && (
         <>
           <div className="relative group w-full">
-            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors pointer-events-none">
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-red-900 transition-colors pointer-events-none">
               <User size={18} />
             </div>
             <input
               type="text"
               placeholder="Primary Contact Full Name"
-              className="w-full h-12 sm:h-16 pr-6 bg-white/5 border border-white/10 rounded-2xl focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-900/50 transition-all text-white placeholder-gray-500 font-medium text-sm"
+              className="w-full h-14 sm:h-16 pr-6 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-900/20 transition-all text-gray-900 placeholder-gray-400 font-medium text-sm"
               style={{ paddingLeft: '3.5rem' }}
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
@@ -325,13 +325,13 @@ const AuthView = ({ authMode, setAuthMode, email, setEmail, password, setPasswor
             />
           </div>
           <div className="relative group w-full">
-            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors pointer-events-none">
+            <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-red-900 transition-colors pointer-events-none">
               <Building size={18} />
             </div>
             <input
               type="text"
               placeholder="Corporate Organisation"
-              className="w-full h-12 sm:h-16 pr-6 bg-white/5 border border-white/10 rounded-2xl focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-900/50 transition-all text-white placeholder-gray-500 font-medium text-sm"
+              className="w-full h-14 sm:h-16 pr-6 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-900/20 transition-all text-gray-900 placeholder-gray-400 font-medium text-sm"
               style={{ paddingLeft: '3.5rem' }}
               value={organisation}
               onChange={(e) => setOrganisation(e.target.value)}
@@ -343,13 +343,13 @@ const AuthView = ({ authMode, setAuthMode, email, setEmail, password, setPasswor
       )}
       
       <div className="relative group w-full">
-        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors pointer-events-none">
+        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-red-900 transition-colors pointer-events-none">
           <Mail size={18} />
         </div>
         <input
           type="email"
           placeholder="Corporate Email Address"
-          className="w-full h-12 sm:h-16 pr-6 bg-white/5 border border-white/10 rounded-2xl focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-900/50 transition-all text-white placeholder-gray-500 font-medium text-sm"
+          className="w-full h-14 sm:h-16 pr-6 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-900/20 transition-all text-gray-900 placeholder-gray-400 font-medium text-sm"
           style={{ paddingLeft: '3.5rem' }}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -359,13 +359,13 @@ const AuthView = ({ authMode, setAuthMode, email, setEmail, password, setPasswor
       </div>
 
       <div className="relative group w-full">
-        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-red-500 transition-colors pointer-events-none">
+        <div className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-red-900 transition-colors pointer-events-none">
           <ShieldCheck size={18} />
         </div>
         <input
           type="password"
           placeholder="Intelligence Vault Password"
-          className="w-full h-12 sm:h-16 pr-6 bg-white/5 border border-white/10 rounded-2xl focus:bg-white/10 focus:outline-none focus:ring-2 focus:ring-red-900/50 transition-all text-white placeholder-gray-500 font-medium text-sm"
+          className="w-full h-14 sm:h-16 pr-6 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-900/20 transition-all text-gray-900 placeholder-gray-400 font-medium text-sm"
           style={{ paddingLeft: '3.5rem' }}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -376,7 +376,7 @@ const AuthView = ({ authMode, setAuthMode, email, setEmail, password, setPasswor
       </div>
 
       {authError && (
-        <div className={`p-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-center border animate-in fade-in slide-in-from-top-2 duration-300 ${authError.toLowerCase().includes("check your email") ? "bg-blue-50/50 text-blue-700 border-blue-100" : "bg-red-50/50 text-red-700 border-red-100"}`}>
+        <div className={`p-4 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] text-center border animate-in fade-in slide-in-from-top-2 duration-300 ${authError.toLowerCase().includes("check your email") ? "bg-blue-50 text-blue-700 border-blue-100" : "bg-red-50 text-red-700 border-red-100"}`}>
           {authError}
         </div>
       )}
@@ -384,7 +384,7 @@ const AuthView = ({ authMode, setAuthMode, email, setEmail, password, setPasswor
       <button
         type="submit"
         disabled={loading}
-        className="w-full h-12 sm:h-16 bg-red-900 text-white rounded-2xl font-black uppercase tracking-[0.3em] text-[9px] sm:text-[10px] hover:bg-red-950 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-3 shadow-xl shadow-red-900/25 mt-2 sm:mt-4 group shrink-0"
+        className="w-full h-14 sm:h-16 bg-red-900 text-white rounded-2xl font-black uppercase tracking-[0.3em] text-[9px] sm:text-[10px] hover:bg-red-950 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-3 shadow-xl shadow-red-900/20 mt-2 sm:mt-4 group shrink-0"
       >
         {loading ? <Loader2 className="animate-spin" size={20} /> : (
           <>
@@ -395,10 +395,10 @@ const AuthView = ({ authMode, setAuthMode, email, setEmail, password, setPasswor
       </button>
     </form>
 
-    <div className="mt-12 pt-8 border-t border-gray-50 text-center shrink-0">
+    <div className="mt-12 pt-8 border-t border-gray-100 text-center shrink-0">
       <button
         onClick={() => setAuthMode(authMode === "login" ? "signup" : "login")}
-        className="text-[10px] font-black text-gray-400 hover:text-red-900 transition-colors uppercase tracking-[0.4em] drop-shadow-sm"
+        className="text-[10px] font-black text-gray-400 hover:text-red-900 transition-colors uppercase tracking-[0.4em]"
       >
         {authMode === "login" ? "Request Access Privileges" : "Return to Main Portal"}
       </button>
@@ -411,16 +411,16 @@ const AuthView = ({ authMode, setAuthMode, email, setEmail, password, setPasswor
 
 
 const Header = ({ user, saving, selectedIndustry, saveToCloud, handleLogout }) => (
-  <div className="bg-[#080808] border-b border-white/5 sticky top-0 z-50 shadow-2xl w-full flex justify-center">
+  <div className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm w-full flex justify-center">
     <div className="w-full max-w-[2000px] px-4 sm:px-6 md:px-12 h-16 sm:h-20 flex justify-between items-center">
       <div className="flex items-center gap-3 sm:gap-4">
         <a href="/" className="shrink-0 outline-none flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity">
-          <img src="/images/iconwhite-nobg.png" className="w-6 h-6 sm:w-8 sm:h-8 object-contain" alt="CherryStone" />
-          <span className="text-white font-bold text-lg sm:text-xl tracking-tight hidden xs:block">CherryStone</span>
+          <img src="/images/icon-whitebg.png" className="w-6 h-6 sm:w-8 sm:h-8 object-contain" alt="CherryStone" />
+          <span className="text-gray-900 font-bold text-lg sm:text-xl tracking-tight hidden xs:block">CherryStone</span>
         </a>
-        <div className="h-4 w-px bg-white/10 hidden md:block mx-1"></div>
+        <div className="h-4 w-px bg-gray-200 hidden md:block mx-1"></div>
         <div className="hidden md:block">
-          <p className="text-[10px] text-red-500 font-black uppercase tracking-[0.3em] whitespace-nowrap">BIO-Stone Maturity Assessment</p>
+          <p className="text-[10px] text-red-900 font-black uppercase tracking-[0.3em] whitespace-nowrap">BIO-Stone Maturity Assessment</p>
         </div>
       </div>
 
@@ -428,28 +428,28 @@ const Header = ({ user, saving, selectedIndustry, saveToCloud, handleLogout }) =
         {user ? (
           <>
             <div className="flex flex-col items-end mr-1 sm:mr-2">
-              <span className="text-[10px] sm:text-xs font-bold text-white tracking-tight truncate max-w-[100px] sm:max-w-none">{user.user_metadata?.full_name || user.email}</span>
-              <span className="text-[8px] sm:text-[9px] text-red-500 font-bold uppercase tracking-widest truncate max-w-[100px] sm:max-w-none">{user.user_metadata?.organisation || "Cherrystone Client"}</span>
+              <span className="text-[10px] sm:text-xs font-bold text-gray-900 tracking-tight truncate max-w-[100px] sm:max-w-none">{user.user_metadata?.full_name || user.email}</span>
+              <span className="text-[8px] sm:text-[9px] text-red-900 font-bold uppercase tracking-widest truncate max-w-[100px] sm:max-w-none">{user.user_metadata?.organisation || "Cherrystone Client"}</span>
             </div>
             <button
               onClick={saveToCloud}
               disabled={saving || !selectedIndustry}
-              className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-white/5 text-gray-400 hover:bg-red-900 hover:text-white transition-all active:scale-95 disabled:opacity-30 flex items-center justify-center border border-white/5"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gray-50 text-gray-400 hover:bg-red-900 hover:text-white transition-all active:scale-95 disabled:opacity-30 flex items-center justify-center border border-gray-200"
               title="Save Progress"
             >
               {saving ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
             </button>
-            <div className="h-5 sm:h-6 w-px bg-white/10"></div>
+            <div className="h-5 sm:h-6 w-px bg-gray-200"></div>
             <button
               onClick={handleLogout}
-              className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl text-gray-500 hover:text-white hover:bg-white/10 transition-all flex items-center justify-center border border-transparent"
+              className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl text-gray-400 hover:text-white hover:bg-red-900 transition-all flex items-center justify-center border border-transparent"
               title="Logout"
             >
               <LogOut size={16} />
             </button>
           </>
         ) : (
-          <div className="text-[8px] sm:text-[9px] uppercase font-black text-gray-500 tracking-[0.2em] sm:tracking-[0.3em] px-3 sm:px-4 py-1.5 sm:py-2 border border-white/10 rounded-full bg-white/2 outline-none">
+          <div className="text-[8px] sm:text-[9px] uppercase font-black text-gray-400 tracking-[0.2em] sm:tracking-[0.3em] px-3 sm:px-4 py-1.5 sm:py-2 border border-gray-200 rounded-full bg-gray-50 outline-none">
             Digital Operations Ecosystem
           </div>
         )}
@@ -488,7 +488,7 @@ const WelcomeTab = ({ user, authProps, navigateToTab }) => {
           </button>
           <button
             onClick={() => navigateToTab("industry")}
-            className="rounded-2xl bg-gradient-to-r from-[#8B1A1A] to-[#0A0A0A] text-white font-bold uppercase tracking-widest text-[11px] transition-all duration-200 hover:from-[#5c1111] hover:to-black active:scale-95 shadow-xl shadow-red-900/20 flex items-center gap-3 shrink-0"
+            className="rounded-2xl bg-red-900 text-white font-bold uppercase tracking-widest text-[11px] transition-all duration-200 hover:bg-red-950 active:scale-95 shadow-xl shadow-red-900/10 flex items-center gap-3 shrink-0"
             style={{ padding: '16px 40px', minWidth: 'max-content' }}
           >
             Begin Now <ArrowRight size={15} />
@@ -509,7 +509,7 @@ const MyAssessmentsTab = ({ assessments, startNew, loadAssessment, deleteAssessm
       </div>
       <button
         onClick={startNew}
-        className="flex items-center gap-3 rounded-2xl bg-gradient-to-r from-[#8B1A1A] to-[#0A0A0A] text-white font-bold uppercase tracking-widest text-[11px] hover:from-[#5c1111] hover:to-black shadow-lg shadow-red-900/20 transition-all active:scale-95 shrink-0"
+        className="flex items-center gap-3 rounded-2xl bg-red-900 text-white font-bold uppercase tracking-widest text-[11px] hover:bg-red-950 shadow-lg shadow-red-900/10 transition-all active:scale-95 shrink-0"
         style={{ padding: '14px 28px', minWidth: 'max-content' }}
       >
         <Plus size={15} /> New Assessment
@@ -610,7 +610,7 @@ const IndustryTab = ({ selectedIndustry, setSelectedIndustry, navigateToTab }) =
         disabled={!selectedIndustry}
         className={`rounded-2xl font-bold uppercase tracking-widest text-[11px] transition-all duration-200 shadow-xl shrink-0 ${
           selectedIndustry
-            ? "bg-gradient-to-r from-[#8B1A1A] to-[#0A0A0A] text-white hover:from-[#5c1111] hover:to-black active:scale-95 shadow-red-900/20"
+            ? "bg-red-900 text-white hover:bg-red-950 active:scale-95 shadow-red-900/10"
             : "bg-gray-100 text-gray-400 cursor-not-allowed shadow-none"
         }`}
         style={{ padding: '16px 32px', minWidth: 'max-content' }}
@@ -643,7 +643,7 @@ const AssessmentTab = ({ isPost = false, scores, updateScore, progress, guidance
         <div className="flex flex-col items-end shrink-0">
           <span className="text-[10px] uppercase font-black text-gray-400 tracking-[0.2em] mb-2">{progressVal}/48 Quantified</span>
           <div className="w-40 h-1.5 bg-gray-100 rounded-full overflow-hidden">
-            <div className="h-full bg-red-900 transition-all duration-500" style={{ width: `${(progressVal / 48) * 100}%` }} />
+            <div className="h-full bg-gradient-to-r from-red-900 to-red-700 transition-all duration-500" style={{ width: `${(progressVal / 48) * 100}%` }} />
           </div>
         </div>
       </div>
@@ -653,7 +653,7 @@ const AssessmentTab = ({ isPost = false, scores, updateScore, progress, guidance
         <div key={dim.num} className="bg-white rounded-2xl shadow-sm overflow-hidden mb-6 border border-gray-100">
 
           {/* Dimension header — overflow-hidden ensures text stays inside */}
-          <div className="bg-[#6B0F0F] px-6 py-4 overflow-hidden">
+          <div className="bg-red-900 px-6 py-4 overflow-hidden">
             <span className="text-white font-black text-[11px] uppercase tracking-[0.25em] block truncate">
               Dimension {dim.num}: {dim.name}
             </span>
@@ -757,7 +757,7 @@ const AssessmentTab = ({ isPost = false, scores, updateScore, progress, guidance
         >Back</button>
         <button
           onClick={() => navigateToTab(isPost ? 'comparison' : 'results')}
-          className="rounded-2xl bg-gradient-to-r from-[#8B1A1A] to-[#0A0A0A] text-white font-bold uppercase tracking-widest text-[11px] transition-all hover:from-[#5c1111] hover:to-black active:scale-95 shadow-xl shadow-red-900/20 shrink-0"
+          className="rounded-2xl bg-red-900 text-white font-bold uppercase tracking-widest text-[11px] transition-all hover:bg-red-950 active:scale-95 shadow-xl shadow-red-900/10 shrink-0"
           style={{ padding: '14px 32px', minWidth: 'max-content' }}
         >{isPost ? 'Analyze Impact' : 'Generate Intelligence'}</button>
       </div>
@@ -893,7 +893,7 @@ const ResultsTab = ({ preScores, selectedIndustry, navigateToTab }) => {
                     );
                   }}
                 />
-                <PolarRadiusAxis angle={90} domain={[0, 5]} tick={{ fill: '#9ca3af', fontSize: 8 }} stroke="rgba(200,200,200,0.2)"/>
+                <PolarRadiusAxis angle={90} domain={[0, 5]} tick={{ fill: '#9ca3af', fontSize: 8 }} stroke="#e5e7eb"/>
                 <Radar name="Score" dataKey="value" stroke="#8B1A1A" fill="#8B1A1A" fillOpacity={0.15} strokeWidth={2} />
               </RadarChart>
             </ResponsiveContainer>
@@ -911,14 +911,14 @@ const ResultsTab = ({ preScores, selectedIndustry, navigateToTab }) => {
         </button>
         <button
           onClick={() => navigateToTab("action-plan")}
-          className="rounded-2xl bg-[#080808] text-white font-bold uppercase tracking-widest text-[11px] transition-all duration-200 hover:bg-gray-900 active:scale-95 shadow-xl shadow-black/20 shrink-0"
+          className="rounded-2xl border-2 border-red-900 text-red-900 font-bold uppercase tracking-widest text-[11px] transition-all duration-200 hover:bg-red-50 active:scale-95 shrink-0"
           style={{ padding: '16px 32px', minWidth: 'max-content' }}
         >
           View Strategic Roadmap
         </button>
         <button
           onClick={() => navigateToTab("post-assessment")}
-          className="rounded-2xl bg-gradient-to-r from-[#8B1A1A] to-[#0A0A0A] text-white font-bold uppercase tracking-widest text-[11px] transition-all duration-200 hover:from-[#5c1111] hover:to-black active:scale-95 shadow-xl shadow-red-900/20 shrink-0"
+          className="rounded-2xl bg-red-900 text-white font-bold uppercase tracking-widest text-[11px] transition-all duration-200 hover:bg-red-950 active:scale-95 shadow-xl shadow-red-900/10 shrink-0"
           style={{ padding: '16px 32px', minWidth: 'max-content' }}
         >
           Start Optimization Assessment
@@ -1088,9 +1088,9 @@ const ComparisonTab = ({ preScores, postScores, selectedIndustry, navigateToTab,
                     );
                   }}
                 />
-                <PolarRadiusAxis angle={90} domain={[0, 5]} tick={{ fill: '#9ca3af', fontSize: 8 }} stroke="rgba(200,200,200,0.2)"/>
-                <Radar name="Baseline" dataKey="pre" stroke="#9ca3af" fill="#9ca3af" fillOpacity={0.1} strokeWidth={2}/>
-                <Radar name="Current" dataKey="post" stroke="#8B1A1A" fill="#8B1A1A" fillOpacity={0.15} strokeWidth={2}/>
+                <PolarRadiusAxis angle={90} domain={[0, 5]} tick={{ fill: '#9ca3af', fontSize: 8 }} stroke="#e5e7eb"/>
+                <Radar name="Baseline" dataKey="pre" stroke="#8B1A1A" fill="#8B1A1A" fillOpacity={0.15} strokeWidth={2}/>
+                <Radar name="Current" dataKey="post" stroke="#4CAF50" fill="#4CAF50" fillOpacity={0.15} strokeWidth={2}/>
                 <Legend 
                   iconType="circle" 
                   verticalAlign="bottom"
@@ -1178,7 +1178,7 @@ const ComparisonTab = ({ preScores, postScores, selectedIndustry, navigateToTab,
         </button>
         <button
           onClick={() => exportReport(pre, post)}
-          className="rounded-2xl bg-gradient-to-r from-[#8B1A1A] to-[#0A0A0A] text-white font-bold uppercase tracking-widest text-[11px] transition-all duration-200 hover:from-[#5c1111] hover:to-black active:scale-95 shadow-xl shadow-red-900/20 flex items-center justify-center gap-2 shrink-0"
+          className="rounded-2xl bg-red-900 text-white font-bold uppercase tracking-widest text-[11px] transition-all duration-200 hover:bg-red-950 active:scale-95 shadow-xl shadow-red-900/10 flex items-center justify-center gap-2 shrink-0"
           style={{ padding: '16px 32px', minWidth: 'max-content' }}
         >
           <Save size={16} /> Export Intelligence Report
@@ -1218,10 +1218,10 @@ const ActionPlanTab = ({ preScores, navigateToTab, exportReport, postScores }) =
         <div className="space-y-6">
           {sorted.map((d) => {
             let priority, priorityTag, priorityBorder;
-            if (d.score <= 2) { priority = "Critical Gap"; priorityTag = "bg-red-100 text-red-700"; priorityBorder = "border-l-8 border-red-600"; }
-            else if (d.score <= 3) { priority = "High Priority"; priorityTag = "bg-orange-100 text-orange-700"; priorityBorder = "border-l-8 border-orange-600"; }
-            else if (d.score <= 4) { priority = "Strategic Optimization"; priorityTag = "bg-green-100 text-green-700"; priorityBorder = "border-l-8 border-green-600"; }
-            else { priority = "Sustain & Innovate"; priorityTag = "bg-blue-100 text-blue-700"; priorityBorder = "border-l-8 border-blue-600"; }
+            if (d.score <= 2) { priority = "Critical Gap"; priorityTag = "bg-red-100 text-red-700"; priorityBorder = "border-l-4 border-red-600"; }
+            else if (d.score <= 3) { priority = "High Priority"; priorityTag = "bg-orange-100 text-orange-700"; priorityBorder = "border-l-4 border-orange-600"; }
+            else if (d.score <= 4) { priority = "Strategic Optimization"; priorityTag = "bg-green-100 text-green-700"; priorityBorder = "border-l-4 border-green-600"; }
+            else { priority = "Sustain & Innovate"; priorityTag = "bg-blue-100 text-blue-700"; priorityBorder = "border-l-4 border-blue-600"; }
 
             return (
               <div key={d.key} className={`bg-white rounded-3xl shadow-sm p-8 border border-gray-100 ${priorityBorder} transition-all duration-300 hover:shadow-lg hover:shadow-gray-200/50`}>
@@ -1255,7 +1255,7 @@ const ActionPlanTab = ({ preScores, navigateToTab, exportReport, postScores }) =
         </button>
         <button
           onClick={() => exportReport(calcDimScores(preScores), calcDimScores(postScores || {}))}
-          className="rounded-2xl bg-gradient-to-r from-[#8B1A1A] to-[#0A0A0A] text-white font-bold uppercase tracking-widest text-[11px] transition-all duration-200 hover:from-[#5c1111] hover:to-black active:scale-95 shadow-xl shadow-red-900/20 flex items-center justify-center gap-2 shrink-0"
+          className="rounded-2xl bg-red-900 text-white font-bold uppercase tracking-widest text-[11px] transition-all duration-200 hover:bg-red-950 active:scale-95 shadow-xl shadow-red-900/10 flex items-center justify-center gap-2 shrink-0"
           style={{ padding: '16px 32px', minWidth: 'max-content' }}
         >
           <Save size={16} /> Export Intelligence Report
@@ -1599,7 +1599,15 @@ export default function ProcessMaturityApp() {
         }
 
         /* Ensure dark text on light background throughout */
-        .maturity-app { color: #080808; background: #FDFDFD; }
+        .maturity-app { color: #111827; background: #f9fafb; font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+
+        /* Scoped override for the AuthView */
+        .maturity-app .auth-view h2 {
+          color: #111827 !important;
+        }
+        .maturity-app .auth-view p {
+          color: #6b7280 !important;
+        }
 
         /* User-select fix — global CSS disables it, re-enable for inputs */
         .maturity-app input, .maturity-app textarea {
@@ -1608,9 +1616,13 @@ export default function ProcessMaturityApp() {
           color: inherit;
         }
 
-        /* Specifically ensure auth inputs have correct color */
-        .maturity-app .auth-view input {
-          color: white !important;
+        /* Custom scrollbar for nav */
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
         }
       `}</style>
       <Header 
